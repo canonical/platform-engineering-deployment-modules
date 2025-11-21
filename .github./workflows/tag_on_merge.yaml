@@ -1,0 +1,59 @@
+name: Bump version
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - name: Fetch tags
+        run: git fetch --tags
+
+      - name: Get last tag per branch
+        id: get_last_tag
+        run: |
+          BRANCH="${GITHUB_REF_NAME}"
+          PREFIX="${BRANCH}."
+          LAST_TAG=$(git tag --list "${PREFIX}*" --sort=-v:refname | head -n 1)
+          echo "Last tag for $BRANCH: $LAST_TAG"
+          echo "last_tag=$LAST_TAG" >> $GITHUB_OUTPUT
+
+      - name: Generate next tag
+        id: generate_tag
+        run: |
+          BRANCH="${GITHUB_REF_NAME}"
+          PREFIX="${BRANCH}."
+          DATE=$(date +'%Y.%m.%d')
+          COUNT=1
+
+          if [ -n "${{ steps.get_last_tag.outputs.last_tag }}" ]; then
+            LAST=$(echo "${{ steps.get_last_tag.outputs.last_tag }}" | awk -F'.' '{print $NF}')
+            COUNT=$((LAST + 1))
+          fi
+
+          TAG="${PREFIX}${DATE}.${COUNT}"
+          echo "Generated tag: $TAG"
+          echo "next_tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Create tag and push
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git tag ${{ steps.generate_tag.outputs.next_tag }}
+          git push origin ${{ steps.generate_tag.outputs.next_tag }}
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2.2.2
+        with:
+          name: Release ${{ steps.generate_tag.outputs.next_tag }}
+          tag_name: ${{ steps.generate_tag.outputs.next_tag }}
+          generate_release_notes: true
