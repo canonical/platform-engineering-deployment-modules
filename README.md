@@ -11,4 +11,4 @@ All deployments are stored in [deployments](/deployments) in a 2-level hierarchy
 
 ## Usage
 
-Reuse the module definitions in [`platform-engineering-deployments`](https://github.com/canonical/platform-engineering-deployments) or anywhere else applicable.
+Reuse the module definitions where applicable.
