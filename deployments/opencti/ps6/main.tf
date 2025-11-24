@@ -187,7 +187,7 @@ resource "juju_application" "gateway-api-integrator" {
   }
 
   config = {
-    external-hostname = "opencti-pfe.staging.canonical.com"
+    external-hostname = var.opencti_external_hostname
     gateway-class     = "cilium"
   }
 

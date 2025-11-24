@@ -23,6 +23,11 @@ variable "opencti_consumers" {
   type        = list(string)
 }
 
+variable "opencti_external_hostname" {
+  description = "The external hostname for OpenCTI"
+  type        = string
+}
+
 variable "opensearch_config" {
   description = "OpenSearch configuration"
   type        = map(string)
