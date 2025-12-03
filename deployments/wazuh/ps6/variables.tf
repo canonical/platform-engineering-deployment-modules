@@ -53,6 +53,11 @@ variable "wazuh_dashboard_constraints" {
   type        = string
 }
 
+variable "wazuh_external_hostname" {
+  description = "The external hostname for Wazuh"
+  type        = string
+}
+
 variable "wazuh_indexer_config" {
   description = "PromConfig for the Wazuh Indexer"
   type        = map(string)

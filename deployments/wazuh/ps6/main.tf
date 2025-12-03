@@ -60,7 +60,7 @@ module "wazuh" {
     channel  = "latest/stable"
     revision = 236
     config = {
-      external_hostname = "wazuh-dev-ps6.platform-engineering.staging.canonical.com"
+      external_hostname = var.wazuh_external_hostname
     }
   }
 
