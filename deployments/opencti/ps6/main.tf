@@ -156,8 +156,8 @@ resource "juju_application" "lego" {
 
   charm {
     name     = "lego"
-    channel  = "4/stable"
-    revision = 61
+    channel  = "4/candidate"
+    revision = 128
   }
 
   config = {
