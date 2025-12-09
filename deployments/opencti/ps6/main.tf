@@ -666,22 +666,6 @@ resource "juju_integration" "opencti-connector-loki" {
   }
 }
 
-resource "juju_integration" "opensearch-grafana-agent" {
-  model = var.juju_db_model_name
-
-  application {
-    name     = "opensearch"
-    endpoint = "cos-agent"
-  }
-
-  application {
-    name     = juju_application.grafana-agent.name
-    endpoint = "cos-agent"
-  }
-
-  provider = juju.opencti_db
-}
-
 resource "juju_integration" "grafana-agent-cos" {
   for_each = toset([
     var.grafana_offer_url,
