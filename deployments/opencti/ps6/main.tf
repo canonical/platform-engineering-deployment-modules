@@ -182,7 +182,7 @@ resource "juju_application" "gateway-api-integrator" {
 
   charm {
     name     = "gateway-api-integrator"
-    revision = 97
+    revision = 115
     channel  = "latest/stable"
   }
 
