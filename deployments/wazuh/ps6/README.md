@@ -1,4 +1,4 @@
-# Wazuh Staging Deployment
+# Wazuh Deployment
 Template for IS Application Environments
 
 ## Models

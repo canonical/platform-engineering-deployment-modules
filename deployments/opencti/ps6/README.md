@@ -1,4 +1,4 @@
-# OpenCTI Staging Deployment
+# OpenCTI Deployment
 
 ## Models
 
