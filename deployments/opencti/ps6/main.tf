@@ -65,7 +65,7 @@ module "opencti" {
 
   opensearch = {
     channel     = "2/edge"
-    revision    = 273
+    revision    = 313
     base        = "ubuntu@22.04"
     constraints = var.opensearch_constraints
     config      = var.opensearch_config
