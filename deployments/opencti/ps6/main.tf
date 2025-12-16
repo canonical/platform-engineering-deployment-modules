@@ -194,6 +194,7 @@ resource "juju_application" "gateway-api-integrator" {
   trust = true
 }
 
+/*
 resource "juju_application" "grafana-agent" {
   name  = "grafana-agent"
   model = var.juju_db_model_name
@@ -207,6 +208,7 @@ resource "juju_application" "grafana-agent" {
 
   provider = juju.opencti_db
 }
+*/
 
 resource "juju_application" "opencti-abuseipdb-ipblacklist-connector" {
   name  = "opencti-abuseipdb-ipblacklist-connector"
@@ -676,7 +678,7 @@ resource "juju_integration" "grafana-agent-cos" {
   model = var.juju_db_model_name
 
   application {
-    name = juju_application.grafana-agent.name
+    name = "grafana-agent"
   }
 
   application {
