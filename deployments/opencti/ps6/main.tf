@@ -48,7 +48,7 @@ resource "openstack_objectstorage_container_v1" "opensearch_backup" {
 module "opencti" {
   source        = "git::https://github.com/canonical/opencti-operator//terraform/product?ref=update-juju-tf-v1&depth=1"
   model_uuid    = var.model_uuid
-  db_model      = var.db_model_uuid
+  db_model_uuid = var.db_model_uuid
   model_user    = var.model_name
   db_model_user = var.db_model_name
 
