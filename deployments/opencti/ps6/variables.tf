@@ -1,19 +1,19 @@
-variable "juju_model_name" {
+variable "model_name" {
   description = "Juju model for OpenCTI"
   type        = string
 }
 
-variable "juju_model_uuid" {
+variable "model_uuid" {
   description = "Juju model UUID for OpenCTI"
   type        = string
 }
 
-variable "juju_db_model_name" {
+variable "db_model_name" {
   description = "Juju model for OpenCTI DB"
   type        = string
 }
 
-variable "juju_db_model_uuid" {
+variable "db_model_uuid" {
   description = "Juju model UUID for OpenCTI DB"
   type        = string
 }

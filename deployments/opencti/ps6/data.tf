@@ -3,7 +3,7 @@ data "vault_generic_secret" "landscape_registration_key" {
 }
 
 data "vault_generic_secret" "lego_credentials" {
-  path = "secret/prodstack6/roles/${var.juju_model_name}/lego"
+  path = "secret/prodstack6/roles/${var.model_name}/lego"
 }
 
 data "vault_generic_secret" "ubuntu_pro_token" {
@@ -11,33 +11,33 @@ data "vault_generic_secret" "ubuntu_pro_token" {
 }
 
 data "vault_generic_secret" "abuseipdb-ipblacklist" {
-  path = "secret/prodstack6/roles/${var.juju_model_name}/abuseipdb-ipblacklist"
+  path = "secret/prodstack6/roles/${var.model_name}/abuseipdb-ipblacklist"
 }
 
 data "vault_generic_secret" "alienvault" {
-  path = "secret/prodstack6/roles/${var.juju_model_name}/alienvault"
+  path = "secret/prodstack6/roles/${var.model_name}/alienvault"
 }
 
 data "vault_generic_secret" "crowdstrike" {
-  path = "secret/prodstack6/roles/${var.juju_model_name}/crowdstrike"
+  path = "secret/prodstack6/roles/${var.model_name}/crowdstrike"
 }
 
 data "vault_generic_secret" "ipinfo" {
-  path = "secret/prodstack6/roles/${var.juju_model_name}/ipinfo"
+  path = "secret/prodstack6/roles/${var.model_name}/ipinfo"
 }
 
 data "vault_generic_secret" "opencti-admin" {
-  path = "secret/prodstack6/roles/${var.juju_model_name}/opencti-admin"
+  path = "secret/prodstack6/roles/${var.model_name}/opencti-admin"
 }
 
 data "vault_generic_secret" "s3" {
-  path = "secret/prodstack6/roles/${var.juju_model_name}/s3"
+  path = "secret/prodstack6/roles/${var.model_name}/s3"
 }
 
 data "vault_generic_secret" "s3_opensearch" {
-  path = "secret/prodstack6/roles/${var.juju_db_model_name}/s3"
+  path = "secret/prodstack6/roles/${var.db_model_name}/s3"
 }
 
 data "vault_generic_secret" "sekoia" {
-  path = "secret/prodstack6/roles/${var.juju_model_name}/sekoia"
+  path = "secret/prodstack6/roles/${var.model_name}/sekoia"
 }
