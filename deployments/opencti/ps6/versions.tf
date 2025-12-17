@@ -7,7 +7,7 @@ terraform {
     }
     juju = {
       source                = "juju/juju"
-      version               = "~> 0.23.0"
+      version               = "~> 1.1.1"
       configuration_aliases = [juju.opencti_db]
     }
     openstack = {
