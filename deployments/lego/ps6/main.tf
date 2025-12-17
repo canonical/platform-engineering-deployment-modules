@@ -1,6 +1,6 @@
 resource "juju_secret" "lego_credentials" {
-  model_uuid = var.model_uuid
-  name       = "lego-credentials"
+  model = var.juju_model_name
+  name  = "lego-credentials"
   value = {
     httpreq-endpoint            = "https://lego-certs.canonical.com"
     httpreq-username            = data.vault_generic_secret.lego_credentials.data["username"]
@@ -11,7 +11,7 @@ resource "juju_secret" "lego_credentials" {
 
 module "lego" {
   source   = "git::https://github.com/canonical/lego-operator//terraform/product?ref=rev191&depth=1"
-  model    = var.model_uuid
+  model    = var.juju_model
   app_name = "lego"
   channel  = "4/candidate"
   revision = 128
@@ -23,7 +23,7 @@ module "lego" {
 }
 
 resource "juju_access_secret" "lego_credentials_access" {
-  model_uuid = var.model_uuid
+  model = var.juju_model_name
   applications = [
     juju_application.lego.name
   ]
