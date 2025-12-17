@@ -144,7 +144,7 @@ resource "juju_access_secret" "lego_credentials_access" {
 }
 
 resource "juju_offer" "lego" {
-  model = data.juju_model.lego.name
+  model = var.juju_server_model_name
 
   name             = "lego"
   application_name = juju_application.lego.name
