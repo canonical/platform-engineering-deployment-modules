@@ -143,6 +143,21 @@ resource "juju_access_secret" "lego_credentials_access" {
   secret_id = juju_secret.lego_credentials.secret_id
 }
 
+resource "juju_offer" "lego" {
+  model = data.juju_model.lego.name
+
+  name             = "lego"
+  application_name = juju_application.lego.name
+  endpoints        = ["certificates"]
+}
+
+resource "juju_access_offer" "lego" {
+  offer_url = juju_offer.lego.url
+  admin     = [data.juju_model.wazuh_server.name]
+  consume   = [data.juju_model.wazuh_dashboard.name]
+}
+
+
 resource "juju_integration" "wazuh_server_certificates" {
   provider = juju
   model    = var.juju_server_model_name
