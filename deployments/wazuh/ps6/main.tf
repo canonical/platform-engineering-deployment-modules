@@ -153,10 +153,9 @@ resource "juju_offer" "lego" {
 
 resource "juju_access_offer" "lego" {
   offer_url = juju_offer.lego.url
-  admin     = [data.juju_model.wazuh_server.name]
-  consume   = [data.juju_model.wazuh_dashboard.name]
+  admin     = [var.juju_server_model_name]
+  consume   = [var.juju_dashboard_model_name]
 }
-
 
 resource "juju_integration" "wazuh_server_certificates" {
   provider = juju
