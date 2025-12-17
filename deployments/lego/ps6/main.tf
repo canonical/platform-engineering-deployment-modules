@@ -1,5 +1,5 @@
 resource "juju_secret" "lego_credentials" {
-  model = var.juju_model_name
+  model = var.juju_model_uuid
   name  = "lego-credentials"
   value = {
     httpreq-endpoint            = "https://lego-certs.canonical.com"
@@ -23,7 +23,7 @@ module "lego" {
 }
 
 resource "juju_access_secret" "lego_credentials_access" {
-  model = var.juju_model_name
+  model = var.juju_model_uuid
   applications = [
     juju_application.lego.name
   ]
