@@ -39,22 +39,22 @@ resource "openstack_objectstorage_container_v1" "opencti" {
 resource "openstack_identity_ec2_credential_v3" "opensearch_backup_s3_creds" {}
 
 resource "openstack_objectstorage_container_v1" "opensearch_backup" {
-  name = var.juju_db_model_name
+  name = var.db_model_name
   lifecycle {
     prevent_destroy = true
   }
 }
 
 module "opencti" {
-  source        = "git::https://github.com/canonical/opencti-operator//terraform/product?ref=opencti-rev61&depth=1"
-  model         = var.juju_model_name
-  db_model      = var.juju_db_model_name
-  model_user    = var.juju_model_name
-  db_model_user = var.juju_db_model_name
+  source        = "git::https://github.com/canonical/opencti-operator//terraform/product?ref=opencti-rev65&depth=1"
+  model_uuid    = var.model_uuid
+  db_model_uuid = var.db_model_uuid
+  model_user    = var.model_name
+  db_model_user = var.db_model_name
 
   opencti = {
-    channel     = "latest/stable"
-    revision    = 54
+    channel     = "latest/edge"
+    revision    = 65
     base        = "ubuntu@24.04"
     constraints = "arch=amd64"
     units       = 1
@@ -134,14 +134,14 @@ module "opencti" {
 }
 
 resource "juju_access_secret" "opencti-admin-access" {
-  model        = var.juju_model_name
+  model_uuid   = var.model_uuid
   applications = [module.opencti.app_name]
   secret_id    = juju_secret.opencti-admin.secret_id
 }
 
 resource "juju_secret" "lego_credentials" {
-  model = var.juju_model_name
-  name  = "lego-credentials"
+  model_uuid = var.model_uuid
+  name       = "lego-credentials"
   value = {
     httpreq-endpoint            = "https://lego-certs.canonical.com"
     httpreq-username            = data.vault_generic_secret.lego_credentials.data["username"]
@@ -151,8 +151,8 @@ resource "juju_secret" "lego_credentials" {
 }
 
 resource "juju_application" "lego" {
-  name  = "lego"
-  model = var.juju_model_name
+  name       = "lego"
+  model_uuid = var.model_uuid
 
   charm {
     name     = "lego"
@@ -169,7 +169,7 @@ resource "juju_application" "lego" {
 }
 
 resource "juju_access_secret" "lego_credentials_access" {
-  model = var.juju_model_name
+  model_uuid = var.model_uuid
   applications = [
     juju_application.lego.name
   ]
@@ -177,8 +177,8 @@ resource "juju_access_secret" "lego_credentials_access" {
 }
 
 resource "juju_application" "gateway-api-integrator" {
-  name  = "gateway-api"
-  model = var.juju_model_name
+  name       = "gateway-api"
+  model_uuid = var.model_uuid
 
   charm {
     name     = "gateway-api-integrator"
@@ -195,8 +195,8 @@ resource "juju_application" "gateway-api-integrator" {
 }
 
 resource "juju_application" "grafana-agent" {
-  name  = "grafana-agent"
-  model = var.juju_db_model_name
+  name       = "grafana-agent"
+  model_uuid = var.db_model_uuid
 
   charm {
     name     = "grafana-agent"
@@ -209,8 +209,8 @@ resource "juju_application" "grafana-agent" {
 }
 
 resource "juju_application" "opencti-abuseipdb-ipblacklist-connector" {
-  name  = "opencti-abuseipdb-ipblacklist-connector"
-  model = var.juju_model_name
+  name       = "opencti-abuseipdb-ipblacklist-connector"
+  model_uuid = var.model_uuid
 
   charm {
     name     = "opencti-abuseipdb-ipblacklist-connector"
@@ -231,8 +231,8 @@ resource "juju_application" "opencti-abuseipdb-ipblacklist-connector" {
 }
 
 resource "juju_application" "opencti-alienvault-connector" {
-  name  = "opencti-alienvault-connector"
-  model = var.juju_model_name
+  name       = "opencti-alienvault-connector"
+  model_uuid = var.model_uuid
 
   charm {
     name     = "opencti-alienvault-connector"
@@ -258,8 +258,8 @@ resource "juju_application" "opencti-alienvault-connector" {
 }
 
 resource "juju_application" "opencti-cisa-kev-connector" {
-  name  = "opencti-cisa-kev-connector"
-  model = var.juju_model_name
+  name       = "opencti-cisa-kev-connector"
+  model_uuid = var.model_uuid
 
   charm {
     name     = "opencti-cisa-kev-connector"
@@ -279,8 +279,8 @@ resource "juju_application" "opencti-cisa-kev-connector" {
 }
 
 resource "juju_application" "opencti-crowdstrike-connector" {
-  name  = "opencti-crowdstrike-connector"
-  model = var.juju_model_name
+  name       = "opencti-crowdstrike-connector"
+  model_uuid = var.model_uuid
 
   charm {
     name     = "opencti-crowdstrike-connector"
@@ -320,8 +320,8 @@ resource "juju_application" "opencti-crowdstrike-connector" {
 }
 
 resource "juju_application" "opencti-cyber-campaign-connector" {
-  name  = "opencti-cyber-campaign-connector"
-  model = var.juju_model_name
+  name       = "opencti-cyber-campaign-connector"
+  model_uuid = var.model_uuid
 
   charm {
     name     = "opencti-cyber-campaign-connector"
@@ -340,8 +340,8 @@ resource "juju_application" "opencti-cyber-campaign-connector" {
 }
 
 resource "juju_application" "opencti-export-file-csv-connector" {
-  name  = "opencti-export-file-csv-connector"
-  model = var.juju_model_name
+  name       = "opencti-export-file-csv-connector"
+  model_uuid = var.model_uuid
 
   charm {
     name     = "opencti-export-file-csv-connector"
@@ -356,8 +356,8 @@ resource "juju_application" "opencti-export-file-csv-connector" {
 }
 
 resource "juju_application" "opencti-export-file-stix-connector" {
-  name  = "opencti-export-file-stix-connector"
-  model = var.juju_model_name
+  name       = "opencti-export-file-stix-connector"
+  model_uuid = var.model_uuid
 
   charm {
     name     = "opencti-export-file-stix-connector"
@@ -372,8 +372,8 @@ resource "juju_application" "opencti-export-file-stix-connector" {
 }
 
 resource "juju_application" "opencti-export-file-txt-connector" {
-  name  = "opencti-export-file-txt-connector"
-  model = var.juju_model_name
+  name       = "opencti-export-file-txt-connector"
+  model_uuid = var.model_uuid
 
   charm {
     name     = "opencti-export-file-txt-connector"
@@ -388,8 +388,8 @@ resource "juju_application" "opencti-export-file-txt-connector" {
 }
 
 resource "juju_application" "opencti-import-document-connector" {
-  name  = "opencti-import-document-connector"
-  model = var.juju_model_name
+  name       = "opencti-import-document-connector"
+  model_uuid = var.model_uuid
 
   charm {
     name     = "opencti-import-document-connector"
@@ -409,8 +409,8 @@ resource "juju_application" "opencti-import-document-connector" {
 }
 
 resource "juju_application" "opencti-import-file-stix-connector" {
-  name  = "opencti-import-file-stix-connector"
-  model = var.juju_model_name
+  name       = "opencti-import-file-stix-connector"
+  model_uuid = var.model_uuid
 
   charm {
     name     = "opencti-import-file-stix-connector"
@@ -428,8 +428,8 @@ resource "juju_application" "opencti-import-file-stix-connector" {
 }
 
 resource "juju_application" "opencti-ipinfo-connector" {
-  name  = "opencti-ipinfo-connector"
-  model = var.juju_model_name
+  name       = "opencti-ipinfo-connector"
+  model_uuid = var.model_uuid
 
   charm {
     name     = "opencti-ipinfo-connector"
@@ -450,8 +450,8 @@ resource "juju_application" "opencti-ipinfo-connector" {
 }
 
 resource "juju_application" "opencti-malwarebazaar-connector" {
-  name  = "opencti-malwarebazaar-connector"
-  model = var.juju_model_name
+  name       = "opencti-malwarebazaar-connector"
+  model_uuid = var.model_uuid
 
   charm {
     name     = "opencti-malwarebazaar-connector"
@@ -469,8 +469,8 @@ resource "juju_application" "opencti-malwarebazaar-connector" {
 }
 
 resource "juju_application" "opencti-misp-feed-connector" {
-  name  = "opencti-misp-feed-connector"
-  model = var.juju_model_name
+  name       = "opencti-misp-feed-connector"
+  model_uuid = var.model_uuid
 
   charm {
     name     = "opencti-misp-feed-connector"
@@ -488,8 +488,8 @@ resource "juju_application" "opencti-misp-feed-connector" {
 }
 
 resource "juju_application" "opencti-mitre-connector" {
-  name  = "opencti-mitre-connector"
-  model = var.juju_model_name
+  name       = "opencti-mitre-connector"
+  model_uuid = var.model_uuid
 
   charm {
     name     = "opencti-mitre-connector"
@@ -507,8 +507,8 @@ resource "juju_application" "opencti-mitre-connector" {
 }
 
 resource "juju_application" "opencti-sekoia-connector" {
-  name  = "opencti-sekoia-connector"
-  model = var.juju_model_name
+  name       = "opencti-sekoia-connector"
+  model_uuid = var.model_uuid
 
   charm {
     name     = "opencti-sekoia-connector"
@@ -527,8 +527,8 @@ resource "juju_application" "opencti-sekoia-connector" {
 }
 
 resource "juju_application" "opencti-urlhaus-connector" {
-  name  = "opencti-urlhaus-connector"
-  model = var.juju_model_name
+  name       = "opencti-urlhaus-connector"
+  model_uuid = var.model_uuid
 
   charm {
     name     = "opencti-urlhaus-connector"
@@ -549,8 +549,8 @@ resource "juju_application" "opencti-urlhaus-connector" {
 }
 
 resource "juju_application" "opencti-vxvault-connector" {
-  name  = "opencti-vxvault-connector"
-  model = var.juju_model_name
+  name       = "opencti-vxvault-connector"
+  model_uuid = var.model_uuid
 
   charm {
     name     = "opencti-vxvault-connector"
@@ -569,7 +569,7 @@ resource "juju_application" "opencti-vxvault-connector" {
 }
 
 resource "juju_integration" "ingress" {
-  model = var.juju_model_name
+  model_uuid = var.model_uuid
 
   application {
     name     = module.opencti.app_name
@@ -583,7 +583,7 @@ resource "juju_integration" "ingress" {
 }
 
 resource "juju_integration" "tls-certificates" {
-  model = var.juju_model_name
+  model_uuid = var.model_uuid
 
   application {
     name     = juju_application.gateway-api-integrator.name
@@ -597,7 +597,7 @@ resource "juju_integration" "tls-certificates" {
 }
 
 resource "juju_integration" "opencti-grafana" {
-  model = var.juju_model_name
+  model_uuid = var.model_uuid
 
   application {
     name     = module.opencti.app_name
@@ -610,7 +610,7 @@ resource "juju_integration" "opencti-grafana" {
 }
 
 resource "juju_integration" "opencti-prometheus-scrape" {
-  model = var.juju_model_name
+  model_uuid = var.model_uuid
 
   application {
     name     = module.opencti.app_name
@@ -623,7 +623,7 @@ resource "juju_integration" "opencti-prometheus-scrape" {
 }
 
 resource "juju_integration" "opencti-loki" {
-  model = var.juju_model_name
+  model_uuid = var.model_uuid
 
   application {
     name     = module.opencti.app_name
@@ -638,7 +638,7 @@ resource "juju_integration" "opencti-loki" {
 resource "juju_integration" "opencti-connector" {
   for_each = local.connector_charms
 
-  model = var.juju_model_name
+  model_uuid = var.model_uuid
 
   application {
     name     = module.opencti.app_name
@@ -654,7 +654,7 @@ resource "juju_integration" "opencti-connector" {
 resource "juju_integration" "opencti-connector-loki" {
   for_each = local.connector_charms
 
-  model = var.juju_model_name
+  model_uuid = var.model_uuid
 
   application {
     name     = each.key
@@ -673,7 +673,7 @@ resource "juju_integration" "grafana-agent-cos" {
     var.prometheus_remote_write_offer_url
   ])
 
-  model = var.juju_db_model_name
+  model_uuid = var.db_model_uuid
 
   application {
     name = juju_application.grafana-agent.name
@@ -687,8 +687,8 @@ resource "juju_integration" "grafana-agent-cos" {
 }
 
 resource "juju_secret" "opencti-admin" {
-  name  = "opencti-admin"
-  model = var.juju_model_name
+  name       = "opencti-admin"
+  model_uuid = var.model_uuid
   value = {
     email    = data.vault_generic_secret.opencti-admin.data["email"]
     password = data.vault_generic_secret.opencti-admin.data["password"]
@@ -696,20 +696,20 @@ resource "juju_secret" "opencti-admin" {
 }
 
 resource "juju_offer" "opencti_connector" {
-  model            = var.juju_model_name
+  model_uuid       = var.model_uuid
   application_name = module.opencti.app_name
   endpoints        = [module.opencti.requires.opencti_connector]
 }
 
 resource "juju_access_offer" "opencti_connector" {
-  admin     = [var.juju_model_name]
+  admin     = [var.model_uuid]
   offer_url = juju_offer.opencti_connector.url
   consume   = var.opencti_consumers
 }
 
 resource "juju_application" "landscape-client" {
-  name  = "landscape-client"
-  model = var.juju_db_model_name
+  name       = "landscape-client"
+  model_uuid = var.db_model_uuid
 
   charm {
     name     = "landscape-client"
@@ -729,8 +729,8 @@ resource "juju_application" "landscape-client" {
 }
 
 resource "juju_integration" "landscape_client" {
-  for_each = local.machine_charms
-  model    = var.juju_db_model_name
+  for_each   = local.machine_charms
+  model_uuid = var.db_model_uuid
 
   application {
     name     = each.key
@@ -745,8 +745,8 @@ resource "juju_integration" "landscape_client" {
 }
 
 resource "juju_application" "ubuntu_pro" {
-  name  = "ubuntu-pro"
-  model = var.juju_db_model_name
+  name       = "ubuntu-pro"
+  model_uuid = var.db_model_uuid
 
   charm {
     name     = "ubuntu-pro"
@@ -764,8 +764,8 @@ resource "juju_application" "ubuntu_pro" {
 }
 
 resource "juju_integration" "ubuntu_pro" {
-  for_each = local.machine_charms
-  model    = var.juju_db_model_name
+  for_each   = local.machine_charms
+  model_uuid = var.db_model_uuid
 
   application {
     name     = each.key
