@@ -13,3 +13,7 @@ output "lego_provides" {
     certificates = "certificates"
   }
 }
+
+output "lego_offer_url" {
+  value = juju_offer.lego.url
+}
