@@ -12,7 +12,7 @@ locals {
 resource "openstack_identity_ec2_credential_v3" "wazuh_indexer_s3_creds" {}
 
 resource "openstack_objectstorage_container_v1" "wazuh_indexer_backup" {
-  name = "${var.indexer_model_uuid}-wazuh-indexer-backup"
+  name = "${var.indexer_model_name}-wazuh-indexer-backup"
   lifecycle {
     prevent_destroy = true
   }
@@ -153,7 +153,7 @@ resource "juju_offer" "lego" {
 
 resource "juju_access_offer" "lego" {
   offer_url = juju_offer.lego.url
-  admin     = [var.server_model_uuid]
+  admin     = [var.server_model_name]
   consume   = [var.dashboard_model_name]
 }
 
