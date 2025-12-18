@@ -702,7 +702,7 @@ resource "juju_offer" "opencti_connector" {
 }
 
 resource "juju_access_offer" "opencti_connector" {
-  admin     = [var.model_uuid]
+  admin     = [var.model_name]
   offer_url = juju_offer.opencti_connector.url
   consume   = var.opencti_consumers
 }
