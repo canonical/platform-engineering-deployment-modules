@@ -3,9 +3,9 @@ output "s3_creds" {
   sensitive = true
 }
 
-output "lego_name" {
+output "lego_app_name" {
   description = "Name of the deployed Lego application."
-  value       = juju_application.lego
+  value       = juju_application.lego.name
 }
 
 output "lego_provides" {
