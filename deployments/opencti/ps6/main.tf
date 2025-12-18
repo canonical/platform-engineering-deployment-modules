@@ -16,7 +16,8 @@ locals {
     "opencti-mitre-connector",
     "opencti-sekoia-connector",
     "opencti-urlhaus-connector",
-    "opencti-vxvault-connector"
+    "opencti-vxvault-connector",
+    "opencti-nti-connector"
   ])
   machine_charms = toset([
     "data-integrator",
@@ -565,6 +566,32 @@ resource "juju_application" "opencti-vxvault-connector" {
     vxvault-interval          = 10
     vxvault-ssl-verify        = true
     vxvault-url               = "https://vxvault.net/URL_List.php"
+  }
+}
+
+resource "juju_application" "opencti-nti-connector" {
+  name       = "opencti-nti-connector"
+  model_uuid = var.model_uuid
+
+  charm {
+    name     = "opencti-nti-connector"
+    channel  = "latest/edge"
+    revision = 1
+    base     = "ubuntu@24.04"
+  }
+
+  config = {
+    connector-log-level       = "info",
+    connector-duration-period = "P1D"
+    connector-queue-threshold = 500
+    nti-base-url              = "https://nti.nsfocusglobal.com/api/v2/"
+    nti-api-key               = data.vault_generic_secret.nti.data["api-key"]
+    nti-tlp                   = "white"
+    nti-create-ioc            = true
+    nti-create-ip             = true
+    nti-create-domain         = true
+    nti-create-file           = true
+    nti-create-url            = true
   }
 }
 

@@ -41,3 +41,7 @@ data "vault_generic_secret" "s3_opensearch" {
 data "vault_generic_secret" "sekoia" {
   path = "secret/prodstack6/roles/${var.model_name}/sekoia"
 }
+
+data "vault_generic_secret" "nti" {
+  path = "secret/prodstack6/roles/${var.model_name}/nti"
+}
