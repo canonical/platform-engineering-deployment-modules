@@ -23,6 +23,6 @@ output "self_signed_certificates_app_name" {
   value       = module.wazuh.self_signed_certificates_app_name
 }
 
-output "self_signed_certificates_provides" {
-  value = module.wazuh.self_signed_certificates_provides
+output "self_signed_certificates_offer_url" {
+  value = module.wazuh.self_signed_certificates_offer_url
 }
