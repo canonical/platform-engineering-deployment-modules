@@ -83,3 +83,13 @@ variable "wazuh_indexer_constraints" {
   description = "Constraints for the Wazuh Indexer"
   type        = string
 }
+
+variable "wazuh_dashboard_fqdn" {
+  description = "FQDN for the Wazuh dashboard"
+  type        = string
+}
+
+variable "wazuh_dashboard_backends" {
+  description = "Comma-separated string of backend endpoints for the Wazuh dashboard"
+  type        = string
+}

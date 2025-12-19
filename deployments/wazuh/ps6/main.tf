@@ -8,6 +8,7 @@ locals {
     "wazuh-indexer-v5-backup",
     "self-signed-certificates"
   ])
+  self_signed_certificates_name = "self-signed-certificates"
 }
 resource "openstack_identity_ec2_credential_v3" "wazuh_indexer_s3_creds" {}
 
@@ -50,7 +51,7 @@ module "wazuh" {
   wazuh_server = {
     app_name = "wazuh-server"
     channel  = "4.11/edge"
-    revision = 212
+    revision = 217
     config = {
       logs-ca-cert             = var.logs_ca_certificate
       custom-config-ssh-key    = "secret:${juju_secret.git_ssh_key.secret_id}"
@@ -68,9 +69,9 @@ module "wazuh" {
   }
 
   self_signed_certificates = {
-    app_name = "self-signed-certificates"
-    channel  = "latest/stable"
-    revision = 264
+    app_name = local.self_signed_certificates_name
+    channel  = "1/edge"
+    revision = 518
     base     = "ubuntu@22.04"
 
     config = {
@@ -516,4 +517,110 @@ resource "juju_integration" "ubuntu_pro_dashboard" {
   }
 
   provider = juju.wazuh_dashboard
+}
+
+module "haproxy" {
+  source     = "git::https://github.com/niwamo/haproxy-operator//terraform/product?ref=454e278"
+  model_uuid = var.dashboard_model_uuid
+
+  haproxy = {
+    channel  = "2.8/edge"
+    revision = 290
+    base     = "ubuntu@24.04"
+    units    = 1
+  }
+
+  grafana_agent = {
+    app_name = "haproxy-grafana-agent"
+    channel  = "2/stable"
+    revision = 687
+  }
+
+  providers = {
+    juju = juju.wazuh_dashboard
+  }
+}
+
+resource "juju_integration" "haproxy_lego" {
+  provider   = juju.wazuh_dashboard
+  model_uuid = var.dashboard_model_uuid
+
+  application {
+    name     = "haproxy"
+    endpoint = module.haproxy.requires.certificates
+  }
+
+  application {
+    offer_url = juju_offer.lego.url
+  }
+
+  depends_on = [module.haproxy]
+}
+
+resource "juju_application" "ingress_configurator" {
+  provider   = juju.wazuh_dashboard
+  model_uuid = var.dashboard_model_uuid
+
+  charm {
+    name     = "ingress-configurator"
+    channel  = "latest/edge"
+    revision = 36
+  }
+  units = 1
+  config = {
+    backend-addresses = var.wazuh_dashboard_backends
+    backend-ports     = 5601
+    backend-protocol  = "https"
+    hostname          = var.wazuh_dashboard_fqdn
+  }
+}
+
+resource "juju_integration" "haproxy_ingress" {
+  provider   = juju.wazuh_dashboard
+  model_uuid = var.dashboard_model_uuid
+
+  application {
+    name     = "haproxy"
+    endpoint = "haproxy-route"
+  }
+
+  application {
+    name     = juju_application.ingress_configurator.name
+    endpoint = "haproxy-route"
+  }
+
+  depends_on = [module.haproxy]
+}
+
+resource "juju_offer" "self_signed_certificates_ca" {
+  provider   = juju.wazuh_indexer
+  model_uuid = var.indexer_model_uuid
+
+  name             = "self-signed-certificates-ca"
+  application_name = local.self_signed_certificates_name
+  endpoints        = ["send-ca-cert"]
+}
+
+resource "juju_access_offer" "self_signed_certificates_ca" {
+  provider = juju.wazuh_indexer
+
+  offer_url = juju_offer.self_signed_certificates_ca.url
+  admin     = [var.indexer_model_name]
+  consume   = [var.dashboard_model_name]
+}
+
+resource "juju_integration" "haproxy_receive_ca" {
+  provider   = juju.wazuh_dashboard
+  model_uuid = var.dashboard_model_uuid
+
+  application {
+    name     = "haproxy"
+    endpoint = "receive-ca-certs"
+  }
+
+  application {
+    offer_url = juju_offer.self_signed_certificates_ca.url
+  }
+
+  depends_on = [juju_access_offer.self_signed_certificates_ca]
 }
