@@ -12,17 +12,20 @@ locals {
 resource "openstack_identity_ec2_credential_v3" "wazuh_indexer_s3_creds" {}
 
 resource "openstack_objectstorage_container_v1" "wazuh_indexer_backup" {
-  name = "${var.juju_indexer_model_name}-wazuh-indexer-backup"
+  name = "${var.indexer_model_name}-wazuh-indexer-backup"
   lifecycle {
     prevent_destroy = true
   }
 }
 
 module "wazuh" {
-  source          = "git::https://github.com/canonical/wazuh-server-operator//terraform/product?ref=rev201&depth=1"
-  server_model    = var.juju_server_model_name
-  indexer_model   = var.juju_indexer_model_name
-  dashboard_model = var.juju_dashboard_model_name
+  source               = "git::https://github.com/canonical/wazuh-server-operator//terraform/product?ref=rev219&depth=1"
+  server_model_name    = var.server_model_name
+  server_model_uuid    = var.server_model_uuid
+  indexer_model_name   = var.indexer_model_name
+  indexer_model_uuid   = var.indexer_model_uuid
+  dashboard_model_name = var.dashboard_model_name
+  dashboard_model_uuid = var.dashboard_model_uuid
 
   wazuh_indexer = {
     app_name    = "wazuh-indexer-v5"
@@ -47,7 +50,7 @@ module "wazuh" {
   wazuh_server = {
     app_name = "wazuh-server"
     channel  = "4.11/edge"
-    revision = 212
+    revision = 217
     config = {
       logs-ca-cert             = var.logs_ca_certificate
       custom-config-ssh-key    = "secret:${juju_secret.git_ssh_key.secret_id}"
@@ -66,8 +69,8 @@ module "wazuh" {
 
   self_signed_certificates = {
     app_name = "self-signed-certificates"
-    channel  = "latest/stable"
-    revision = 264
+    channel  = "1/edge"
+    revision = 518
     base     = "ubuntu@22.04"
 
     config = {
@@ -107,8 +110,8 @@ module "wazuh" {
 }
 
 resource "juju_secret" "lego_credentials" {
-  model = var.juju_server_model_name
-  name  = "lego-credentials"
+  model_uuid = var.server_model_uuid
+  name       = "lego-credentials"
   value = {
     httpreq-endpoint            = "https://lego-certs.canonical.com"
     httpreq-username            = data.vault_generic_secret.lego_credentials.data["username"]
@@ -118,8 +121,8 @@ resource "juju_secret" "lego_credentials" {
 }
 
 resource "juju_application" "lego" {
-  name  = "lego"
-  model = var.juju_server_model_name
+  name       = "lego"
+  model_uuid = var.server_model_uuid
 
   charm {
     name     = "lego"
@@ -136,7 +139,7 @@ resource "juju_application" "lego" {
 }
 
 resource "juju_access_secret" "lego_credentials_access" {
-  model = var.juju_server_model_name
+  model_uuid = var.server_model_uuid
   applications = [
     juju_application.lego.name
   ]
@@ -144,7 +147,7 @@ resource "juju_access_secret" "lego_credentials_access" {
 }
 
 resource "juju_offer" "lego" {
-  model = var.juju_server_model_name
+  model_uuid = var.server_model_uuid
 
   name             = "lego"
   application_name = juju_application.lego.name
@@ -153,13 +156,13 @@ resource "juju_offer" "lego" {
 
 resource "juju_access_offer" "lego" {
   offer_url = juju_offer.lego.url
-  admin     = [var.juju_server_model_name]
-  consume   = [var.juju_dashboard_model_name]
+  admin     = [var.server_model_name]
+  consume   = [var.dashboard_model_name]
 }
 
 resource "juju_integration" "wazuh_server_certificates" {
-  provider = juju
-  model    = var.juju_server_model_name
+  provider   = juju
+  model_uuid = var.server_model_uuid
 
   application {
     name     = module.wazuh.wazuh_server_name
@@ -173,8 +176,8 @@ resource "juju_integration" "wazuh_server_certificates" {
 }
 
 resource "juju_integration" "wazuh_server_dashboard" {
-  provider = juju
-  model    = var.juju_server_model_name
+  provider   = juju
+  model_uuid = var.server_model_uuid
 
   application {
     name     = module.wazuh.wazuh_server_name
@@ -187,8 +190,8 @@ resource "juju_integration" "wazuh_server_dashboard" {
 }
 
 resource "juju_integration" "wazuh_server_loki" {
-  provider = juju
-  model    = var.juju_server_model_name
+  provider   = juju
+  model_uuid = var.server_model_uuid
 
   application {
     name     = module.wazuh.wazuh_server_name
@@ -201,8 +204,8 @@ resource "juju_integration" "wazuh_server_loki" {
 }
 
 resource "juju_integration" "wazuh_server_prometheus" {
-  provider = juju
-  model    = var.juju_server_model_name
+  provider   = juju
+  model_uuid = var.server_model_uuid
 
   application {
     name     = module.wazuh.wazuh_server_name
@@ -215,8 +218,8 @@ resource "juju_integration" "wazuh_server_prometheus" {
 }
 
 resource "juju_integration" "traefik_dashboard" {
-  provider = juju
-  model    = var.juju_server_model_name
+  provider   = juju
+  model_uuid = var.server_model_uuid
 
   application {
     name     = module.wazuh.traefik_name
@@ -229,8 +232,8 @@ resource "juju_integration" "traefik_dashboard" {
 }
 
 resource "juju_integration" "traefik_loki" {
-  provider = juju
-  model    = var.juju_server_model_name
+  provider   = juju
+  model_uuid = var.server_model_uuid
 
   application {
     name     = module.wazuh.traefik_name
@@ -243,8 +246,8 @@ resource "juju_integration" "traefik_loki" {
 }
 
 resource "juju_integration" "traefik_prometheus" {
-  provider = juju
-  model    = var.juju_server_model_name
+  provider   = juju
+  model_uuid = var.server_model_uuid
 
   application {
     name     = module.wazuh.traefik_name
@@ -257,8 +260,8 @@ resource "juju_integration" "traefik_prometheus" {
 }
 
 resource "juju_integration" "wazuh_opencti" {
-  provider = juju
-  model    = var.juju_server_model_name
+  provider   = juju
+  model_uuid = var.server_model_uuid
 
   application {
     name     = module.wazuh.wazuh_server_name
@@ -271,8 +274,8 @@ resource "juju_integration" "wazuh_opencti" {
 }
 
 resource "juju_integration" "grafana_agent_dashboard_grafana" {
-  provider = juju.wazuh_dashboard
-  model    = var.juju_dashboard_model_name
+  provider   = juju.wazuh_dashboard
+  model_uuid = var.dashboard_model_uuid
 
   application {
     name     = module.wazuh.wazuh_dashboard_grafana_agent_name
@@ -285,8 +288,8 @@ resource "juju_integration" "grafana_agent_dashboard_grafana" {
 }
 
 resource "juju_integration" "grafana_agent_dashboard_loki" {
-  provider = juju.wazuh_dashboard
-  model    = var.juju_dashboard_model_name
+  provider   = juju.wazuh_dashboard
+  model_uuid = var.dashboard_model_uuid
 
   application {
     name     = module.wazuh.wazuh_dashboard_grafana_agent_name
@@ -299,8 +302,8 @@ resource "juju_integration" "grafana_agent_dashboard_loki" {
 }
 
 resource "juju_integration" "grafana_agent_dashboard_prometheus" {
-  provider = juju.wazuh_dashboard
-  model    = var.juju_dashboard_model_name
+  provider   = juju.wazuh_dashboard
+  model_uuid = var.dashboard_model_uuid
 
   application {
     name     = module.wazuh.wazuh_dashboard_grafana_agent_name
@@ -313,8 +316,8 @@ resource "juju_integration" "grafana_agent_dashboard_prometheus" {
 }
 
 resource "juju_integration" "grafana_agent_indexer_grafana" {
-  provider = juju.wazuh_indexer
-  model    = var.juju_indexer_model_name
+  provider   = juju.wazuh_indexer
+  model_uuid = var.indexer_model_uuid
 
   application {
     name     = module.wazuh.wazuh_indexer_grafana_agent_name
@@ -327,8 +330,8 @@ resource "juju_integration" "grafana_agent_indexer_grafana" {
 }
 
 resource "juju_integration" "grafana_agent_indexer_loki" {
-  provider = juju.wazuh_indexer
-  model    = var.juju_indexer_model_name
+  provider   = juju.wazuh_indexer
+  model_uuid = var.indexer_model_uuid
 
   application {
     name     = module.wazuh.wazuh_indexer_grafana_agent_name
@@ -341,8 +344,8 @@ resource "juju_integration" "grafana_agent_indexer_loki" {
 }
 
 resource "juju_integration" "grafana_agent_indexer_prometheus" {
-  provider = juju.wazuh_indexer
-  model    = var.juju_indexer_model_name
+  provider   = juju.wazuh_indexer
+  model_uuid = var.indexer_model_uuid
 
   application {
     name     = module.wazuh.wazuh_indexer_grafana_agent_name
@@ -355,8 +358,8 @@ resource "juju_integration" "grafana_agent_indexer_prometheus" {
 }
 
 resource "juju_secret" "git_ssh_key" {
-  model = var.juju_server_model_name
-  name  = "git_ssh_key"
+  model_uuid = var.server_model_uuid
+  name       = "git_ssh_key"
   value = {
     value = data.vault_generic_secret.git_ssh_key.data["private_key"]
   }
@@ -364,7 +367,7 @@ resource "juju_secret" "git_ssh_key" {
 }
 
 resource "juju_access_secret" "git_ssh_key_access" {
-  model = var.juju_server_model_name
+  model_uuid = var.server_model_uuid
   applications = [
     module.wazuh.wazuh_server_name
   ]
@@ -372,8 +375,8 @@ resource "juju_access_secret" "git_ssh_key_access" {
 }
 
 resource "juju_application" "landscape_client" {
-  name  = "landscape-client"
-  model = var.juju_indexer_model_name
+  name       = "landscape-client"
+  model_uuid = var.indexer_model_uuid
 
   charm {
     name     = "landscape-client"
@@ -393,8 +396,8 @@ resource "juju_application" "landscape_client" {
 }
 
 resource "juju_application" "landscape_client_dashboard" {
-  name  = "landscape-client"
-  model = var.juju_dashboard_model_name
+  name       = "landscape-client"
+  model_uuid = var.dashboard_model_uuid
 
   charm {
     name     = "landscape-client"
@@ -414,8 +417,8 @@ resource "juju_application" "landscape_client_dashboard" {
 }
 
 resource "juju_integration" "landscape_client" {
-  for_each = local.machine_indexer_charms
-  model    = var.juju_indexer_model_name
+  for_each   = local.machine_indexer_charms
+  model_uuid = var.indexer_model_uuid
 
   application {
     name     = each.key
@@ -430,8 +433,8 @@ resource "juju_integration" "landscape_client" {
 }
 
 resource "juju_integration" "landscape_client_dashboard" {
-  for_each = local.machine_dashboard_charms
-  model    = var.juju_dashboard_model_name
+  for_each   = local.machine_dashboard_charms
+  model_uuid = var.dashboard_model_uuid
 
   application {
     name     = each.key
@@ -446,8 +449,8 @@ resource "juju_integration" "landscape_client_dashboard" {
 }
 
 resource "juju_application" "ubuntu_pro" {
-  name  = "ubuntu-pro"
-  model = var.juju_indexer_model_name
+  name       = "ubuntu-pro"
+  model_uuid = var.indexer_model_uuid
 
   charm {
     name     = "ubuntu-pro"
@@ -465,8 +468,8 @@ resource "juju_application" "ubuntu_pro" {
 }
 
 resource "juju_application" "ubuntu_pro_dashboard" {
-  name  = "ubuntu-pro"
-  model = var.juju_dashboard_model_name
+  name       = "ubuntu-pro"
+  model_uuid = var.dashboard_model_uuid
 
   charm {
     name     = "ubuntu-pro"
@@ -484,8 +487,8 @@ resource "juju_application" "ubuntu_pro_dashboard" {
 }
 
 resource "juju_integration" "ubuntu_pro" {
-  for_each = local.machine_indexer_charms
-  model    = var.juju_indexer_model_name
+  for_each   = local.machine_indexer_charms
+  model_uuid = var.indexer_model_uuid
 
   application {
     name     = each.key
@@ -500,8 +503,8 @@ resource "juju_integration" "ubuntu_pro" {
 }
 
 resource "juju_integration" "ubuntu_pro_dashboard" {
-  for_each = local.machine_dashboard_charms
-  model    = var.juju_dashboard_model_name
+  for_each   = local.machine_dashboard_charms
+  model_uuid = var.dashboard_model_uuid
 
   application {
     name     = each.key

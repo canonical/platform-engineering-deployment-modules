@@ -1,15 +1,30 @@
-variable "juju_dashboard_model_name" {
+variable "dashboard_model_name" {
   description = "Juju model for Wazuh Dashboard"
   type        = string
 }
 
-variable "juju_indexer_model_name" {
+variable "dashboard_model_uuid" {
+  description = "Juju model UUID for Wazuh Dashboard"
+  type        = string
+}
+
+variable "indexer_model_name" {
   description = "Juju model for Wazuh Indexer"
   type        = string
 }
 
-variable "juju_server_model_name" {
+variable "indexer_model_uuid" {
+  description = "Juju model UUID for Wazuh Indexer"
+  type        = string
+}
+
+variable "server_model_name" {
   description = "Juju model for Wazuh Server"
+  type        = string
+}
+
+variable "server_model_uuid" {
+  description = "Juju model UUID for Wazuh Server"
   type        = string
 }
 
