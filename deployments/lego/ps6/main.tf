@@ -10,7 +10,7 @@ resource "juju_secret" "lego_credentials" {
 }
 
 module "lego" {
-  source   = "git::https://github.com/canonical/lego-operator//terraform/product?ref=rev191&depth=1"
+  source   = "git::https://github.com/canonical/lego-operator//terraform?ref=rev197&depth=1"
   model    = var.model_uuid
   app_name = "lego"
   channel  = "4/candidate"
