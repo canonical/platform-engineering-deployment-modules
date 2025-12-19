@@ -19,7 +19,7 @@ resource "openstack_objectstorage_container_v1" "wazuh_indexer_backup" {
 }
 
 module "wazuh" {
-  source               = "git::https://github.com/canonical/wazuh-server-operator//terraform/product?ref=upgrade-tf-provider&depth=1"
+  source               = "git::https://github.com/canonical/wazuh-server-operator//terraform/product?ref=rev219&depth=1"
   server_model_name    = var.server_model_name
   server_model_uuid    = var.server_model_uuid
   indexer_model_name   = var.indexer_model_name
