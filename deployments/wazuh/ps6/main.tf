@@ -50,7 +50,7 @@ module "wazuh" {
   wazuh_server = {
     app_name = "wazuh-server"
     channel  = "4.11/edge"
-    revision = 212
+    revision = 217
     config = {
       logs-ca-cert             = var.logs_ca_certificate
       custom-config-ssh-key    = "secret:${juju_secret.git_ssh_key.secret_id}"
@@ -69,8 +69,8 @@ module "wazuh" {
 
   self_signed_certificates = {
     app_name = "self-signed-certificates"
-    channel  = "latest/stable"
-    revision = 264
+    channel  = "1/edge"
+    revision = 518
     base     = "ubuntu@22.04"
 
     config = {
