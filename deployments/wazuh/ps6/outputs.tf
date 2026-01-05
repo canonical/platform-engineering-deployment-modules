@@ -17,3 +17,12 @@ output "lego_provides" {
 output "lego_offer_url" {
   value = juju_offer.lego.url
 }
+
+output "self_signed_certificates_app_name" {
+  description = "Name of the deployed self-signed-certificates application."
+  value       = module.wazuh.self_signed_certificates_app_name
+}
+
+output "self_signed_certificates_offer_url" {
+  value = module.wazuh.self_signed_certificates_offer_url
+}
