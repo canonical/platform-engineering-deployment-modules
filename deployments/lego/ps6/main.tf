@@ -25,7 +25,7 @@ module "lego" {
 resource "juju_access_secret" "lego_credentials_access" {
   model_uuid = var.model_uuid
   applications = [
-    juju_application.lego.name
+    module.lego.app_name
   ]
   secret_id = juju_secret.lego_credentials.secret_id
 }
