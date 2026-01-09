@@ -83,3 +83,8 @@ variable "wazuh_indexer_constraints" {
   description = "Constraints for the Wazuh Indexer"
   type        = string
 }
+
+variable "wazuh_indexer_units" {
+  description = "Number of units for the Wazuh Indexer"
+  type        = number
+}
