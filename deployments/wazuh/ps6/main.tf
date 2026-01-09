@@ -33,6 +33,7 @@ module "wazuh" {
     revision    = 9
     config      = var.wazuh_indexer_config
     constraints = var.wazuh_indexer_constraints
+    units       = var.wazuh_indexer_units
   }
 
   sysconfig = {
