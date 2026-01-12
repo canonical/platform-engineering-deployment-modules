@@ -87,4 +87,5 @@ variable "wazuh_indexer_constraints" {
 variable "wazuh_indexer_units" {
   description = "Number of units for the Wazuh Indexer"
   type        = number
+  default     = 3
 }
