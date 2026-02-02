@@ -30,7 +30,7 @@ module "wazuh" {
   wazuh_indexer = {
     app_name    = "wazuh-indexer-v5"
     channel     = "4.11/edge"
-    revision    = 12
+    revision    = 13
     config      = var.wazuh_indexer_config
     constraints = var.wazuh_indexer_constraints
     units       = var.wazuh_indexer_units
