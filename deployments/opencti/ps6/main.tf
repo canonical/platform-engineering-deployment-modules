@@ -55,7 +55,7 @@ module "opencti" {
 
   opencti = {
     channel     = "latest/edge"
-    revision    = 71
+    revision    = 74
     base        = "ubuntu@24.04"
     constraints = "arch=amd64"
     units       = 1
