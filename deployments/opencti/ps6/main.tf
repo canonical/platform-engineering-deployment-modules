@@ -435,7 +435,7 @@ resource "juju_application" "opencti-ipinfo-connector" {
   charm {
     name     = "opencti-ipinfo-connector"
     channel  = "latest/edge"
-    revision = 71
+    revision = 73
     base     = "ubuntu@24.04"
   }
 
@@ -495,7 +495,7 @@ resource "juju_application" "opencti-mitre-connector" {
   charm {
     name     = "opencti-mitre-connector"
     channel  = "latest/edge"
-    revision = 75
+    revision = 77
     base     = "ubuntu@24.04"
   }
 
@@ -514,7 +514,7 @@ resource "juju_application" "opencti-sekoia-connector" {
   charm {
     name     = "opencti-sekoia-connector"
     channel  = "latest/edge"
-    revision = 75
+    revision = 77
     base     = "ubuntu@24.04"
   }
 
