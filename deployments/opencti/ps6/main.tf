@@ -216,7 +216,7 @@ resource "juju_application" "opencti-abuseipdb-ipblacklist-connector" {
   charm {
     name     = "opencti-abuseipdb-ipblacklist-connector"
     channel  = "latest/edge"
-    revision = 16
+    revision = 71
     base     = "ubuntu@24.04"
   }
 
@@ -238,7 +238,7 @@ resource "juju_application" "opencti-alienvault-connector" {
   charm {
     name     = "opencti-alienvault-connector"
     channel  = "latest/edge"
-    revision = 12
+    revision = 72
     base     = "ubuntu@24.04"
   }
 
@@ -265,7 +265,7 @@ resource "juju_application" "opencti-cisa-kev-connector" {
   charm {
     name     = "opencti-cisa-kev-connector"
     channel  = "latest/edge"
-    revision = 14
+    revision = 73
     base     = "ubuntu@24.04"
   }
 
@@ -286,7 +286,7 @@ resource "juju_application" "opencti-crowdstrike-connector" {
   charm {
     name     = "opencti-crowdstrike-connector"
     channel  = "latest/edge"
-    revision = 14
+    revision = 75
     base     = "ubuntu@24.04"
   }
 
@@ -300,14 +300,14 @@ resource "juju_application" "opencti-crowdstrike-connector" {
     crowdstrike-create-observables            = true
     crowdstrike-create-indicators             = true
     crowdstrike-scopes                        = "actor,report,indicator,yara_master"
-    crowdstrike-actor-start-timestamp         = 0
-    crowdstrike-report-start-timestamp        = 0
+    crowdstrike-actor-start-timestamp         = "0"
+    crowdstrike-report-start-timestamp        = "0"
     crowdstrike-report-status                 = "New"
     crowdstrike-report-include-types          = "notice,tipper,intelligence report,periodic report"
     crowdstrike-report-type                   = "threat-report"
     crowdstrike-report-target-industries      = ""
     crowdstrike-report-guess-malware          = false
-    crowdstrike-indicator-start-timestamp     = 0
+    crowdstrike-indicator-start-timestamp     = "0"
     crowdstrike-indicator-exclude-types       = "hash_ion,hash_md5,hash_sha1"
     crowdstrike-default-x-opencti-score       = 50
     crowdstrike-indicator-low-score           = 40
@@ -327,7 +327,7 @@ resource "juju_application" "opencti-cyber-campaign-connector" {
   charm {
     name     = "opencti-cyber-campaign-connector"
     channel  = "latest/edge"
-    revision = 13
+    revision = 73
     base     = "ubuntu@24.04"
   }
 
@@ -347,7 +347,7 @@ resource "juju_application" "opencti-export-file-csv-connector" {
   charm {
     name     = "opencti-export-file-csv-connector"
     channel  = "latest/edge"
-    revision = 13
+    revision = 75
     base     = "ubuntu@24.04"
   }
 
@@ -363,7 +363,7 @@ resource "juju_application" "opencti-export-file-stix-connector" {
   charm {
     name     = "opencti-export-file-stix-connector"
     channel  = "latest/edge"
-    revision = 12
+    revision = 74
     base     = "ubuntu@24.04"
   }
 
@@ -379,7 +379,7 @@ resource "juju_application" "opencti-export-file-txt-connector" {
   charm {
     name     = "opencti-export-file-txt-connector"
     channel  = "latest/edge"
-    revision = 13
+    revision = 73
     base     = "ubuntu@24.04"
   }
 
@@ -395,7 +395,7 @@ resource "juju_application" "opencti-import-document-connector" {
   charm {
     name     = "opencti-import-document-connector"
     channel  = "latest/edge"
-    revision = 14
+    revision = 76
     base     = "ubuntu@24.04"
   }
 
@@ -416,7 +416,7 @@ resource "juju_application" "opencti-import-file-stix-connector" {
   charm {
     name     = "opencti-import-file-stix-connector"
     channel  = "latest/edge"
-    revision = 14
+    revision = 77
     base     = "ubuntu@24.04"
   }
 
@@ -435,7 +435,7 @@ resource "juju_application" "opencti-ipinfo-connector" {
   charm {
     name     = "opencti-ipinfo-connector"
     channel  = "latest/edge"
-    revision = 9
+    revision = 70
     base     = "ubuntu@24.04"
   }
 
@@ -457,7 +457,7 @@ resource "juju_application" "opencti-malwarebazaar-connector" {
   charm {
     name     = "opencti-malwarebazaar-connector"
     channel  = "latest/edge"
-    revision = 12
+    revision = 71
     base     = "ubuntu@24.04"
   }
 
@@ -476,7 +476,7 @@ resource "juju_application" "opencti-misp-feed-connector" {
   charm {
     name     = "opencti-misp-feed-connector"
     channel  = "latest/edge"
-    revision = 13
+    revision = 74
     base     = "ubuntu@24.04"
   }
 
@@ -495,7 +495,7 @@ resource "juju_application" "opencti-mitre-connector" {
   charm {
     name     = "opencti-mitre-connector"
     channel  = "latest/edge"
-    revision = 13
+    revision = 74
     base     = "ubuntu@24.04"
   }
 
@@ -514,7 +514,7 @@ resource "juju_application" "opencti-sekoia-connector" {
   charm {
     name     = "opencti-sekoia-connector"
     channel  = "latest/edge"
-    revision = 14
+    revision = 74
     base     = "ubuntu@24.04"
   }
 
@@ -534,7 +534,7 @@ resource "juju_application" "opencti-urlhaus-connector" {
   charm {
     name     = "opencti-urlhaus-connector"
     channel  = "latest/edge"
-    revision = 9
+    revision = 71
     base     = "ubuntu@24.04"
   }
 
@@ -556,7 +556,7 @@ resource "juju_application" "opencti-vxvault-connector" {
   charm {
     name     = "opencti-vxvault-connector"
     channel  = "latest/edge"
-    revision = 14
+    revision = 76
     base     = "ubuntu@24.04"
   }
 
@@ -576,7 +576,7 @@ resource "juju_application" "opencti-nti-connector" {
   charm {
     name     = "opencti-nti-connector"
     channel  = "latest/edge"
-    revision = 1
+    revision = 35
     base     = "ubuntu@24.04"
   }
 
