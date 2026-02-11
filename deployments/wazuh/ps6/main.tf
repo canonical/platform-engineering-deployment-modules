@@ -44,7 +44,7 @@ module "wazuh" {
   wazuh_dashboard = {
     app_name    = "wazuh-dashboard-v5"
     channel     = "4.11/edge"
-    revision    = 20
+    revision    = 21
     constraints = var.wazuh_dashboard_constraints
   }
 
