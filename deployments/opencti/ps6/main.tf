@@ -633,7 +633,7 @@ resource "juju_integration" "ingress" {
   }
 
   application {
-    name     = juju_application.gateway-api-integrator.name
+    name     = juju_application.gateway-route-configurator.name
     endpoint = "gateway"
   }
 }
