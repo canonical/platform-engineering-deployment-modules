@@ -189,11 +189,39 @@ resource "juju_application" "gateway-api-integrator" {
   }
 
   config = {
-    external-hostname = var.opencti_external_hostname
-    gateway-class     = "cilium"
+    gateway-class = "cilium"
   }
 
   trust = true
+}
+
+resource "juju_application" "gateway-route-configurator" {
+  name       = "gateway-route-configurator"
+  model_uuid = var.model_uuid
+
+  charm {
+    name     = "gateway-route-configurator"
+    revision = 8
+    channel  = "latest/edge"
+  }
+
+  config = {
+    hostname = var.opencti_external_hostname
+  }
+}
+
+resource "juju_integration" "gateway-api-route" {
+  model_uuid = var.model_uuid
+
+  application {
+    name     = juju_application.gateway-route-configurator.name
+    endpoint = "gateway-route"
+  }
+
+  application {
+    name     = juju_application.gateway-api-integrator.name
+    endpoint = "gateway-route"
+  }
 }
 
 resource "juju_application" "grafana-agent" {
