@@ -184,7 +184,7 @@ resource "juju_application" "gateway-api-integrator" {
 
   charm {
     name     = "gateway-api-integrator"
-    revision = 115
+    revision = 127
     channel  = "latest/stable"
   }
 
@@ -633,8 +633,8 @@ resource "juju_integration" "ingress" {
   }
 
   application {
-    name     = juju_application.gateway-api-integrator.name
-    endpoint = "gateway"
+    name     = juju_application.gateway-route-configurator.name
+    endpoint = "ingress"
   }
 }
 
