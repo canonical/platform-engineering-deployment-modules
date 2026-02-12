@@ -201,8 +201,8 @@ resource "juju_application" "gateway-route-configurator" {
 
   charm {
     name     = "gateway-route-configurator"
-    revision = 2
-    channel  = "latest/stable"
+    revision = 8
+    channel  = "latest/edge"
   }
 
   config = {
