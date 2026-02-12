@@ -634,7 +634,7 @@ resource "juju_integration" "ingress" {
 
   application {
     name     = juju_application.gateway-route-configurator.name
-    endpoint = "gateway"
+    endpoint = "ingress"
   }
 }
 
