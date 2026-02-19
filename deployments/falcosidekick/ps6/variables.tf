@@ -1,3 +1,8 @@
+variable "model_name" {
+  description = "Juju model name"
+  type        = string
+}
+
 variable "model_uuid" {
   description = "Juju model UUID"
   type        = string
@@ -26,4 +31,9 @@ variable "loki_offer_url" {
 variable "prometheus_metrics_endpoint_offer_url" {
   description = "Prometheus metrics offer URL"
   type        = string
+}
+
+variable "falcosidekick_http_endpoint_consumers" {
+  description = "List of models that consume the Falco sidekick offer"
+  type        = list(string)
 }

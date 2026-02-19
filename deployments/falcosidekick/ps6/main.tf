@@ -86,3 +86,18 @@ resource "juju_integration" "traefik_certificates" {
     name = var.certificates_offer_url
   }
 }
+
+resource "juju_offer" "falcosidekick_http_endpoint" {
+  model_uuid = model_uuid
+
+  name             = "falcosidekick-http-endpoint"
+  application_name = var.falcosidekick.falcosidekick_name
+  endpoints        = [module.falcosidekick.provides.http_endpoint]
+}
+
+resource "juju_access_offer" "falcosidekick_http_endpoint" {
+  admin     = [var.model_name]
+  offer_url = juju_offer.falcosidekick_http_endpoint.url
+  consume   = var.falcosidekick_http_endpoint_consumers
+}
+
