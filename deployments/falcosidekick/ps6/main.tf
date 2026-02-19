@@ -1,0 +1,88 @@
+module "falcosidekick" {
+  source = "git::https://github.com/canonical/falco-operators.git//falcosidekick-k8s-operator/terraform/terraform-product?ref=opencti-rev53&depth=1"
+
+  model_uuid = var.model_uuid
+
+  falcosidekick = {
+    channel  = "2/edge"
+    revision = 37
+  }
+
+  traefik_k8s = {
+    channel  = "latest/stable"
+    revision = 236
+    config = {
+      external_hostname = var.external_hostname
+    }
+  }
+}
+
+resource "juju_integration" "falcosidekick_loki" {
+  provider   = juju
+  model_uuid = var.model_uuid
+
+  application {
+    name     = module.falcosidekick.falcosidekick_name
+    endpoint = module.falcosidekick.falcosidekick_requires.logging
+  }
+
+  application {
+    offer_url = var.loki_offer_url
+  }
+}
+
+resource "juju_integration" "traefik_dashboard" {
+  provider   = juju
+  model_uuid = var.model_uuid
+
+  application {
+    name     = module.falcosidekick.traefik_name
+    endpoint = module.falcosidekick.traefik_provides.grafana_dashboard
+  }
+
+  application {
+    offer_url = var.grafana_offer_url
+  }
+}
+
+resource "juju_integration" "traefik_loki" {
+  provider   = juju
+  model_uuid = var.model_uuid
+
+  application {
+    name     = module.falcosidekick.traefik_name
+    endpoint = module.falcosidekick.traefik_requires.logging
+  }
+
+  application {
+    offer_url = var.loki_offer_url
+  }
+}
+
+resource "juju_integration" "traefik_prometheus" {
+  provider   = juju
+  model_uuid = var.model_uuid
+
+  application {
+    name     = module.falcosidekick.traefik_name
+    endpoint = module.falcosidekick.traefik_provides.metrics_endpoint
+  }
+
+  application {
+    offer_url = var.prometheus_metrics_endpoint_offer_url
+  }
+}
+
+resource "juju_integration" "traefik_certificates" {
+  provider   = juju
+  model_uuid = var.model_uuid
+
+  application {
+    name     = module.falcosidekick.traefik_name
+    endpoint = module.falcosidekick.traefik_requires.certificates
+  }
+
+  application {
+    name = var.certificates_offer_url
+  }
+}
