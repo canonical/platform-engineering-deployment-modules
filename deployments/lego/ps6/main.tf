@@ -29,3 +29,18 @@ resource "juju_access_secret" "lego_credentials_access" {
   ]
   secret_id = juju_secret.lego_credentials.secret_id
 }
+
+resource "juju_offer" "lego_certificates" {
+  model_uuid = var.model_uuid
+
+  name             = "lego-certificates"
+  application_name = module.lego.app_name
+  endpoints        = [module.lego.provides.certificates]
+}
+
+resource "juju_access_offer" "v" {
+  admin     = [var.model_name]
+  offer_url = juju_offer.lego_certificates.url
+  consume   = var.lego_certificates_consumers
+}
+
