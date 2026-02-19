@@ -1,5 +1,5 @@
 module "falcosidekick" {
-  source = "git::https://github.com/canonical/falco-operators.git//falcosidekick-k8s-operator/terraform/terraform-product?ref=opencti-rev53&depth=1"
+  source = "git::https://github.com/canonical/falco-operators.git//falcosidekick-k8s-operator/terraform/terraform-product?ref=rev54&depth=1"
 
   model_uuid = var.model_uuid
 
