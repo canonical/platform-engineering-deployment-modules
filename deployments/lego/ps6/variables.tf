@@ -13,3 +13,8 @@ variable "password" {
   type        = string
   sensitive   = true
 }
+
+variable "lego_certificates_consumers" {
+  description = "List of models that consume the Lego certificates offer"
+  type        = list(string)
+}
