@@ -88,7 +88,7 @@ resource "juju_integration" "traefik_certificates" {
 }
 
 resource "juju_offer" "falcosidekick_http_endpoint" {
-  model_uuid = model_uuid
+  model_uuid = var.model_uuid
 
   name             = "falcosidekick-http-endpoint"
   application_name = var.falcosidekick.falcosidekick_name
