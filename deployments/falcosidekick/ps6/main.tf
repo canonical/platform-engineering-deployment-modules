@@ -83,7 +83,7 @@ resource "juju_integration" "traefik_certificates" {
   }
 
   application {
-    name = var.certificates_offer_url
+    oofer_url = var.certificates_offer_url
   }
 }
 
