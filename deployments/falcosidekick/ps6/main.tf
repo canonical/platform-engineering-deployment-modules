@@ -91,7 +91,7 @@ resource "juju_offer" "falcosidekick_http_endpoint" {
   model_uuid = var.model_uuid
 
   name             = "falcosidekick-http-endpoint"
-  application_name = var.falcosidekick.falcosidekick_name
+  application_name = module.falcosidekick.falcosidekick_name
   endpoints        = [module.falcosidekick.provides.http_endpoint]
 }
 
