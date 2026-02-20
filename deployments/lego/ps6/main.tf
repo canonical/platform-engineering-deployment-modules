@@ -38,7 +38,7 @@ resource "juju_offer" "lego_certificates" {
   endpoints        = [module.lego.provides.certificates]
 }
 
-resource "juju_access_offer" "v" {
+resource "juju_access_offer" "lego_certificates" {
   admin     = [var.model_name]
   offer_url = juju_offer.lego_certificates.url
   consume   = var.lego_certificates_consumers

@@ -1,3 +1,8 @@
+variable "model_name" {
+  description = "Juju model name"
+  type        = string
+}
+
 variable "model_uuid" {
   description = "Juju model for LEGO"
   type        = string
