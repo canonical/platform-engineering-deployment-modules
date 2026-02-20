@@ -92,7 +92,7 @@ resource "juju_offer" "falcosidekick_http_endpoint" {
 
   name             = "falcosidekick-http-endpoint"
   application_name = module.falcosidekick.falcosidekick_name
-  endpoints        = [module.falcosidekick.provides.http_endpoint]
+  endpoints        = [module.falcosidekick.falcosidekick_provides.http_endpoint]
 }
 
 resource "juju_access_offer" "falcosidekick_http_endpoint" {
