@@ -1,5 +1,5 @@
 module "falcosidekick" {
-  source = "git::https://github.com/canonical/falco-operators//falcosidekick-k8s-operator/terraform-product?ref=rev56&depth=1"
+  source = "git::https://github.com/canonical/falco-operators//falcosidekick-k8s-operator/terraform-product?ref=rev59&depth=1"
 
   model_uuid = var.model_uuid
 
@@ -91,8 +91,8 @@ resource "juju_offer" "falcosidekick_http_endpoint" {
   model_uuid = var.model_uuid
 
   name             = "falcosidekick-http-endpoint"
-  application_name = var.falcosidekick.falcosidekick_name
-  endpoints        = [module.falcosidekick.provides.http_endpoint]
+  application_name = module.falcosidekick.falcosidekick_name
+  endpoints        = [module.falcosidekick.falcosidekick_provides.http_endpoint]
 }
 
 resource "juju_access_offer" "falcosidekick_http_endpoint" {
