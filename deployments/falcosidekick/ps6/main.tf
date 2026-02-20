@@ -1,5 +1,5 @@
 module "falcosidekick" {
-  source = "git::https://github.com/canonical/falco-operators//falcosidekick-k8s-operator/terraform-product?ref=rev61&depth=1"
+  source = "git::https://github.com/canonical/falco-operators//falcosidekick-k8s-operator/terraform-product?ref=rev62&depth=1"
 
   model_uuid = var.model_uuid
 
@@ -16,6 +16,21 @@ module "falcosidekick" {
     }
   }
 }
+
+resource "juju_integration" "falcosidekick_send_loki_logs" {
+  provider   = juju
+  model_uuid = var.model_uuid
+
+  application {
+    name     = module.falcosidekick.falcosidekick_name
+    endpoint = module.falcosidekick.falcosidekick_requires.send_loki_logs
+  }
+
+  application {
+    offer_url = var.send_loki_logs_offer_url
+  }
+}
+
 
 resource "juju_integration" "falcosidekick_loki" {
   provider   = juju
