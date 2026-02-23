@@ -71,7 +71,7 @@ resource "juju_integration" "certificates" {
   model_uuid = var.model_uuid
 
   application {
-    name     = juju_application.gateway_route_configurator.name
+    name     = juju_application.gateway_api_integrator.name
     endpoint = "certificates"
   }
 
