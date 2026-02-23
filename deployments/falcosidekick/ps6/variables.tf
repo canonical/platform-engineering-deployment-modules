@@ -18,18 +18,8 @@ variable "certificates_offer_url" {
   type        = string
 }
 
-variable "grafana_offer_url" {
-  description = "Grafana offer URL"
-  type        = string
-}
-
 variable "loki_offer_url" {
   description = "Loki offer URL"
-  type        = string
-}
-
-variable "prometheus_metrics_endpoint_offer_url" {
-  description = "Prometheus metrics offer URL"
   type        = string
 }
 
