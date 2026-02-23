@@ -47,7 +47,7 @@ resource "juju_integration" "gateway_api_route" {
   }
 
   application {
-    name     = juju_application.gateway-api-integrator.name
+    name     = juju_application.gateway_api_integrator.name
     endpoint = "gateway-route"
   }
 }
@@ -114,7 +114,7 @@ resource "juju_offer" "falcosidekick_http_endpoint" {
 
   name             = "falcosidekick-http-endpoint"
   application_name = module.falcosidekick.app_name
-  endpoints        = [module.falcosidekick.falcosidekick_provides.http_endpoint]
+  endpoints        = [module.falcosidekick.provides.http_endpoint]
 }
 
 resource "juju_access_offer" "falcosidekick_http_endpoint" {
