@@ -42,7 +42,7 @@ resource "juju_integration" "gateway_api_route" {
   model_uuid = var.model_uuid
 
   application {
-    name     = juju_application.gateway-route-configurator.name
+    name     = juju_application.gateway_route_configurator.name
     endpoint = "gateway-route"
   }
 
