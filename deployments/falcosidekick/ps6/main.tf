@@ -3,7 +3,7 @@ module "falcosidekick" {
 
   model_uuid = var.model_uuid
   channel    = "2/edge"
-  revision   = 66
+  revision   = 56
 }
 
 resource "juju_application" "gateway_api_integrator" {
