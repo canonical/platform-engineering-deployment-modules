@@ -12,8 +12,8 @@ resource "juju_application" "gateway_api_integrator" {
 
   charm {
     name     = "gateway-api-integrator"
-    revision = 127
-    channel  = "latest/stable"
+    revision = 136
+    channel  = "latest/edge"
   }
 
   config = {
@@ -29,7 +29,7 @@ resource "juju_application" "gateway_route_configurator" {
 
   charm {
     name     = "gateway-route-configurator"
-    revision = 8
+    revision = 9
     channel  = "latest/edge"
   }
 
