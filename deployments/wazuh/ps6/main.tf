@@ -19,13 +19,14 @@ resource "openstack_objectstorage_container_v1" "wazuh_indexer_backup" {
 }
 
 module "wazuh" {
-  source               = "git::https://github.com/canonical/wazuh-server-operator//terraform/product?ref=rev225&depth=1"
-  server_model_name    = var.server_model_name
-  server_model_uuid    = var.server_model_uuid
-  indexer_model_name   = var.indexer_model_name
-  indexer_model_uuid   = var.indexer_model_uuid
-  dashboard_model_name = var.dashboard_model_name
-  dashboard_model_uuid = var.dashboard_model_uuid
+  source                  = "git::https://github.com/canonical/wazuh-server-operator//terraform/product?ref=rev225&depth=1"
+  server_model_name       = var.server_model_name
+  server_model_uuid       = var.server_model_uuid
+  indexer_model_name      = var.indexer_model_name
+  indexer_model_uuid      = var.indexer_model_uuid
+  dashboard_model_name    = var.dashboard_model_name
+  dashboard_model_uuid    = var.dashboard_model_uuid
+  other_indexer_consumers = var.other_indexer_consumers
 
   wazuh_indexer = {
     app_name    = "wazuh-indexer-v5"
