@@ -118,6 +118,7 @@ resource "juju_secret" "lego_credentials" {
     httpreq-endpoint            = "https://lego-certs.canonical.com"
     httpreq-username            = data.vault_generic_secret.lego_credentials.data["username"]
     httpreq-password            = data.vault_generic_secret.lego_credentials.data["password"]
+    httpreq-http-timeout        = 600
     httpreq-propagation-timeout = 600
   }
 }
