@@ -28,6 +28,12 @@ variable "server_model_uuid" {
   type        = string
 }
 
+variable "indexer_consumers" {
+  type        = list(string)
+  description = "Additional model names that need consume access to the indexer offer"
+  default     = []
+}
+
 variable "grafana_offer_url" {
   description = "Grafana offer URL"
   type        = string
