@@ -5,6 +5,7 @@ resource "juju_secret" "lego_credentials" {
     httpreq-endpoint            = "https://lego-certs.canonical.com"
     httpreq-username            = var.username
     httpreq-password            = var.password
+    httpreq-http-timeout        = 600
     httpreq-propagation-timeout = 600
   }
 }
