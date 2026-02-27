@@ -98,5 +98,5 @@ variable "wazuh_indexer_units" {
 
 variable "wazuh_server_storage" {
   description = "Storage constraints for the Wazuh Server"
-  type        = string
+  type        = map(string)
 }
