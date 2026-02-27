@@ -17,7 +17,8 @@ locals {
     "opencti-sekoia-connector",
     "opencti-urlhaus-connector",
     "opencti-vxvault-connector",
-    "opencti-nti-connector"
+    "opencti-nti-connector",
+    "opencti-woap-connector"
   ])
   machine_charms = toset([
     "data-integrator",
@@ -624,6 +625,26 @@ resource "juju_application" "opencti-nti-connector" {
   }
 }
 
+resource "juju_application" "opencti-woap-connector" {
+  name       = "opencti-woap-connector"
+  model_uuid = var.model_uuid
+
+  charm {
+    name     = "opencti-woap-connector"
+    channel  = "latest/edge" 
+    revision = 1             
+    base     = "ubuntu@24.04"
+  }
+
+  config = {
+    opensearch-index          = "wazuh-alerts-*"  
+    opensearch-ssl-verify     = true
+    connector-log-level       = "info"
+    connector-duration-period = "PT1M"
+    wazuh-min-severity        = 13
+  }
+}
+
 resource "juju_integration" "ingress" {
   model_uuid = var.model_uuid
 
@@ -833,4 +854,18 @@ resource "juju_integration" "ubuntu_pro" {
   }
 
   provider = juju.opencti_db
+}
+
+resource "juju_integration" "woap_connector_indexer" {
+  provider   = juju
+  model_uuid = var.model_uuid
+
+  application {
+    name     = juju_application.opencti-woap-connector.name
+    endpoint = "opensearch-client"
+  }
+
+  application {
+    offer_url = var.indexer_offer_url
+  }
 }
