@@ -95,3 +95,8 @@ variable "wazuh_indexer_units" {
   type        = number
   default     = 3
 }
+
+variable "wazuh_server_storage" {
+  description = "Storage constraints for the Wazuh Server"
+  type        = string
+}

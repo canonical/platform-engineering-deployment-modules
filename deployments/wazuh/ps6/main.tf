@@ -57,8 +57,8 @@ module "wazuh" {
       logs-ca-cert             = var.logs_ca_certificate
       custom-config-ssh-key    = "secret:${juju_secret.git_ssh_key.secret_id}"
       custom-config-repository = var.wazuh_custom_config_repository
-
     }
+    storage = var.wazuh_server_storage
   }
 
   traefik_k8s = {
