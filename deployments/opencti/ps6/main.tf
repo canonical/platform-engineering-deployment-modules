@@ -631,13 +631,13 @@ resource "juju_application" "opencti-woap-connector" {
 
   charm {
     name     = "opencti-woap-connector"
-    channel  = "latest/edge" 
-    revision = 1             
+    channel  = "latest/edge"
+    revision = 1
     base     = "ubuntu@24.04"
   }
 
   config = {
-    opensearch-index          = "wazuh-alerts-*"  
+    opensearch-index          = "wazuh-alerts-*"
     opensearch-ssl-verify     = true
     connector-log-level       = "info"
     connector-duration-period = "PT1M"
