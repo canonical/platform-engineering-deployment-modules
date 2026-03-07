@@ -632,7 +632,7 @@ resource "juju_application" "opencti-woap-connector" {
   charm {
     name     = "opencti-woap-connector"
     channel  = "latest/edge"
-    revision = 1
+    revision = 2
     base     = "ubuntu@24.04"
   }
 
@@ -641,7 +641,7 @@ resource "juju_application" "opencti-woap-connector" {
     opensearch-ssl-verify     = true
     connector-log-level       = "info"
     connector-duration-period = "PT1M"
-    wazuh-min-severity        = 13
+    wazuh-min-severity        = 12
   }
 }
 
