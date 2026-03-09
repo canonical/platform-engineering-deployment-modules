@@ -28,6 +28,11 @@ variable "loki_offer_url" {
   type        = string
 }
 
+variable "indexer_offer_url" {
+  description = "Indexer offer URL"
+  type        = string
+}
+
 variable "opencti_consumers" {
   description = "List of models that consume the OpenCTI offer"
   type        = list(string)
