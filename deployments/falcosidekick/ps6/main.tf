@@ -120,6 +120,6 @@ resource "juju_offer" "falcosidekick_http_endpoint" {
 resource "juju_access_offer" "falcosidekick_http_endpoint" {
   admin     = [var.model_name]
   offer_url = juju_offer.falcosidekick_http_endpoint.url
-  consume   = concat(var.falcosidekick_http_endpoint_consumers)
+  consume   = var.falcosidekick_http_endpoint_consumers
 }
 
