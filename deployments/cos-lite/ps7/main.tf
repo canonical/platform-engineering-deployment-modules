@@ -1,17 +1,3 @@
-locals {
-  juju_model_name = "k8s-pfe-ps7-cos-staging-cos"
-  metrics_endpoint_consumers = [
-  ]
-  remote_write_consumers = [
-  ]
-  consumers = concat(
-    local.metrics_endpoint_consumers,
-    local.remote_write_consumers,
-  )
-  certificates_offer_url = "admin/k8s-pfe-ps7-stg-lego.lego-certificates"
-  external_hostname      = "cos-lite-ps7.pfe.staging.canonical.com"
-}
-
 module "alertmanager" {
   source             = "git::https://github.com/canonical/alertmanager-k8s-operator//terraform?ref=tf-provider-v0&depth=1"
   app_name           = "alertmanager"
