@@ -1,0 +1,460 @@
+module "alertmanager" {
+  source             = "git::https://github.com/canonical/alertmanager-k8s-operator//terraform?ref=tf-provider-v0&depth=1"
+  app_name           = "alertmanager"
+  channel            = 1 / stable
+  config             = {}
+  constraints        = "arch=amd64"
+  model              = var.model
+  revision           = 162
+  storage_directives = {}
+  units              = 1
+}
+
+module "catalogue" {
+  source             = "git::https://github.com/canonical/catalogue-k8s-operator//terraform?ref=tf-provider-v0&depth=1"
+  app_name           = "catalogue"
+  channel            = 1 / stable
+  config             = {}
+  constraints        = "arch=amd64"
+  model              = var.model
+  revision           = 87
+  storage_directives = {}
+  units              = 1
+}
+
+module "grafana" {
+  source             = "git::https://github.com/canonical/grafana-k8s-operator//terraform?ref=tf-provider-v0&depth=1"
+  app_name           = "grafana"
+  channel            = 1 / stable
+  config             = {}
+  constraints        = "arch=amd64"
+  model              = var.model
+  revision           = 151
+  storage_directives = {}
+  units              = 1
+}
+
+module "loki" {
+  source             = "git::https://github.com/canonical/loki-k8s-operator//terraform?ref=tf-provider-v0&depth=1"
+  app_name           = "loki"
+  channel            = 1 / stable
+  config             = {}
+  constraints        = "arch=amd64"
+  model              = var.model
+  storage_directives = {}
+  revision           = 199
+  units              = 1
+}
+
+module "prometheus" {
+  source             = "git::https://github.com/canonical/prometheus-k8s-operator//terraform?ref=tf-provider-v0&depth=1"
+  app_name           = "prometheus"
+  channel            = 1 / stable
+  config             = {}
+  constraints        = "arch=amd64"
+  model              = var.model
+  storage_directives = {}
+  revision           = 247
+  units              = 1
+}
+
+module "ssc" {
+  source      = "git::https://github.com/canonical/self-signed-certificates-operator//terraform?ref=rev628&depth=1"
+  app_name    = "ca"
+  channel     = 1 / stable
+  config      = {}
+  constraints = "arch=amd64"
+  model       = var.model
+  revision    = 588
+  units       = 1
+}
+
+resource "juju_integration" "alertmanager_grafana_dashboards" {
+  model = var.model
+
+  application {
+    name     = module.alertmanager.app_name
+    endpoint = module.alertmanager.endpoints.grafana_dashboard
+  }
+
+  application {
+    name     = module.grafana.app_name
+    endpoint = module.grafana.endpoints.grafana_dashboard
+  }
+}
+
+resource "juju_integration" "alertmanager_prometheus" {
+  model = var.model
+
+  application {
+    name     = module.prometheus.app_name
+    endpoint = module.prometheus.endpoints.alertmanager
+  }
+
+  application {
+    name     = module.alertmanager.app_name
+    endpoint = module.alertmanager.endpoints.alerting
+  }
+}
+
+resource "juju_integration" "alertmanager_self_monitoring_prometheus" {
+  model = var.model
+
+  application {
+    name     = module.prometheus.app_name
+    endpoint = module.prometheus.endpoints.metrics_endpoint
+  }
+
+  application {
+    name     = module.alertmanager.app_name
+    endpoint = module.alertmanager.endpoints.self_metrics_endpoint
+  }
+}
+
+resource "juju_integration" "alertmanager_loki" {
+  model = var.model
+
+  application {
+    name     = module.loki.app_name
+    endpoint = module.loki.endpoints.alertmanager
+  }
+
+  application {
+    name     = module.alertmanager.app_name
+    endpoint = module.alertmanager.endpoints.alerting
+  }
+}
+
+resource "juju_integration" "grafana_source_alertmanager" {
+  model = var.model
+
+  application {
+    name     = module.alertmanager.app_name
+    endpoint = module.alertmanager.endpoints.grafana_source
+  }
+
+  application {
+    name     = module.grafana.app_name
+    endpoint = module.grafana.endpoints.grafana_source
+  }
+}
+
+resource "juju_integration" "grafana_self_monitoring_prometheus" {
+  model = var.model
+
+  application {
+    name     = module.prometheus.app_name
+    endpoint = module.prometheus.endpoints.metrics_endpoint
+  }
+
+  application {
+    name     = module.grafana.app_name
+    endpoint = module.grafana.endpoints.metrics_endpoint
+  }
+}
+
+resource "juju_integration" "prometheus_grafana_dashboards_provider" {
+  model = var.model
+
+  application {
+    name     = module.prometheus.app_name
+    endpoint = module.prometheus.endpoints.grafana_dashboard
+  }
+
+  application {
+    name     = module.grafana.app_name
+    endpoint = module.grafana.endpoints.grafana_dashboard
+  }
+}
+
+resource "juju_integration" "prometheus_grafana_source" {
+  model = var.model
+
+  application {
+    name     = module.prometheus.app_name
+    endpoint = module.prometheus.endpoints.grafana_source
+  }
+
+  application {
+    name     = module.grafana.app_name
+    endpoint = module.grafana.endpoints.grafana_source
+  }
+}
+
+resource "juju_integration" "loki_grafana_dashboards_provider" {
+  model = var.model
+
+  application {
+    name     = module.loki.app_name
+    endpoint = module.loki.endpoints.grafana_dashboard
+  }
+
+  application {
+    name     = module.grafana.app_name
+    endpoint = module.grafana.endpoints.grafana_dashboard
+  }
+}
+
+resource "juju_integration" "loki_grafana_source" {
+  model = var.model
+
+  application {
+    name     = module.loki.app_name
+    endpoint = module.loki.endpoints.grafana_source
+  }
+
+  application {
+    name     = module.grafana.app_name
+    endpoint = module.grafana.endpoints.grafana_source
+  }
+}
+
+resource "juju_integration" "loki_self_monitoring_prometheus" {
+  model = var.model
+
+  application {
+    name     = module.prometheus.app_name
+    endpoint = module.prometheus.endpoints.metrics_endpoint
+  }
+
+  application {
+    name     = module.loki.app_name
+    endpoint = module.loki.endpoints.metrics_endpoint
+  }
+}
+
+resource "juju_integration" "catalogue_alertmanager" {
+  model = var.model
+
+  application {
+    name     = module.catalogue.app_name
+    endpoint = module.catalogue.endpoints.catalogue
+  }
+
+  application {
+    name     = module.alertmanager.app_name
+    endpoint = module.alertmanager.endpoints.catalogue
+  }
+}
+
+resource "juju_integration" "catalogue_grafana" {
+  model = var.model
+
+  application {
+    name     = module.catalogue.app_name
+    endpoint = module.catalogue.endpoints.catalogue
+  }
+
+  application {
+    name     = module.grafana.app_name
+    endpoint = module.grafana.endpoints.catalogue
+  }
+}
+
+resource "juju_integration" "catalogue_prometheus" {
+  model = var.model
+
+  application {
+    name     = module.catalogue.app_name
+    endpoint = module.catalogue.endpoints.catalogue
+  }
+
+  application {
+    name     = module.prometheus.app_name
+    endpoint = module.prometheus.endpoints.catalogue
+  }
+}
+
+resource "juju_integration" "alertmanager_ingress" {
+  model = var.model
+
+  application {
+    offer_url = var.ingress_offer_url
+  }
+
+  application {
+    name     = module.alertmanager.app_name
+    endpoint = module.alertmanager.endpoints.ingress
+  }
+}
+
+resource "juju_integration" "catalogue_ingress" {
+  model = var.model
+
+  application {
+    offer_url = var.ingress_offer_url
+  }
+
+  application {
+    name     = module.catalogue.app_name
+    endpoint = module.catalogue.endpoints.ingress
+  }
+}
+
+resource "juju_integration" "grafana_ingress" {
+  model = var.model
+
+  application {
+    offer_url = var.ingress_offer_url
+  }
+
+  application {
+    name     = module.grafana.app_name
+    endpoint = module.grafana.endpoints.ingress
+  }
+}
+
+resource "juju_integration" "prometheus_ingress" {
+  model = var.model
+
+  application {
+    offer_url = var.ingress_offer_url
+  }
+
+  application {
+    name     = module.prometheus.app_name
+    endpoint = module.prometheus.endpoints.ingress
+  }
+}
+
+resource "juju_integration" "loki_ingress" {
+  model = var.model
+
+  application {
+    offer_url = var.ingress_offer_url
+  }
+
+  application {
+    name     = module.loki.app_name
+    endpoint = module.loki.endpoints.ingress
+  }
+}
+
+resource "juju_integration" "alertmanager_certificates" {
+  model = var.model
+
+  application {
+    name     = module.ssc[0].app_name
+    endpoint = module.ssc[0].provides.certificates
+  }
+
+  application {
+    name     = module.alertmanager.app_name
+    endpoint = module.alertmanager.endpoints.certificates
+  }
+}
+
+resource "juju_integration" "catalogue_certificates" {
+  model = var.model
+
+  application {
+    name     = module.ssc[0].app_name
+    endpoint = module.ssc[0].provides.certificates
+  }
+
+  application {
+    name     = module.catalogue.app_name
+    endpoint = module.catalogue.endpoints.certificates
+  }
+}
+
+resource "juju_integration" "grafana_certificates" {
+  model = var.model
+
+  application {
+    name     = module.ssc[0].app_name
+    endpoint = module.ssc[0].provides.certificates
+  }
+
+  application {
+    name     = module.grafana.app_name
+    endpoint = module.grafana.endpoints.certificates
+  }
+}
+
+resource "juju_integration" "loki_certificates" {
+  model = var.model
+
+  application {
+    name     = module.ssc[0].app_name
+    endpoint = module.ssc[0].provides.certificates
+  }
+
+  application {
+    name     = module.loki.app_name
+    endpoint = module.loki.endpoints.certificates
+  }
+}
+
+resource "juju_integration" "prometheus_certificates" {
+  model = var.model
+
+  application {
+    name     = module.ssc[0].app_name
+    endpoint = module.ssc[0].provides.certificates
+  }
+
+  application {
+    name     = module.prometheus.app_name
+    endpoint = module.prometheus.endpoints.certificates
+  }
+}
+
+resource "juju_offer" "alertmanager_karma_dashboard" {
+  name             = "alertmanager-karma-dashboard"
+  model            = var.model
+  application_name = module.alertmanager.app_name
+  endpoints        = ["karma-dashboard"]
+}
+
+resource "juju_offer" "grafana_dashboards" {
+  name             = "grafana-dashboards"
+  model            = var.model
+  application_name = module.grafana.app_name
+  endpoints        = ["grafana-dashboard"]
+}
+
+resource "juju_offer" "loki_logging" {
+  name             = "loki-logging"
+  model            = var.model
+  application_name = module.loki.app_name
+  endpoints        = ["logging"]
+}
+
+resource "juju_offer" "prometheus_receive_remote_write" {
+  name             = "prometheus-receive-remote-write"
+  model            = var.model
+  application_name = module.prometheus.app_name
+  endpoints        = ["receive-remote-write"]
+}
+
+resource "juju_offer" "prometheus_metrics_endpoint" {
+  name             = "prometheus-metrics-endpoint"
+  model            = var.model
+  application_name = module.prometheus.app_name
+  endpoints        = ["metrics-endpoint"]
+}
+
+resource "juju_access_offer" "grafana_dashboard" {
+  offer_url = module.cos-lite.offers.grafana_dashboards.url
+  admin     = var.model
+  consume   = var.grafana_consumers
+}
+
+resource "juju_access_offer" "loki_logging" {
+  offer_url = module.cos-lite.offers.loki_logging.url
+  admin     = var.model
+  consume   = var.loki_consumers
+}
+
+resource "juju_access_offer" "remote_write" {
+  offer_url = module.cos-lite.offers.prometheus_receive_remote_write.url
+  admin     = var.model
+  consume   = var.remote_write_consumers
+}
+
+resource "juju_access_offer" "metrics_endpoint" {
+  offer_url = module.cos-lite.offers.prometheus_metrics_endpoint.url
+  admin     = var.model
+  consume   = var.metrics_endpoint_consumers
+}
