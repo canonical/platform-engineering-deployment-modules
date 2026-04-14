@@ -4,7 +4,7 @@ variable "model" {
 }
 
 variable "ingress_offer_url" {
-  description = "The ingress offer URL."
+  description = "The ingress offer URL"
   type        = string
   default     = null
 }
@@ -24,7 +24,7 @@ variable "remote_write_consumers" {
   type        = list(string)
 }
 
-variable "metrics_endpoint" {
+variable "metrics_endpoint_consumers" {
   description = "List of models that consume the prometheus metrics_endpoint offer"
   type        = list(string)
 }
