@@ -32,3 +32,9 @@ variable "falcosidekick_http_endpoint_consumers" {
   description = "List of models that consume the Falco sidekick offer"
   type        = list(string)
 }
+
+variable "ingress_offer_url" {
+  description = "The ingress offer URL"
+  type        = string
+  default     = null
+}
