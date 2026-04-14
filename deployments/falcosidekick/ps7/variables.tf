@@ -8,16 +8,6 @@ variable "model_uuid" {
   type        = string
 }
 
-variable "external_hostname" {
-  description = "The external hostname for Falco sidekick"
-  type        = string
-}
-
-variable "certificates_offer_url" {
-  description = "Certificates offer URL"
-  type        = string
-}
-
 variable "loki_offer_url" {
   description = "Loki offer URL"
   type        = string
