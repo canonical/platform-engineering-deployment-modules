@@ -458,3 +458,4 @@ resource "juju_access_offer" "metrics_endpoint" {
   admin     = var.model
   consume   = var.metrics_endpoint_consumers
 }
+
