@@ -1,3 +1,12 @@
+module "ingress_configurator" {
+  source     = "git::https://github.com/canonical/ingress-configurator-operator//terraform?ref=rev72&depth=1"
+  app_name   = "ingress-configurator"
+  model_uuid = var.model_uuid
+  channel    = "latest/edge"
+  revision   = 72
+  config     = { hostname = var.external_hostname }
+}
+
 module "alertmanager" {
   source             = "git::https://github.com/canonical/alertmanager-k8s-operator//terraform?ref=tf-provider-v0&depth=1"
   app_name           = "alertmanager"
@@ -262,6 +271,76 @@ resource "juju_integration" "catalogue_prometheus" {
   application {
     name     = module.prometheus.app_name
     endpoint = module.prometheus.endpoints.catalogue
+  }
+}
+
+resource "juju_integration" "alertmanager_ingress" {
+  model = var.model
+
+  application {
+    name     = module.ingress_configurator.app_name
+    endpoint = module.ingress_configurator.endpoints.ingress
+  }
+
+  application {
+    name     = module.alertmanager.app_name
+    endpoint = module.alertmanager.endpoints.ingress
+  }
+}
+
+resource "juju_integration" "catalogue_ingress" {
+  model = var.model
+
+  application {
+    name     = module.ingress_configurator.app_name
+    endpoint = module.ingress_configurator.endpoints.ingress
+  }
+
+  application {
+    name     = module.catalogue.app_name
+    endpoint = module.catalogue.endpoints.ingress
+  }
+}
+
+resource "juju_integration" "grafana_ingress" {
+  model = var.model
+
+  application {
+    name     = module.ingress_configurator.app_name
+    endpoint = module.ingress_configurator.endpoints.ingress
+  }
+
+  application {
+    name     = module.grafana.app_name
+    endpoint = module.grafana.endpoints.ingress
+  }
+}
+
+resource "juju_integration" "prometheus_ingress" {
+  model = var.model
+
+  application {
+    name     = module.ingress_configurator.app_name
+    endpoint = module.ingress_configurator.endpoints.ingress
+  }
+
+  application {
+    name     = module.prometheus.app_name
+    endpoint = module.prometheus.endpoints.ingress
+  }
+}
+
+resource "juju_integration" "loki_ingress" {
+  model = var.model
+
+  application {
+    name     = module.ingress_configurator.app_name
+    endpoint = module.ingress_configurator.endpoints.ingress
+  }
+
+  application {
+    name     = module.loki.app_name
+    endpoint = module.loki.endpoints.ingress
   }
 }
 
