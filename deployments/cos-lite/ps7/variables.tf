@@ -3,12 +3,6 @@ variable "model" {
   type        = string
 }
 
-variable "ingress_offer_url" {
-  description = "The ingress offer URL"
-  type        = string
-  default     = null
-}
-
 variable "grafana_consumers" {
   description = "List of models that consume the grafana offer"
   type        = list(string)
