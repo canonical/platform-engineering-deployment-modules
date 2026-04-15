@@ -265,71 +265,6 @@ resource "juju_integration" "catalogue_prometheus" {
   }
 }
 
-resource "juju_integration" "alertmanager_ingress" {
-  model = var.model
-
-  application {
-    offer_url = var.ingress_offer_url
-  }
-
-  application {
-    name     = module.alertmanager.app_name
-    endpoint = module.alertmanager.endpoints.ingress
-  }
-}
-
-resource "juju_integration" "catalogue_ingress" {
-  model = var.model
-
-  application {
-    offer_url = var.ingress_offer_url
-  }
-
-  application {
-    name     = module.catalogue.app_name
-    endpoint = module.catalogue.endpoints.ingress
-  }
-}
-
-resource "juju_integration" "grafana_ingress" {
-  model = var.model
-
-  application {
-    offer_url = var.ingress_offer_url
-  }
-
-  application {
-    name     = module.grafana.app_name
-    endpoint = module.grafana.endpoints.ingress
-  }
-}
-
-resource "juju_integration" "prometheus_ingress" {
-  model = var.model
-
-  application {
-    offer_url = var.ingress_offer_url
-  }
-
-  application {
-    name     = module.prometheus.app_name
-    endpoint = module.prometheus.endpoints.ingress
-  }
-}
-
-resource "juju_integration" "loki_ingress" {
-  model = var.model
-
-  application {
-    offer_url = var.ingress_offer_url
-  }
-
-  application {
-    name     = module.loki.app_name
-    endpoint = module.loki.endpoints.ingress
-  }
-}
-
 resource "juju_integration" "alertmanager_certificates" {
   model = var.model
 
@@ -458,3 +393,4 @@ resource "juju_access_offer" "metrics_endpoint" {
   admin     = var.model
   consume   = var.metrics_endpoint_consumers
 }
+

@@ -6,19 +6,6 @@ module "falcosidekick" {
   revision   = 56
 }
 
-resource "juju_integration" "ingress" {
-  model_uuid = var.model_uuid
-
-  application {
-    name     = module.falcosidekick.app_name
-    endpoint = module.falcosidekick.requires.ingress
-  }
-
-  application {
-    offer = var.ingress_offer_url
-  }
-}
-
 resource "juju_integration" "falcosidekick_send_loki_logs" {
   provider   = juju
   model_uuid = var.model_uuid
