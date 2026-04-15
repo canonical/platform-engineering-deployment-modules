@@ -1,3 +1,12 @@
+module "ingress_configurator" {
+  source     = "git::https://github.com/canonical/ingress-configurator-operator//terraform?ref=rev72&depth=1"
+  app_name   = "ingress-configurator"
+  model_uuid = var.model_uuid
+  channel    = "latest/edge"
+  revision   = 72
+  config     = { hostname = var.external_hostname }
+}
+
 module "falcosidekick" {
   source = "git::https://github.com/canonical/falco-operators//falcosidekick-k8s-operator/terraform?ref=rev66&depth=1"
 
@@ -6,53 +15,8 @@ module "falcosidekick" {
   revision   = 56
 }
 
-resource "juju_application" "gateway_api_integrator" {
-  name       = "gateway-api"
-  model_uuid = var.model_uuid
-
-  charm {
-    name     = "gateway-api-integrator"
-    revision = 136
-    channel  = "latest/edge"
-  }
-
-  config = {
-    gateway-class = "cilium"
-  }
-
-  trust = true
-}
-
-resource "juju_application" "gateway_route_configurator" {
-  name       = "gateway-route-configurator"
-  model_uuid = var.model_uuid
-
-  charm {
-    name     = "gateway-route-configurator"
-    revision = 9
-    channel  = "latest/edge"
-  }
-
-  config = {
-    hostname = var.external_hostname
-  }
-}
-
-resource "juju_integration" "gateway_api_route" {
-  model_uuid = var.model_uuid
-
-  application {
-    name     = juju_application.gateway_route_configurator.name
-    endpoint = "gateway-route"
-  }
-
-  application {
-    name     = juju_application.gateway_api_integrator.name
-    endpoint = "gateway-route"
-  }
-}
-
-resource "juju_integration" "ingress" {
+resource "juju_integration" "falcosidekick_ingress" {
+  provider   = juju
   model_uuid = var.model_uuid
 
   application {
@@ -61,22 +25,8 @@ resource "juju_integration" "ingress" {
   }
 
   application {
-    name     = juju_application.gateway_route_configurator.name
-    endpoint = "ingress"
-  }
-}
-
-resource "juju_integration" "certificates" {
-  provider   = juju
-  model_uuid = var.model_uuid
-
-  application {
-    name     = juju_application.gateway_api_integrator.name
-    endpoint = "certificates"
-  }
-
-  application {
-    offer_url = var.certificates_offer_url
+    name     = module.ingress_configurator.app_name
+    endpoint = module.ingress_configurator.endpoints.ingress
   }
 }
 
@@ -93,7 +43,6 @@ resource "juju_integration" "falcosidekick_send_loki_logs" {
     offer_url = var.send_loki_logs_offer_url
   }
 }
-
 
 resource "juju_integration" "falcosidekick_loki" {
   provider   = juju

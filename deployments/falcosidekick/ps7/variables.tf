@@ -8,16 +8,6 @@ variable "model_uuid" {
   type        = string
 }
 
-variable "external_hostname" {
-  description = "The external hostname for Falco sidekick"
-  type        = string
-}
-
-variable "certificates_offer_url" {
-  description = "Certificates offer URL"
-  type        = string
-}
-
 variable "loki_offer_url" {
   description = "Loki offer URL"
   type        = string
@@ -31,4 +21,9 @@ variable "send_loki_logs_offer_url" {
 variable "falcosidekick_http_endpoint_consumers" {
   description = "List of models that consume the Falco sidekick offer"
   type        = list(string)
+}
+
+variable "external_hostname" {
+  description = "Hostname to configure on the ingress configurator charm"
+  type        = string
 }
