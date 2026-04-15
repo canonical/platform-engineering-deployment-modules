@@ -11,12 +11,13 @@ output "offers" {
 
 output "components" {
   value = {
-    alertmanager = module.alertmanager
-    catalogue    = module.catalogue
-    grafana      = module.grafana
-    loki         = module.loki
-    prometheus   = module.prometheus
-    ssc          = module.ssc
+    alertmanager         = module.alertmanager
+    catalogue            = module.catalogue
+    grafana              = module.grafana
+    loki                 = module.loki
+    prometheus           = module.prometheus
+    ssc                  = module.ssc
+    ingress_configurator = module.ingress_configurator
   }
   description = "All Terraform charm modules which make up this product module"
 }
