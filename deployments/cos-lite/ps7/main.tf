@@ -10,7 +10,7 @@ module "ingress_configurator" {
 module "alertmanager" {
   source             = "git::https://github.com/canonical/alertmanager-k8s-operator//terraform?ref=tf-provider-v0&depth=1"
   app_name           = "alertmanager"
-  channel            = 1 / stable
+  channel            = "1/stable"
   config             = {}
   constraints        = "arch=amd64"
   model              = var.model
@@ -22,7 +22,7 @@ module "alertmanager" {
 module "catalogue" {
   source             = "git::https://github.com/canonical/catalogue-k8s-operator//terraform?ref=tf-provider-v0&depth=1"
   app_name           = "catalogue"
-  channel            = 1 / stable
+  channel            = "1/stable"
   config             = {}
   constraints        = "arch=amd64"
   model              = var.model
@@ -34,7 +34,7 @@ module "catalogue" {
 module "grafana" {
   source             = "git::https://github.com/canonical/grafana-k8s-operator//terraform?ref=tf-provider-v0&depth=1"
   app_name           = "grafana"
-  channel            = 1 / stable
+  channel            = "1/stable"
   config             = {}
   constraints        = "arch=amd64"
   model              = var.model
@@ -46,7 +46,7 @@ module "grafana" {
 module "loki" {
   source             = "git::https://github.com/canonical/loki-k8s-operator//terraform?ref=tf-provider-v0&depth=1"
   app_name           = "loki"
-  channel            = 1 / stable
+  channel            = "1/stable"
   config             = {}
   constraints        = "arch=amd64"
   model              = var.model
@@ -58,7 +58,7 @@ module "loki" {
 module "prometheus" {
   source             = "git::https://github.com/canonical/prometheus-k8s-operator//terraform?ref=tf-provider-v0&depth=1"
   app_name           = "prometheus"
-  channel            = 1 / stable
+  channel            = "1/stable"
   config             = {}
   constraints        = "arch=amd64"
   model              = var.model
@@ -70,7 +70,7 @@ module "prometheus" {
 module "ssc" {
   source      = "git::https://github.com/canonical/self-signed-certificates-operator//terraform?ref=rev628&depth=1"
   app_name    = "ca"
-  channel     = 1 / stable
+  channel     = "1/stable"
   config      = {}
   constraints = "arch=amd64"
   model       = var.model
