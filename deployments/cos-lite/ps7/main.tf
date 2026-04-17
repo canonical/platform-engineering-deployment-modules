@@ -8,9 +8,9 @@ module "ingress_configurator" {
 }
 
 module "alertmanager" {
-  source             = "git::https://github.com/canonical/alertmanager-k8s-operator//terraform?ref=tf-provider-v0&depth=1"
+  source             = "git::https://github.com/canonical/alertmanager-k8s-operator//terraform?ref=rev201&depth=1"
   app_name           = "alertmanager"
-  channel            = 1 / stable
+  channel            = "1/stable"
   config             = {}
   constraints        = "arch=amd64"
   model              = var.model
@@ -20,9 +20,9 @@ module "alertmanager" {
 }
 
 module "catalogue" {
-  source             = "git::https://github.com/canonical/catalogue-k8s-operator//terraform?ref=tf-provider-v0&depth=1"
+  source             = "git::https://github.com/canonical/catalogue-k8s-operator//terraform?ref=rev120&depth=1"
   app_name           = "catalogue"
-  channel            = 1 / stable
+  channel            = "1/stable"
   config             = {}
   constraints        = "arch=amd64"
   model              = var.model
@@ -32,9 +32,9 @@ module "catalogue" {
 }
 
 module "grafana" {
-  source             = "git::https://github.com/canonical/grafana-k8s-operator//terraform?ref=tf-provider-v0&depth=1"
+  source             = "git::https://github.com/canonical/grafana-k8s-operator//terraform?ref=rev185&depth=1"
   app_name           = "grafana"
-  channel            = 1 / stable
+  channel            = "1/stable"
   config             = {}
   constraints        = "arch=amd64"
   model              = var.model
@@ -44,9 +44,9 @@ module "grafana" {
 }
 
 module "loki" {
-  source             = "git::https://github.com/canonical/loki-k8s-operator//terraform?ref=tf-provider-v0&depth=1"
+  source             = "git::https://github.com/canonical/loki-k8s-operator//terraform?ref=rev220&depth=1"
   app_name           = "loki"
-  channel            = 1 / stable
+  channel            = "1/stable"
   config             = {}
   constraints        = "arch=amd64"
   model              = var.model
@@ -56,9 +56,9 @@ module "loki" {
 }
 
 module "prometheus" {
-  source             = "git::https://github.com/canonical/prometheus-k8s-operator//terraform?ref=tf-provider-v0&depth=1"
+  source             = "git::https://github.com/canonical/prometheus-k8s-operator//terraform?ref=rev291&depth=1"
   app_name           = "prometheus"
-  channel            = 1 / stable
+  channel            = "1/stable"
   config             = {}
   constraints        = "arch=amd64"
   model              = var.model
@@ -70,7 +70,7 @@ module "prometheus" {
 module "ssc" {
   source      = "git::https://github.com/canonical/self-signed-certificates-operator//terraform?ref=rev628&depth=1"
   app_name    = "ca"
-  channel     = 1 / stable
+  channel     = "1/stable"
   config      = {}
   constraints = "arch=amd64"
   model       = var.model
@@ -348,8 +348,8 @@ resource "juju_integration" "alertmanager_certificates" {
   model = var.model
 
   application {
-    name     = module.ssc[0].app_name
-    endpoint = module.ssc[0].provides.certificates
+    name     = module.ssc.app_name
+    endpoint = module.ssc.provides.certificates
   }
 
   application {
@@ -362,8 +362,8 @@ resource "juju_integration" "catalogue_certificates" {
   model = var.model
 
   application {
-    name     = module.ssc[0].app_name
-    endpoint = module.ssc[0].provides.certificates
+    name     = module.ssc.app_name
+    endpoint = module.ssc.provides.certificates
   }
 
   application {
@@ -376,8 +376,8 @@ resource "juju_integration" "grafana_certificates" {
   model = var.model
 
   application {
-    name     = module.ssc[0].app_name
-    endpoint = module.ssc[0].provides.certificates
+    name     = module.ssc.app_name
+    endpoint = module.ssc.provides.certificates
   }
 
   application {
@@ -390,8 +390,8 @@ resource "juju_integration" "loki_certificates" {
   model = var.model
 
   application {
-    name     = module.ssc[0].app_name
-    endpoint = module.ssc[0].provides.certificates
+    name     = module.ssc.app_name
+    endpoint = module.ssc.provides.certificates
   }
 
   application {
@@ -404,8 +404,8 @@ resource "juju_integration" "prometheus_certificates" {
   model = var.model
 
   application {
-    name     = module.ssc[0].app_name
-    endpoint = module.ssc[0].provides.certificates
+    name     = module.ssc.app_name
+    endpoint = module.ssc.provides.certificates
   }
 
   application {
@@ -450,25 +450,25 @@ resource "juju_offer" "prometheus_metrics_endpoint" {
 }
 
 resource "juju_access_offer" "grafana_dashboard" {
-  offer_url = module.cos-lite.offers.grafana_dashboards.url
+  offer_url = juju_offer.grafana_dashboards.url
   admin     = var.model
   consume   = var.grafana_consumers
 }
 
 resource "juju_access_offer" "loki_logging" {
-  offer_url = module.cos-lite.offers.loki_logging.url
+  offer_url = juju_offer.loki_logging.url
   admin     = var.model
   consume   = var.loki_consumers
 }
 
 resource "juju_access_offer" "remote_write" {
-  offer_url = module.cos-lite.offers.prometheus_receive_remote_write.url
+  offer_url = juju_offer.prometheus_receive_remote_write.url
   admin     = var.model
   consume   = var.remote_write_consumers
 }
 
 resource "juju_access_offer" "metrics_endpoint" {
-  offer_url = module.cos-lite.offers.prometheus_metrics_endpoint.url
+  offer_url = juju_offer.prometheus_metrics_endpoint.url
   admin     = var.model
   consume   = var.metrics_endpoint_consumers
 }
