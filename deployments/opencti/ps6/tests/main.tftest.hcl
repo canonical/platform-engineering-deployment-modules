@@ -1,7 +1,23 @@
 # Copyright 2025 Canonical Ltd.
 # See LICENSE file for licensing details.
 
-mock_provider "vault" {}
+mock_provider "vault" {
+  mock_data "vault_generic_secret" {
+    defaults = {
+      data = {
+        endpoint_url      = "https://mock-s3.example.com"
+        username          = "mock-username"
+        password          = "mock-password"
+        key               = "mock-key"
+        token             = "mock-token"
+        email             = "mock@example.com"
+        "api-key"         = "mock-api-key"
+        "client-id"       = "mock-client-id"
+        "client-secret"   = "mock-client-secret"
+      }
+    }
+  }
+}
 mock_provider "openstack" {}
 
 provider "juju" {}
