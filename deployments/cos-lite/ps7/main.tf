@@ -8,7 +8,7 @@ module "ingress_configurator" {
 }
 
 module "alertmanager" {
-  source             = "git::https://github.com/canonical/alertmanager-k8s-operator//terraform?ref=tf-provider-v0&depth=1"
+  source             = "git::https://github.com/canonical/alertmanager-k8s-operator//terraform?ref=rev201&depth=1"
   app_name           = "alertmanager"
   channel            = "1/stable"
   config             = {}
@@ -20,7 +20,7 @@ module "alertmanager" {
 }
 
 module "catalogue" {
-  source             = "git::https://github.com/canonical/catalogue-k8s-operator//terraform?ref=tf-provider-v0&depth=1"
+  source             = "git::https://github.com/canonical/catalogue-k8s-operator//terraform?ref=rev120&depth=1"
   app_name           = "catalogue"
   channel            = "1/stable"
   config             = {}
@@ -32,7 +32,7 @@ module "catalogue" {
 }
 
 module "grafana" {
-  source             = "git::https://github.com/canonical/grafana-k8s-operator//terraform?ref=tf-provider-v0&depth=1"
+  source             = "git::https://github.com/canonical/grafana-k8s-operator//terraform?ref=rev185&depth=1"
   app_name           = "grafana"
   channel            = "1/stable"
   config             = {}
@@ -44,7 +44,7 @@ module "grafana" {
 }
 
 module "loki" {
-  source             = "git::https://github.com/canonical/loki-k8s-operator//terraform?ref=tf-provider-v0&depth=1"
+  source             = "git::https://github.com/canonical/loki-k8s-operator//terraform?ref=rev220&depth=1"
   app_name           = "loki"
   channel            = "1/stable"
   config             = {}
@@ -56,7 +56,7 @@ module "loki" {
 }
 
 module "prometheus" {
-  source             = "git::https://github.com/canonical/prometheus-k8s-operator//terraform?ref=tf-provider-v0&depth=1"
+  source             = "git::https://github.com/canonical/prometheus-k8s-operator//terraform?ref=rev291&depth=1"
   app_name           = "prometheus"
   channel            = "1/stable"
   config             = {}
