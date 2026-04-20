@@ -22,7 +22,7 @@ run "basic_plan" {
   }
 
   assert {
-    condition     = output.components.falcosidekick.app_name == "falcosidekick"
+    condition     = output.components.falcosidekick.app_name == "falcosidekick-k8s"
     error_message = "falcosidekick app_name did not match expected"
   }
 }
