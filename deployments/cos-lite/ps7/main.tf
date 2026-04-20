@@ -68,11 +68,14 @@ module "prometheus" {
 }
 
 module "ssc" {
-  source     = "git::https://github.com/canonical/self-signed-certificates-operator//terraform?ref=rev628&depth=1"
-  app_name   = "ca"
-  channel    = "1/stable"
-  config     = {}
-  model_name = var.model
+  source      = "git::https://github.com/canonical/self-signed-certificates-operator//terraform?ref=14f5ae731f934f623c98befabc59ccb2467c5ac6&depth=1"
+  app_name    = "ca"
+  channel     = "1/stable"
+  config      = {}
+  constraints = "arch=amd64"
+  model_uuid  = var.model_uuid
+  revision    = 588
+  units       = 1
 }
 
 resource "juju_integration" "alertmanager_grafana_dashboards" {
@@ -346,7 +349,7 @@ resource "juju_integration" "alertmanager_certificates" {
 
   application {
     name     = module.ssc.app_name
-    endpoint = module.ssc.certificates_endpoint
+    endpoint = module.ssc.provides.certificates
   }
 
   application {
@@ -360,7 +363,7 @@ resource "juju_integration" "catalogue_certificates" {
 
   application {
     name     = module.ssc.app_name
-    endpoint = module.ssc.certificates_endpoint
+    endpoint = module.ssc.provides.certificates
   }
 
   application {
@@ -374,7 +377,7 @@ resource "juju_integration" "grafana_certificates" {
 
   application {
     name     = module.ssc.app_name
-    endpoint = module.ssc.certificates_endpoint
+    endpoint = module.ssc.provides.certificates
   }
 
   application {
@@ -388,7 +391,7 @@ resource "juju_integration" "loki_certificates" {
 
   application {
     name     = module.ssc.app_name
-    endpoint = module.ssc.certificates_endpoint
+    endpoint = module.ssc.provides.certificates
   }
 
   application {
@@ -402,7 +405,7 @@ resource "juju_integration" "prometheus_certificates" {
 
   application {
     name     = module.ssc.app_name
-    endpoint = module.ssc.certificates_endpoint
+    endpoint = module.ssc.provides.certificates
   }
 
   application {
@@ -448,25 +451,25 @@ resource "juju_offer" "prometheus_metrics_endpoint" {
 
 resource "juju_access_offer" "grafana_dashboard" {
   offer_url = juju_offer.grafana_dashboards.url
-  admin     = var.model
+  admin     = [var.model]
   consume   = var.grafana_consumers
 }
 
 resource "juju_access_offer" "loki_logging" {
   offer_url = juju_offer.loki_logging.url
-  admin     = var.model
+  admin     = [var.model]
   consume   = var.loki_consumers
 }
 
 resource "juju_access_offer" "remote_write" {
   offer_url = juju_offer.prometheus_receive_remote_write.url
-  admin     = var.model
+  admin     = [var.model]
   consume   = var.remote_write_consumers
 }
 
 resource "juju_access_offer" "metrics_endpoint" {
   offer_url = juju_offer.prometheus_metrics_endpoint.url
-  admin     = var.model
+  admin     = [var.model]
   consume   = var.metrics_endpoint_consumers
 }
 
