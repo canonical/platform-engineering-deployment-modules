@@ -68,7 +68,7 @@ module "prometheus" {
 }
 
 module "ssc" {
-  source      = "git::https://github.com/canonical/self-signed-certificates-operator//terraform?ref=14f5ae731f934f623c98befabc59ccb2467c5ac6&depth=1"
+  source      = "git::https://github.com/canonical/self-signed-certificates-operator//terraform?ref=rev628&depth=1"
   app_name    = "ca"
   channel     = "1/stable"
   config      = {}
