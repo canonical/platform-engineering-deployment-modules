@@ -13,7 +13,7 @@ module "alertmanager" {
   channel            = "1/stable"
   config             = {}
   constraints        = "arch=amd64"
-  model              = var.model
+  model_uuid         = var.model_uuid
   revision           = 162
   storage_directives = {}
   units              = 1
@@ -25,7 +25,7 @@ module "catalogue" {
   channel            = "1/stable"
   config             = {}
   constraints        = "arch=amd64"
-  model              = var.model
+  model_uuid         = var.model_uuid
   revision           = 87
   storage_directives = {}
   units              = 1
@@ -37,7 +37,7 @@ module "grafana" {
   channel            = "1/stable"
   config             = {}
   constraints        = "arch=amd64"
-  model              = var.model
+  model_uuid         = var.model_uuid
   revision           = 151
   storage_directives = {}
   units              = 1
@@ -49,7 +49,7 @@ module "loki" {
   channel            = "1/stable"
   config             = {}
   constraints        = "arch=amd64"
-  model              = var.model
+  model_uuid         = var.model_uuid
   storage_directives = {}
   revision           = 199
   units              = 1
@@ -61,21 +61,18 @@ module "prometheus" {
   channel            = "1/stable"
   config             = {}
   constraints        = "arch=amd64"
-  model              = var.model
+  model_uuid         = var.model_uuid
   storage_directives = {}
   revision           = 247
   units              = 1
 }
 
 module "ssc" {
-  source      = "git::https://github.com/canonical/self-signed-certificates-operator//terraform?ref=rev628&depth=1"
-  app_name    = "ca"
-  channel     = "1/stable"
-  config      = {}
-  constraints = "arch=amd64"
-  model       = var.model
-  revision    = 588
-  units       = 1
+  source     = "git::https://github.com/canonical/self-signed-certificates-operator//terraform?ref=rev628&depth=1"
+  app_name   = "ca"
+  channel    = "1/stable"
+  config     = {}
+  model_name = var.model
 }
 
 resource "juju_integration" "alertmanager_grafana_dashboards" {
@@ -349,7 +346,7 @@ resource "juju_integration" "alertmanager_certificates" {
 
   application {
     name     = module.ssc.app_name
-    endpoint = module.ssc.provides.certificates
+    endpoint = module.ssc.certificates_endpoint
   }
 
   application {
@@ -363,7 +360,7 @@ resource "juju_integration" "catalogue_certificates" {
 
   application {
     name     = module.ssc.app_name
-    endpoint = module.ssc.provides.certificates
+    endpoint = module.ssc.certificates_endpoint
   }
 
   application {
@@ -377,7 +374,7 @@ resource "juju_integration" "grafana_certificates" {
 
   application {
     name     = module.ssc.app_name
-    endpoint = module.ssc.provides.certificates
+    endpoint = module.ssc.certificates_endpoint
   }
 
   application {
@@ -391,7 +388,7 @@ resource "juju_integration" "loki_certificates" {
 
   application {
     name     = module.ssc.app_name
-    endpoint = module.ssc.provides.certificates
+    endpoint = module.ssc.certificates_endpoint
   }
 
   application {
@@ -405,7 +402,7 @@ resource "juju_integration" "prometheus_certificates" {
 
   application {
     name     = module.ssc.app_name
-    endpoint = module.ssc.provides.certificates
+    endpoint = module.ssc.certificates_endpoint
   }
 
   application {
