@@ -15,10 +15,10 @@ provider "juju" {}
 
 resource "juju_model" "test_model" {
   name       = "tf-falcosidekick-${formatdate("YYYYMMDDhhmmss", timestamp())}"
-  credential = "microk8s"
+  credential = "tfk8s"
 
   cloud {
-    name = "microk8s"
+    name = "tfk8s"
   }
 }
 
