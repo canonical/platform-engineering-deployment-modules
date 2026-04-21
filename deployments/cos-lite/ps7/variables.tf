@@ -1,8 +1,3 @@
-variable "model" {
-  description = "Reference to an existing model resource or data source for the model to deploy to"
-  type        = string
-}
-
 variable "model_uuid" {
   description = "UUID of the Juju model where the application will be deployed"
   type        = string
