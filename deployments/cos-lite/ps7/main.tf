@@ -451,25 +451,25 @@ resource "juju_offer" "prometheus_metrics_endpoint" {
 
 resource "juju_jaas_access_offer" "grafana_dashboard" {
   offer_url = juju_offer.grafana_dashboards.url
-  admin     = [var.model]
-  consume   = var.grafana_consumers
+  access    = "consumer"
+  users     = var.grafana_consumers
 }
 
 resource "juju_jaas_access_offer" "loki_logging" {
   offer_url = juju_offer.loki_logging.url
-  admin     = [var.model]
-  consume   = var.loki_consumers
+  access    = "consumer"
+  users     = var.loki_consumers
 }
 
 resource "juju_jaas_access_offer" "remote_write" {
   offer_url = juju_offer.prometheus_receive_remote_write.url
-  admin     = [var.model]
-  consume   = var.remote_write_consumers
+  access    = "consumer"
+  users     = var.remote_write_consumers
 }
 
 resource "juju_jaas_access_offer" "metrics_endpoint" {
   offer_url = juju_offer.prometheus_metrics_endpoint.url
-  admin     = [var.model]
-  consume   = var.metrics_endpoint_consumers
+  access    = "consumer"
+  users     = var.metrics_endpoint_consumers
 }
 
