@@ -66,9 +66,9 @@ resource "juju_offer" "falcosidekick_http_endpoint" {
   endpoints        = [module.falcosidekick.provides.http_endpoint]
 }
 
-resource "juju_access_offer" "falcosidekick_http_endpoint" {
-  admin     = [var.model_name]
+resource "juju_jaas_access_offer" "falcosidekick_http_endpoint" {
   offer_url = juju_offer.falcosidekick_http_endpoint.url
-  consume   = var.falcosidekick_http_endpoint_consumers
+  access    = "consumer"
+  users     = var.falcosidekick_http_endpoint_consumers
 }
 
