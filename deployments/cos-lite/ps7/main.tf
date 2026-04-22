@@ -126,7 +126,7 @@ resource "juju_offer" "ssc_certificates" {
 
 locals {
   ingress_configurator = {
-    app_name  = juju_application.ingress_configurator.name
+    app_name = juju_application.ingress_configurator.name
     endpoints = {
       ingress           = "ingress"
       haproxy_route     = "haproxy-route"
@@ -135,7 +135,7 @@ locals {
   }
 
   alertmanager = {
-    app_name  = juju_application.alertmanager.name
+    app_name = juju_application.alertmanager.name
     endpoints = {
       catalogue             = "catalogue"
       certificates          = "certificates"
@@ -151,7 +151,7 @@ locals {
   }
 
   catalogue = {
-    app_name  = juju_application.catalogue.name
+    app_name = juju_application.catalogue.name
     endpoints = {
       certificates = "certificates"
       ingress      = "ingress"
@@ -161,7 +161,7 @@ locals {
   }
 
   grafana = {
-    app_name  = juju_application.grafana.name
+    app_name = juju_application.grafana.name
     endpoints = {
       catalogue         = "catalogue"
       certificates      = "certificates"
@@ -178,7 +178,7 @@ locals {
   }
 
   loki = {
-    app_name  = juju_application.loki.name
+    app_name = juju_application.loki.name
     endpoints = {
       alertmanager         = "alertmanager"
       ingress              = "ingress"
@@ -196,7 +196,7 @@ locals {
   }
 
   prometheus = {
-    app_name  = juju_application.prometheus.name
+    app_name = juju_application.prometheus.name
     endpoints = {
       metrics_endpoint      = "metrics-endpoint"
       alertmanager          = "alertmanager"
@@ -221,7 +221,7 @@ locals {
       tracing = "tracing"
     }
     provides = {
-      certificates  = "certificates"
+      certificates   = "certificates"
       "send-ca-cert" = "send-ca-cert"
     }
     offers = {
@@ -650,24 +650,24 @@ resource "juju_offer" "prometheus_metrics_endpoint" {
 resource "juju_jaas_access_offer" "grafana_dashboard" {
   offer_url = juju_offer.grafana_dashboards.url
   access    = "consumer"
-  users     = var.grafana_consumers
+  groups    = var.grafana_consumers
 }
 
 resource "juju_jaas_access_offer" "loki_logging" {
   offer_url = juju_offer.loki_logging.url
   access    = "consumer"
-  users     = var.loki_consumers
+  groups    = var.loki_consumers
 }
 
 resource "juju_jaas_access_offer" "remote_write" {
   offer_url = juju_offer.prometheus_receive_remote_write.url
   access    = "consumer"
-  users     = var.remote_write_consumers
+  groups    = var.remote_write_consumers
 }
 
 resource "juju_jaas_access_offer" "metrics_endpoint" {
   offer_url = juju_offer.prometheus_metrics_endpoint.url
   access    = "consumer"
-  users     = var.metrics_endpoint_consumers
+  groups    = var.metrics_endpoint_consumers
 }
 
