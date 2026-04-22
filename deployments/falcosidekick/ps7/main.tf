@@ -69,6 +69,6 @@ resource "juju_offer" "falcosidekick_http_endpoint" {
 resource "juju_jaas_access_offer" "falcosidekick_http_endpoint" {
   offer_url = juju_offer.falcosidekick_http_endpoint.url
   access    = "consumer"
-  users     = var.falcosidekick_http_endpoint_consumers
+  groups    = var.falcosidekick_http_endpoint_consumers
 }
 
