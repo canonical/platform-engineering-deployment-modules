@@ -18,7 +18,6 @@ run "basic_plan" {
     external_hostname                     = "test.local"
     loki_offer_url                        = "admin/test-cos.loki-logging"
     send_loki_logs_offer_url              = "admin/test-cos.loki-logging"
-    falcosidekick_http_endpoint_consumers = []
   }
 
   assert {

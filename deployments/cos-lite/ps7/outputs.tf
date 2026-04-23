@@ -11,13 +11,17 @@ output "offers" {
 
 output "components" {
   value = {
-    alertmanager         = local.alertmanager
-    catalogue            = local.catalogue
-    grafana              = local.grafana
-    loki                 = local.loki
-    prometheus           = local.prometheus
-    ssc                  = local.ssc
-    ingress_configurator = local.ingress_configurator
+    alertmanager                    = local.alertmanager
+    catalogue                       = local.catalogue
+    grafana                         = local.grafana
+    loki                            = local.loki
+    prometheus                      = local.prometheus
+    ssc                             = local.ssc
+    ingress_configurator_alertmanager = juju_application.ingress_configurator_alertmanager.name
+    ingress_configurator_catalogue    = juju_application.ingress_configurator_catalogue.name
+    ingress_configurator_grafana      = juju_application.ingress_configurator_grafana.name
+    ingress_configurator_loki         = juju_application.ingress_configurator_loki.name
+    ingress_configurator_prometheus   = juju_application.ingress_configurator_prometheus.name
   }
   description = "All Terraform charm modules which make up this product module"
 }
