@@ -16,10 +16,6 @@ run "basic_plan" {
     model                      = run.setup_tests.model_name
     model_uuid                 = run.setup_tests.model_uuid
     external_hostname          = "test.local"
-    grafana_consumers          = []
-    loki_consumers             = []
-    remote_write_consumers     = []
-    metrics_endpoint_consumers = []
   }
 
   assert {
