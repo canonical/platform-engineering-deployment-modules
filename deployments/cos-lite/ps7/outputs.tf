@@ -11,12 +11,12 @@ output "offers" {
 
 output "components" {
   value = {
-    alertmanager                    = local.alertmanager
-    catalogue                       = local.catalogue
-    grafana                         = local.grafana
-    loki                            = local.loki
-    prometheus                      = local.prometheus
-    ssc                             = local.ssc
+    alertmanager                      = local.alertmanager
+    catalogue                         = local.catalogue
+    grafana                           = local.grafana
+    loki                              = local.loki
+    prometheus                        = local.prometheus
+    ssc                               = local.ssc
     ingress_configurator_alertmanager = juju_application.ingress_configurator_alertmanager.name
     ingress_configurator_catalogue    = juju_application.ingress_configurator_catalogue.name
     ingress_configurator_grafana      = juju_application.ingress_configurator_grafana.name

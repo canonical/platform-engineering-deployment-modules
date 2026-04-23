@@ -105,9 +105,9 @@ resource "juju_application" "ingress_configurator_alertmanager" {
     base     = "ubuntu@24.04"
   }
 
-  config      = { hostname = var.external_hostname, paths = juju_application.alertmanager.name }
-  units       = 1
-  trust       = true
+  config = { hostname = var.external_hostname, paths = juju_application.alertmanager.name }
+  units  = 1
+  trust  = true
 }
 
 resource "juju_application" "ingress_configurator_catalogue" {
@@ -121,9 +121,9 @@ resource "juju_application" "ingress_configurator_catalogue" {
     base     = "ubuntu@24.04"
   }
 
-  config      = { hostname = var.external_hostname, paths = juju_application.catalogue.name }
-  units       = 1
-  trust       = true
+  config = { hostname = var.external_hostname, paths = juju_application.catalogue.name }
+  units  = 1
+  trust  = true
 }
 
 resource "juju_application" "ingress_configurator_grafana" {
@@ -137,9 +137,9 @@ resource "juju_application" "ingress_configurator_grafana" {
     base     = "ubuntu@24.04"
   }
 
-  config      = { hostname = var.external_hostname, paths = juju_application.grafana.name }
-  units       = 1
-  trust       = true
+  config = { hostname = var.external_hostname, paths = juju_application.grafana.name }
+  units  = 1
+  trust  = true
 }
 
 resource "juju_application" "ingress_configurator_prometheus" {
@@ -153,9 +153,9 @@ resource "juju_application" "ingress_configurator_prometheus" {
     base     = "ubuntu@24.04"
   }
 
-  config      = { hostname = var.external_hostname, paths = juju_application.prometheus.name }
-  units       = 1
-  trust       = true
+  config = { hostname = var.external_hostname, paths = juju_application.prometheus.name }
+  units  = 1
+  trust  = true
 }
 
 resource "juju_application" "ingress_configurator_loki" {
@@ -169,9 +169,9 @@ resource "juju_application" "ingress_configurator_loki" {
     base     = "ubuntu@24.04"
   }
 
-  config      = { hostname = var.external_hostname, paths = juju_application.loki.name }
-  units       = 1
-  trust       = true
+  config = { hostname = var.external_hostname, paths = juju_application.loki.name }
+  units  = 1
+  trust  = true
 }
 
 resource "juju_offer" "ssc_send_ca_cert" {
