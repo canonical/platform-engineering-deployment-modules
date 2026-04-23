@@ -65,10 +65,3 @@ resource "juju_offer" "falcosidekick_http_endpoint" {
   application_name = module.falcosidekick.app_name
   endpoints        = [module.falcosidekick.provides.http_endpoint]
 }
-
-resource "juju_jaas_access_offer" "falcosidekick_http_endpoint" {
-  offer_url = juju_offer.falcosidekick_http_endpoint.url
-  access    = "consumer"
-  groups    = var.falcosidekick_http_endpoint_consumers
-}
-

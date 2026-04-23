@@ -13,12 +13,11 @@ run "basic_plan" {
   command = plan
 
   variables {
-    model_name                            = run.setup_tests.model_name
-    model_uuid                            = run.setup_tests.model_uuid
-    external_hostname                     = "test.local"
-    loki_offer_url                        = "admin/test-cos.loki-logging"
-    send_loki_logs_offer_url              = "admin/test-cos.loki-logging"
-    falcosidekick_http_endpoint_consumers = []
+    model_name               = run.setup_tests.model_name
+    model_uuid               = run.setup_tests.model_uuid
+    external_hostname        = "test.local"
+    loki_offer_url           = "admin/test-cos.loki-logging"
+    send_loki_logs_offer_url = "admin/test-cos.loki-logging"
   }
 
   assert {

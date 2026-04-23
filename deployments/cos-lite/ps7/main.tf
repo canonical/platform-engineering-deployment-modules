@@ -1,19 +1,3 @@
-resource "juju_application" "ingress_configurator" {
-  name       = "ingress-configurator"
-  model_uuid = var.model_uuid
-
-  charm {
-    name     = "ingress-configurator"
-    channel  = "latest/edge"
-    revision = 72
-    base     = "ubuntu@24.04"
-  }
-
-  config      = { hostname = var.external_hostname }
-  constraints = ""
-  units       = 1
-}
-
 resource "juju_application" "alertmanager" {
   name               = "alertmanager"
   config             = {}
@@ -102,12 +86,92 @@ resource "juju_application" "ssc" {
     name     = "self-signed-certificates"
     channel  = "1/stable"
     revision = 588
-    base     = "ubuntu@24.04"
+    base     = "ubuntu@22.04"
   }
 
   config      = {}
   constraints = "arch=amd64"
   units       = 1
+}
+
+resource "juju_application" "ingress_configurator_alertmanager" {
+  name       = "alertmanager-ingress-configurator"
+  model_uuid = var.model_uuid
+
+  charm {
+    name     = "ingress-configurator"
+    channel  = "latest/edge"
+    revision = 72
+    base     = "ubuntu@24.04"
+  }
+
+  config = { hostname = var.external_hostname, paths = juju_application.alertmanager.name }
+  units  = 1
+  trust  = true
+}
+
+resource "juju_application" "ingress_configurator_catalogue" {
+  name       = "catalogue-ingress-configurator"
+  model_uuid = var.model_uuid
+
+  charm {
+    name     = "ingress-configurator"
+    channel  = "latest/edge"
+    revision = 72
+    base     = "ubuntu@24.04"
+  }
+
+  config = { hostname = var.external_hostname, paths = juju_application.catalogue.name }
+  units  = 1
+  trust  = true
+}
+
+resource "juju_application" "ingress_configurator_grafana" {
+  name       = "grafana-ingress-configurator"
+  model_uuid = var.model_uuid
+
+  charm {
+    name     = "ingress-configurator"
+    channel  = "latest/edge"
+    revision = 72
+    base     = "ubuntu@24.04"
+  }
+
+  config = { hostname = var.external_hostname, paths = juju_application.grafana.name }
+  units  = 1
+  trust  = true
+}
+
+resource "juju_application" "ingress_configurator_prometheus" {
+  name       = "prometheus-ingress-configurator"
+  model_uuid = var.model_uuid
+
+  charm {
+    name     = "ingress-configurator"
+    channel  = "latest/edge"
+    revision = 72
+    base     = "ubuntu@24.04"
+  }
+
+  config = { hostname = var.external_hostname, paths = juju_application.prometheus.name }
+  units  = 1
+  trust  = true
+}
+
+resource "juju_application" "ingress_configurator_loki" {
+  name       = "loki-ingress-configurator"
+  model_uuid = var.model_uuid
+
+  charm {
+    name     = "ingress-configurator"
+    channel  = "latest/edge"
+    revision = 72
+    base     = "ubuntu@24.04"
+  }
+
+  config = { hostname = var.external_hostname, paths = juju_application.loki.name }
+  units  = 1
+  trust  = true
 }
 
 resource "juju_offer" "ssc_send_ca_cert" {
@@ -125,15 +189,6 @@ resource "juju_offer" "ssc_certificates" {
 }
 
 locals {
-  ingress_configurator = {
-    app_name = juju_application.ingress_configurator.name
-    endpoints = {
-      ingress           = "ingress"
-      haproxy_route     = "haproxy-route"
-      haproxy_route_tcp = "haproxy-route-tcp"
-    }
-  }
-
   alertmanager = {
     app_name = juju_application.alertmanager.name
     endpoints = {
@@ -231,62 +286,17 @@ locals {
   }
 }
 
-moved {
-  from = module.ingress_configurator.juju_application.ingress-configurator
-  to   = juju_application.ingress_configurator
-}
-
-moved {
-  from = module.alertmanager.juju_application.alertmanager
-  to   = juju_application.alertmanager
-}
-
-moved {
-  from = module.catalogue.juju_application.catalogue
-  to   = juju_application.catalogue
-}
-
-moved {
-  from = module.grafana.juju_application.grafana
-  to   = juju_application.grafana
-}
-
-moved {
-  from = module.loki.juju_application.loki
-  to   = juju_application.loki
-}
-
-moved {
-  from = module.prometheus.juju_application.prometheus
-  to   = juju_application.prometheus
-}
-
-moved {
-  from = module.ssc.juju_application.self-signed-certificates
-  to   = juju_application.ssc
-}
-
-moved {
-  from = module.ssc.juju_offer.send_ca_cert
-  to   = juju_offer.ssc_send_ca_cert
-}
-
-moved {
-  from = module.ssc.juju_offer.certificates
-  to   = juju_offer.ssc_certificates
-}
-
 resource "juju_integration" "alertmanager_grafana_dashboards" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.alertmanager.app_name
-    endpoint = local.alertmanager.endpoints.grafana_dashboard
+    name     = juju_application.alertmanager.name
+    endpoint = "grafana-dashboard"
   }
 
   application {
-    name     = local.grafana.app_name
-    endpoint = local.grafana.endpoints.grafana_dashboard
+    name     = juju_application.grafana.name
+    endpoint = "grafana-dashboard"
   }
 }
 
@@ -294,13 +304,13 @@ resource "juju_integration" "alertmanager_prometheus" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.prometheus.app_name
-    endpoint = local.prometheus.endpoints.alertmanager
+    name     = juju_application.prometheus.name
+    endpoint = "alertmanager"
   }
 
   application {
-    name     = local.alertmanager.app_name
-    endpoint = local.alertmanager.endpoints.alerting
+    name     = juju_application.alertmanager.name
+    endpoint = "alerting"
   }
 }
 
@@ -308,13 +318,13 @@ resource "juju_integration" "alertmanager_self_monitoring_prometheus" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.prometheus.app_name
-    endpoint = local.prometheus.endpoints.metrics_endpoint
+    name     = juju_application.prometheus.name
+    endpoint = "metrics-endpoint"
   }
 
   application {
-    name     = local.alertmanager.app_name
-    endpoint = local.alertmanager.endpoints.self_metrics_endpoint
+    name     = juju_application.alertmanager.name
+    endpoint = "self-metrics-endpoint"
   }
 }
 
@@ -322,13 +332,13 @@ resource "juju_integration" "alertmanager_loki" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.loki.app_name
-    endpoint = local.loki.endpoints.alertmanager
+    name     = juju_application.loki.name
+    endpoint = "alertmanager"
   }
 
   application {
-    name     = local.alertmanager.app_name
-    endpoint = local.alertmanager.endpoints.alerting
+    name     = juju_application.alertmanager.name
+    endpoint = "alerting"
   }
 }
 
@@ -336,13 +346,13 @@ resource "juju_integration" "grafana_source_alertmanager" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.alertmanager.app_name
-    endpoint = local.alertmanager.endpoints.grafana_source
+    name     = juju_application.alertmanager.name
+    endpoint = "grafana-source"
   }
 
   application {
-    name     = local.grafana.app_name
-    endpoint = local.grafana.endpoints.grafana_source
+    name     = juju_application.grafana.name
+    endpoint = "grafana-source"
   }
 }
 
@@ -350,13 +360,13 @@ resource "juju_integration" "grafana_self_monitoring_prometheus" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.prometheus.app_name
-    endpoint = local.prometheus.endpoints.metrics_endpoint
+    name     = juju_application.prometheus.name
+    endpoint = "metrics-endpoint"
   }
 
   application {
-    name     = local.grafana.app_name
-    endpoint = local.grafana.endpoints.metrics_endpoint
+    name     = juju_application.grafana.name
+    endpoint = "metrics-endpoint"
   }
 }
 
@@ -364,13 +374,13 @@ resource "juju_integration" "prometheus_grafana_dashboards_provider" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.prometheus.app_name
-    endpoint = local.prometheus.endpoints.grafana_dashboard
+    name     = juju_application.prometheus.name
+    endpoint = "grafana-dashboard"
   }
 
   application {
-    name     = local.grafana.app_name
-    endpoint = local.grafana.endpoints.grafana_dashboard
+    name     = juju_application.grafana.name
+    endpoint = "grafana-dashboard"
   }
 }
 
@@ -378,13 +388,13 @@ resource "juju_integration" "prometheus_grafana_source" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.prometheus.app_name
-    endpoint = local.prometheus.endpoints.grafana_source
+    name     = juju_application.prometheus.name
+    endpoint = "grafana-source"
   }
 
   application {
-    name     = local.grafana.app_name
-    endpoint = local.grafana.endpoints.grafana_source
+    name     = juju_application.grafana.name
+    endpoint = "grafana-source"
   }
 }
 
@@ -392,13 +402,13 @@ resource "juju_integration" "loki_grafana_dashboards_provider" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.loki.app_name
-    endpoint = local.loki.endpoints.grafana_dashboard
+    name     = juju_application.loki.name
+    endpoint = "grafana-dashboard"
   }
 
   application {
-    name     = local.grafana.app_name
-    endpoint = local.grafana.endpoints.grafana_dashboard
+    name     = juju_application.grafana.name
+    endpoint = "grafana-dashboard"
   }
 }
 
@@ -406,13 +416,13 @@ resource "juju_integration" "loki_grafana_source" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.loki.app_name
-    endpoint = local.loki.endpoints.grafana_source
+    name     = juju_application.loki.name
+    endpoint = "grafana-source"
   }
 
   application {
-    name     = local.grafana.app_name
-    endpoint = local.grafana.endpoints.grafana_source
+    name     = juju_application.grafana.name
+    endpoint = "grafana-source"
   }
 }
 
@@ -420,13 +430,13 @@ resource "juju_integration" "loki_self_monitoring_prometheus" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.prometheus.app_name
-    endpoint = local.prometheus.endpoints.metrics_endpoint
+    name     = juju_application.prometheus.name
+    endpoint = "metrics-endpoint"
   }
 
   application {
-    name     = local.loki.app_name
-    endpoint = local.loki.endpoints.metrics_endpoint
+    name     = juju_application.loki.name
+    endpoint = "metrics-endpoint"
   }
 }
 
@@ -434,13 +444,13 @@ resource "juju_integration" "catalogue_alertmanager" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.catalogue.app_name
-    endpoint = local.catalogue.endpoints.catalogue
+    name     = juju_application.catalogue.name
+    endpoint = "catalogue"
   }
 
   application {
-    name     = local.alertmanager.app_name
-    endpoint = local.alertmanager.endpoints.catalogue
+    name     = juju_application.alertmanager.name
+    endpoint = "catalogue"
   }
 }
 
@@ -448,13 +458,13 @@ resource "juju_integration" "catalogue_grafana" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.catalogue.app_name
-    endpoint = local.catalogue.endpoints.catalogue
+    name     = juju_application.catalogue.name
+    endpoint = "catalogue"
   }
 
   application {
-    name     = local.grafana.app_name
-    endpoint = local.grafana.endpoints.catalogue
+    name     = juju_application.grafana.name
+    endpoint = "catalogue"
   }
 }
 
@@ -462,13 +472,13 @@ resource "juju_integration" "catalogue_prometheus" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.catalogue.app_name
-    endpoint = local.catalogue.endpoints.catalogue
+    name     = juju_application.catalogue.name
+    endpoint = "catalogue"
   }
 
   application {
-    name     = local.prometheus.app_name
-    endpoint = local.prometheus.endpoints.catalogue
+    name     = juju_application.prometheus.name
+    endpoint = "catalogue"
   }
 }
 
@@ -476,13 +486,13 @@ resource "juju_integration" "alertmanager_ingress" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.ingress_configurator.app_name
-    endpoint = local.ingress_configurator.endpoints.ingress
+    name     = juju_application.ingress_configurator_alertmanager.name
+    endpoint = "ingress"
   }
 
   application {
-    name     = local.alertmanager.app_name
-    endpoint = local.alertmanager.endpoints.ingress
+    name     = juju_application.alertmanager.name
+    endpoint = "ingress"
   }
 }
 
@@ -490,13 +500,13 @@ resource "juju_integration" "catalogue_ingress" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.ingress_configurator.app_name
-    endpoint = local.ingress_configurator.endpoints.ingress
+    name     = juju_application.ingress_configurator_catalogue.name
+    endpoint = "ingress"
   }
 
   application {
-    name     = local.catalogue.app_name
-    endpoint = local.catalogue.endpoints.ingress
+    name     = juju_application.catalogue.name
+    endpoint = "ingress"
   }
 }
 
@@ -504,13 +514,13 @@ resource "juju_integration" "grafana_ingress" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.ingress_configurator.app_name
-    endpoint = local.ingress_configurator.endpoints.ingress
+    name     = juju_application.ingress_configurator_grafana.name
+    endpoint = "ingress"
   }
 
   application {
-    name     = local.grafana.app_name
-    endpoint = local.grafana.endpoints.ingress
+    name     = juju_application.grafana.name
+    endpoint = "ingress"
   }
 }
 
@@ -518,13 +528,13 @@ resource "juju_integration" "prometheus_ingress" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.ingress_configurator.app_name
-    endpoint = local.ingress_configurator.endpoints.ingress
+    name     = juju_application.ingress_configurator_prometheus.name
+    endpoint = "ingress"
   }
 
   application {
-    name     = local.prometheus.app_name
-    endpoint = local.prometheus.endpoints.ingress
+    name     = juju_application.prometheus.name
+    endpoint = "ingress"
   }
 }
 
@@ -532,13 +542,13 @@ resource "juju_integration" "loki_ingress" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.ingress_configurator.app_name
-    endpoint = local.ingress_configurator.endpoints.ingress
+    name     = juju_application.ingress_configurator_loki.name
+    endpoint = "ingress"
   }
 
   application {
-    name     = local.loki.app_name
-    endpoint = local.loki.endpoints.ingress
+    name     = juju_application.loki.name
+    endpoint = "ingress"
   }
 }
 
@@ -546,13 +556,13 @@ resource "juju_integration" "alertmanager_certificates" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.ssc.app_name
+    name     = juju_application.ssc.name
     endpoint = local.ssc.provides.certificates
   }
 
   application {
-    name     = local.alertmanager.app_name
-    endpoint = local.alertmanager.endpoints.certificates
+    name     = juju_application.alertmanager.name
+    endpoint = "certificates"
   }
 }
 
@@ -560,13 +570,13 @@ resource "juju_integration" "catalogue_certificates" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.ssc.app_name
+    name     = juju_application.ssc.name
     endpoint = local.ssc.provides.certificates
   }
 
   application {
-    name     = local.catalogue.app_name
-    endpoint = local.catalogue.endpoints.certificates
+    name     = juju_application.catalogue.name
+    endpoint = "certificates"
   }
 }
 
@@ -574,13 +584,13 @@ resource "juju_integration" "grafana_certificates" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.ssc.app_name
+    name     = juju_application.ssc.name
     endpoint = local.ssc.provides.certificates
   }
 
   application {
-    name     = local.grafana.app_name
-    endpoint = local.grafana.endpoints.certificates
+    name     = juju_application.grafana.name
+    endpoint = "certificates"
   }
 }
 
@@ -588,13 +598,13 @@ resource "juju_integration" "loki_certificates" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.ssc.app_name
+    name     = juju_application.ssc.name
     endpoint = local.ssc.provides.certificates
   }
 
   application {
-    name     = local.loki.app_name
-    endpoint = local.loki.endpoints.certificates
+    name     = juju_application.loki.name
+    endpoint = "certificates"
   }
 }
 
@@ -602,72 +612,47 @@ resource "juju_integration" "prometheus_certificates" {
   model_uuid = var.model_uuid
 
   application {
-    name     = local.ssc.app_name
+    name     = juju_application.ssc.name
     endpoint = local.ssc.provides.certificates
   }
 
   application {
-    name     = local.prometheus.app_name
-    endpoint = local.prometheus.endpoints.certificates
+    name     = juju_application.prometheus.name
+    endpoint = "certificates"
   }
 }
 
 resource "juju_offer" "alertmanager_karma_dashboard" {
   name             = "alertmanager-karma-dashboard"
   model_uuid       = var.model_uuid
-  application_name = local.alertmanager.app_name
+  application_name = juju_application.alertmanager.name
   endpoints        = ["karma-dashboard"]
 }
 
 resource "juju_offer" "grafana_dashboards" {
   name             = "grafana-dashboards"
   model_uuid       = var.model_uuid
-  application_name = local.grafana.app_name
+  application_name = juju_application.grafana.name
   endpoints        = ["grafana-dashboard"]
 }
 
 resource "juju_offer" "loki_logging" {
   name             = "loki-logging"
   model_uuid       = var.model_uuid
-  application_name = local.loki.app_name
+  application_name = juju_application.loki.name
   endpoints        = ["logging"]
 }
 
 resource "juju_offer" "prometheus_receive_remote_write" {
   name             = "prometheus-receive-remote-write"
   model_uuid       = var.model_uuid
-  application_name = local.prometheus.app_name
+  application_name = juju_application.prometheus.name
   endpoints        = ["receive-remote-write"]
 }
 
 resource "juju_offer" "prometheus_metrics_endpoint" {
   name             = "prometheus-metrics-endpoint"
   model_uuid       = var.model_uuid
-  application_name = local.prometheus.app_name
+  application_name = juju_application.prometheus.name
   endpoints        = ["metrics-endpoint"]
 }
-
-resource "juju_jaas_access_offer" "grafana_dashboard" {
-  offer_url = juju_offer.grafana_dashboards.url
-  access    = "consumer"
-  groups    = var.grafana_consumers
-}
-
-resource "juju_jaas_access_offer" "loki_logging" {
-  offer_url = juju_offer.loki_logging.url
-  access    = "consumer"
-  groups    = var.loki_consumers
-}
-
-resource "juju_jaas_access_offer" "remote_write" {
-  offer_url = juju_offer.prometheus_receive_remote_write.url
-  access    = "consumer"
-  groups    = var.remote_write_consumers
-}
-
-resource "juju_jaas_access_offer" "metrics_endpoint" {
-  offer_url = juju_offer.prometheus_metrics_endpoint.url
-  access    = "consumer"
-  groups    = var.metrics_endpoint_consumers
-}
-
