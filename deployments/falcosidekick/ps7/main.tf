@@ -1,10 +1,17 @@
-module "ingress_configurator" {
-  source     = "git::https://github.com/canonical/ingress-configurator-operator//terraform?ref=rev72&depth=1"
-  app_name   = "ingress-configurator"
+resource "juju_application" "ingress_configurator_falcosidekick" {
+  name       = "falcosidekick-ingress-configurator"
   model_uuid = var.model_uuid
-  channel    = "latest/edge"
-  revision   = 72
-  config     = { hostname = var.external_hostname }
+
+  charm {
+    name     = "ingress-configurator"
+    channel  = "latest/edge"
+    revision = 72
+    base     = "ubuntu@24.04"
+  }
+
+  config = { hostname = var.external_hostname }
+  units  = 1
+  trust  = true
 }
 
 module "falcosidekick" {
@@ -25,8 +32,8 @@ resource "juju_integration" "falcosidekick_ingress" {
   }
 
   application {
-    name     = module.ingress_configurator.app_name
-    endpoint = module.ingress_configurator.endpoints.ingress
+    name     = juju_application.ingress_configurator_falcosidekick.app_name
+    endpoint = juju_application.ingress_configurator_falcosidekick.endpoints.ingress
   }
 }
 
