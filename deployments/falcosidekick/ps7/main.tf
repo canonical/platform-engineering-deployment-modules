@@ -32,8 +32,8 @@ resource "juju_integration" "falcosidekick_ingress" {
   }
 
   application {
-    name     = juju_application.ingress_configurator_falcosidekick.app_name
-    endpoint = juju_application.ingress_configurator_falcosidekick.endpoints.ingress
+    name     = juju_application.ingress_configurator_falcosidekick.name
+    endpoint = "ingress"
   }
 }
 
