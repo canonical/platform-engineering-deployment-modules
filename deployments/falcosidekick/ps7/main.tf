@@ -19,7 +19,7 @@ module "falcosidekick" {
 
   model_uuid = var.model_uuid
   channel    = "2/edge"
-  revision   = 56
+  revision   = 80
 }
 
 resource "juju_integration" "falcosidekick_ingress" {
