@@ -8,11 +8,11 @@ module "ingress_configurator" {
 }
 
 module "falcosidekick" {
-  source = "git::https://github.com/canonical/falco-operators//falcosidekick-k8s-operator/terraform?ref=rev66&depth=1"
+  source = "git::https://github.com/canonical/falco-operators//falcosidekick-k8s-operator/terraform?ref=falcosidekick-rev84&depth=1"
 
   model_uuid = var.model_uuid
   channel    = "2/edge"
-  revision   = 56
+  revision   = 84
 }
 
 resource "juju_integration" "falcosidekick_ingress" {
