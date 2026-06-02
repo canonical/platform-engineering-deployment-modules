@@ -5,6 +5,7 @@ module "ingress_configurator" {
   channel    = "latest/edge"
   revision   = 72
   config     = { hostname = var.external_hostname }
+  trust      = true
 }
 
 module "falcosidekick" {
