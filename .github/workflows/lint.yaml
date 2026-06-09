@@ -17,7 +17,7 @@ jobs:
       WORKING_DIR: 'deployments'
     steps:
       - name: Check out code
-        uses: actions/checkout@v6.0.0
+        uses: actions/checkout@v6.0.3
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v4.0.1
@@ -27,7 +27,7 @@ jobs:
         working-directory: ${{env.WORKING_DIR}}
 
       - name: Setup Tflint
-        uses: terraform-linters/setup-tflint@v6.2.1
+        uses: terraform-linters/setup-tflint@v6.2.2
         with:
           tflint_wrapper_enabled: true
 
