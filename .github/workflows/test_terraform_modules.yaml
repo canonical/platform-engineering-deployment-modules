@@ -22,4 +22,5 @@ jobs:
     secrets: inherit
     with:
       lxd-controller-with-k8s-cloud: true
+      self-hosted-runner: false
       terraform-directories: '["deployments/falco/ps7", "deployments/lego/ps6", "deployments/opencti/ps6", "deployments/wazuh/ps6"]'
