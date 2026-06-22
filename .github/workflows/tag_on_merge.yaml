@@ -52,7 +52,7 @@ jobs:
           git push origin ${{ steps.generate_tag.outputs.next_tag }}
 
       - name: Create Release
-        uses: softprops/action-gh-release@v3.0.0
+        uses: softprops/action-gh-release@v3.0.1
         with:
           name: Release ${{ steps.generate_tag.outputs.next_tag }}
           tag_name: ${{ steps.generate_tag.outputs.next_tag }}
