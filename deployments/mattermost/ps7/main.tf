@@ -39,6 +39,8 @@ module "mattermost" {
     config   = var.smtp_config
   }
 
+  smtp_password = var.smtp_password
+
   self_signed_certificates = {
     channel  = "latest/stable"
     revision = 518

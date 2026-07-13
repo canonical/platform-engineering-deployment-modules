@@ -58,6 +58,13 @@ variable "smtp_config" {
   type        = map(string)
 }
 
+variable "smtp_password" {
+  description = "SMTP AUTH password. Stored as a Juju secret and referenced by smtp-integrator via password_secret."
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
 variable "oauth_config" {
   description = "OAuth external IdP integrator charm configuration (client_id, client_secret, issuer_url, etc.)"
   type        = map(string)
