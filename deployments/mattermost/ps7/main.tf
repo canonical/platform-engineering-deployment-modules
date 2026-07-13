@@ -47,7 +47,7 @@ module "mattermost" {
   }
 
   oauth = {
-    channel  = "edge"
+    channel  = "latest/edge"
     revision = 6
     base     = "ubuntu@22.04"
     config   = var.oauth_config
