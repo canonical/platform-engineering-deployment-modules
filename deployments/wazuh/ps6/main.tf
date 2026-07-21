@@ -67,6 +67,7 @@ module "wazuh" {
     config = {
       external_hostname = var.wazuh_external_hostname
     }
+    units = 3
   }
 
   self_signed_certificates = {
