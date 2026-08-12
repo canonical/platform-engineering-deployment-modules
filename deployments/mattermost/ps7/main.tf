@@ -5,7 +5,7 @@
 # revisions/channels of every charm. It intentionally does NOT deploy ingress:
 # ingress is deployment-specific and managed by the consuming deployment.
 module "mattermost" {
-  source     = "git::file:///home/dogay.kamar@canonical.com/Desktop/canonical-main/mattermost-k8s-operator//terraform/product"
+  source     = "git::https://github.com/canonical/mattermost-k8s-operator//terraform/product?ref=main&depth=1"
   model_uuid = var.model_uuid
 
   deploy_postgresql = var.deploy_postgresql
