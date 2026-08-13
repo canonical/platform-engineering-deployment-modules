@@ -15,8 +15,6 @@ Usage:
 If no files are given, all ``deployments/**/main.tf`` files (excluding any
 ``tests/`` subpaths) are scanned.
 """
-from __future__ import annotations
-
 import re
 import sys
 from pathlib import Path
