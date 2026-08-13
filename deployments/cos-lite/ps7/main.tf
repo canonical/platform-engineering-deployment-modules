@@ -8,8 +8,9 @@ resource "juju_application" "alertmanager" {
   units              = 1
 
   charm {
-    name     = "alertmanager-k8s"
-    channel  = "1/stable"
+    name    = "alertmanager-k8s"
+    channel = "1/stable"
+    # renovate: charm="alertmanager-k8s" track="1" risk="stable" base="20.04" arch="amd64"
     revision = 162
   }
 }
@@ -24,8 +25,9 @@ resource "juju_application" "catalogue" {
   units              = 1
 
   charm {
-    name     = "catalogue-k8s"
-    channel  = "1/stable"
+    name    = "catalogue-k8s"
+    channel = "1/stable"
+    # renovate: charm="catalogue-k8s" track="1" risk="stable" base="20.04" arch="amd64"
     revision = 87
   }
 }
@@ -40,8 +42,9 @@ resource "juju_application" "grafana" {
   units              = 1
 
   charm {
-    name     = "grafana-k8s"
-    channel  = "1/stable"
+    name    = "grafana-k8s"
+    channel = "1/stable"
+    # renovate: charm="grafana-k8s" track="1" risk="stable" base="20.04" arch="amd64"
     revision = 151
   }
 }
@@ -56,8 +59,9 @@ resource "juju_application" "loki" {
   units              = 1
 
   charm {
-    name     = "loki-k8s"
-    channel  = "1/stable"
+    name    = "loki-k8s"
+    channel = "1/stable"
+    # renovate: charm="loki-k8s" track="1" risk="stable" base="20.04" arch="amd64"
     revision = 199
   }
 }
@@ -72,8 +76,9 @@ resource "juju_application" "prometheus" {
   units              = 1
 
   charm {
-    name     = "prometheus-k8s"
-    channel  = "1/stable"
+    name    = "prometheus-k8s"
+    channel = "1/stable"
+    # renovate: charm="prometheus-k8s" track="1" risk="stable" base="20.04" arch="amd64"
     revision = 247
   }
 }
@@ -83,8 +88,9 @@ resource "juju_application" "ssc" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "self-signed-certificates"
-    channel  = "1/stable"
+    name    = "self-signed-certificates"
+    channel = "1/stable"
+    # renovate: charm="self-signed-certificates" track="1" risk="stable" base="22.04" arch="amd64"
     revision = 588
     base     = "ubuntu@22.04"
   }
@@ -99,8 +105,9 @@ resource "juju_application" "ingress_configurator_alertmanager" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "ingress-configurator"
-    channel  = "latest/edge"
+    name    = "ingress-configurator"
+    channel = "latest/edge"
+    # renovate: charm="ingress-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
     revision = 72
     base     = "ubuntu@24.04"
   }
@@ -115,8 +122,9 @@ resource "juju_application" "ingress_configurator_catalogue" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "ingress-configurator"
-    channel  = "latest/edge"
+    name    = "ingress-configurator"
+    channel = "latest/edge"
+    # renovate: charm="ingress-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
     revision = 72
     base     = "ubuntu@24.04"
   }
@@ -131,8 +139,9 @@ resource "juju_application" "ingress_configurator_grafana" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "ingress-configurator"
-    channel  = "latest/edge"
+    name    = "ingress-configurator"
+    channel = "latest/edge"
+    # renovate: charm="ingress-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
     revision = 72
     base     = "ubuntu@24.04"
   }
@@ -147,8 +156,9 @@ resource "juju_application" "ingress_configurator_prometheus" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "ingress-configurator"
-    channel  = "latest/edge"
+    name    = "ingress-configurator"
+    channel = "latest/edge"
+    # renovate: charm="ingress-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
     revision = 72
     base     = "ubuntu@24.04"
   }
@@ -163,8 +173,9 @@ resource "juju_application" "ingress_configurator_loki" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "ingress-configurator"
-    channel  = "latest/edge"
+    name    = "ingress-configurator"
+    channel = "latest/edge"
+    # renovate: charm="ingress-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
     revision = 72
     base     = "ubuntu@24.04"
   }

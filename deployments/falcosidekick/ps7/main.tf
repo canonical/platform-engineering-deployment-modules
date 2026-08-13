@@ -3,9 +3,10 @@ module "ingress_configurator" {
   app_name   = "ingress-configurator"
   model_uuid = var.model_uuid
   channel    = "latest/edge"
-  revision   = 81
-  config     = { hostname = var.external_hostname }
-  trust      = true
+  # renovate: charm="ingress-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
+  revision = 81
+  config   = { hostname = var.external_hostname }
+  trust    = true
 }
 
 module "falcosidekick" {
@@ -13,7 +14,8 @@ module "falcosidekick" {
 
   model_uuid = var.model_uuid
   channel    = "2/edge"
-  revision   = 84
+  # renovate: charm="falcosidekick-k8s" track="2" risk="edge" base="24.04" arch="amd64"
+  revision = 84
 }
 
 resource "juju_integration" "falcosidekick_ingress" {

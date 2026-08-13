@@ -15,6 +15,7 @@ module "lego" {
   model    = var.model_uuid
   app_name = "lego"
   channel  = "4/candidate"
+  # renovate: charm="lego" track="4" risk="candidate" base="22.04" arch="amd64"
   revision = 128
   config = {
     "email" : "is-admin@canonical.com",
