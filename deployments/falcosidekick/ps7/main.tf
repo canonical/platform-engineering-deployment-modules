@@ -1,5 +1,5 @@
 module "ingress_configurator" {
-  source     = "git::https://github.com/canonical/ingress-configurator-operator//terraform?ref=rev81&depth=1"
+  source     = "git::https://github.com/canonical/ingress-configurator-operator//terraform?ref=rev95&depth=1"
   app_name   = "ingress-configurator"
   model_uuid = var.model_uuid
   channel    = "latest/edge"
