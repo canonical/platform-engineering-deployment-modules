@@ -13,7 +13,7 @@ module "mattermost" {
 
   mattermost = {
     channel  = "latest/edge"
-    revision = 34
+    revision = 49
     config   = var.mattermost_config
     units    = var.mattermost_units
   }
