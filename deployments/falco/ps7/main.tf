@@ -3,7 +3,8 @@ module "falco" {
 
   model_uuid = var.model_uuid
   channel    = "0.42/edge"
-  revision   = 94
+  # renovate: charm="falco" track="0.42" risk="edge" base="24.04" arch="amd64"
+  revision = 94
 }
 
 resource "juju_integration" "falco_falcosidekick_http_endpoint" {
