@@ -11,7 +11,7 @@ resource "juju_application" "alertmanager" {
     name    = "alertmanager-k8s"
     channel = "1/stable"
     # renovate: charm="alertmanager-k8s" track="1" risk="stable" base="20.04" arch="amd64"
-    revision = 162
+    revision = 180
   }
 }
 
