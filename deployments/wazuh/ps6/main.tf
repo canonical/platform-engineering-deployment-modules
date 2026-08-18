@@ -105,13 +105,13 @@ module "wazuh" {
   wazuh_indexer_grafana_agent = {
     channel = "1/stable"
     # renovate: charm="grafana-agent" track="1" risk="stable" base="22.04" arch="amd64"
-    revision = 456
+    revision = 603
   }
 
   wazuh_dashboard_grafana_agent = {
     channel = "1/stable"
     # renovate: charm="grafana-agent" track="1" risk="stable" base="22.04" arch="amd64"
-    revision = 456
+    revision = 603
   }
 
   providers = {
