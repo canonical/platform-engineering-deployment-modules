@@ -11,18 +11,19 @@
         "/^deployments/.+/main\\.tf$/"
       ],
       "matchStrings": [
-        "#\\s*renovate:\\s*charm=\"(?<packageName>[^\"]+)\"\\s+track=\"(?<depTrack>[^\"]*)\"\\s+risk=\"(?<depRisk>[^\"]+)\"\\s+base=\"(?<depBase>[^\"]+)\"\\s+arch=\"(?<depArch>[^\"]+)\"\\s*\\n\\s*revision\\s*=\\s*(?<currentValue>\\d+)\\s*\\n"
+        "#\\s*renovate:\\s*charm=\"(?<depName>[^\"]+)\"\\s+track=\"(?<depTrack>[^\"]*)\"\\s+risk=\"(?<depRisk>[^\"]+)\"\\s+base=\"(?<depBase>[^\"]+)\"\\s+arch=\"(?<depArch>[^\"]+)\"\\s*\\n\\s*revision\\s*=\\s*(?<currentValue>\\d+)\\s*\\n"
       ],
+      "packageNameTemplate": "{{{depName}}}:{{{depTrack}}}:{{{depRisk}}}:{{{depBase}}}:{{{depArch}}}",
+      "registryUrlTemplate": "https://api.charmhub.io/v2/charms/info/{{{depName}}}?fields=channel-map",
       "versioningTemplate": "loose",
       "datasourceTemplate": "custom.charmhub"
     }
   ],
   "customDatasources": {
     "charmhub": {
-      "defaultRegistryUrlTemplate": "https://api.charmhub.io/v2/charms/info/{{packageName}}?fields=channel-map",
       "format": "json",
       "transformTemplates": [
-        "{\"releases\": [{\"version\": $string($$.`channel-map`[channel.risk = '{{depRisk}}' and channel.track = '{{depTrack}}' and channel.base.architecture = '{{depArch}}' and channel.base.channel = '{{depBase}}'].revision.revision)}]}"
+        "($parts := $split(\"{{{packageName}}}\", \":\"); {\"releases\": [{\"version\": $string(`channel-map`[channel.track = $parts[1] and channel.risk = $parts[2] and channel.base.channel = $parts[3] and channel.base.architecture = $parts[4]].revision.revision)}]})"
       ]
     }
   },
