@@ -194,7 +194,7 @@ resource "juju_application" "gateway-api-integrator" {
   charm {
     name = "gateway-api-integrator"
     # renovate: charm="gateway-api-integrator" track="latest" risk="stable" base="24.04" arch="amd64"
-    revision = 127
+    revision = 151
     channel  = "latest/stable"
   }
 
