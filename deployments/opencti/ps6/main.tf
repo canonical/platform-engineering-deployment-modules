@@ -242,7 +242,7 @@ resource "juju_application" "grafana-agent" {
   charm {
     name = "grafana-agent"
     # renovate: charm="grafana-agent" track="1" risk="stable" base="22.04" arch="amd64"
-    revision = 490
+    revision = 603
     channel  = "1/stable"
     base     = "ubuntu@22.04"
   }
