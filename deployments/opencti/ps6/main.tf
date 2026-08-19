@@ -394,7 +394,7 @@ resource "juju_application" "opencti-export-file-csv-connector" {
     name    = "opencti-export-file-csv-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-export-file-csv-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 75
+    revision = 119
     base     = "ubuntu@24.04"
   }
 
