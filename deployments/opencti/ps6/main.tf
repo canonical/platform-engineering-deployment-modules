@@ -258,7 +258,7 @@ resource "juju_application" "opencti-abuseipdb-ipblacklist-connector" {
     name    = "opencti-abuseipdb-ipblacklist-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-abuseipdb-ipblacklist-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 71
+    revision = 115
     base     = "ubuntu@24.04"
   }
 
@@ -281,7 +281,7 @@ resource "juju_application" "opencti-alienvault-connector" {
     name    = "opencti-alienvault-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-alienvault-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 72
+    revision = 118
     base     = "ubuntu@24.04"
   }
 
