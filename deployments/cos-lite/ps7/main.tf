@@ -45,7 +45,7 @@ resource "juju_application" "grafana" {
     name    = "grafana-k8s"
     channel = "1/stable"
     # renovate: charm="grafana-k8s" track="1" risk="stable" base="20.04" arch="amd64"
-    revision = 151
+    revision = 160
   }
 }
 
