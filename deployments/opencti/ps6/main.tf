@@ -309,7 +309,7 @@ resource "juju_application" "opencti-cisa-kev-connector" {
     name    = "opencti-cisa-kev-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-cisa-kev-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 73
+    revision = 116
     base     = "ubuntu@24.04"
   }
 
