@@ -467,7 +467,7 @@ resource "juju_application" "opencti-import-file-stix-connector" {
     name    = "opencti-import-file-stix-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-import-file-stix-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 77
+    revision = 123
     base     = "ubuntu@24.04"
   }
 
