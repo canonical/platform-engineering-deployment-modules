@@ -428,7 +428,7 @@ resource "juju_application" "opencti-export-file-txt-connector" {
     name    = "opencti-export-file-txt-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-export-file-txt-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 73
+    revision = 117
     base     = "ubuntu@24.04"
   }
 
