@@ -445,7 +445,7 @@ resource "juju_application" "opencti-import-document-connector" {
     name    = "opencti-import-document-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-import-document-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 76
+    revision = 120
     base     = "ubuntu@24.04"
   }
 
