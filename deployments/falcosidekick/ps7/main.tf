@@ -4,7 +4,7 @@ module "ingress_configurator" {
   model_uuid = var.model_uuid
   channel    = "latest/edge"
   # renovate: charm="ingress-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
-  revision = 98
+  revision = 99
   config   = { hostname = var.external_hostname }
   trust    = true
 }
