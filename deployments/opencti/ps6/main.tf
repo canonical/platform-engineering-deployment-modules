@@ -487,7 +487,7 @@ resource "juju_application" "opencti-ipinfo-connector" {
     name    = "opencti-ipinfo-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-ipinfo-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 73
+    revision = 115
     base     = "ubuntu@24.04"
   }
 
