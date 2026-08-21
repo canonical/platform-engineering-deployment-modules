@@ -510,7 +510,7 @@ resource "juju_application" "opencti-malwarebazaar-connector" {
     name    = "opencti-malwarebazaar-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-malwarebazaar-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 71
+    revision = 115
     base     = "ubuntu@24.04"
   }
 
