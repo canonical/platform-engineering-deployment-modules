@@ -570,7 +570,7 @@ resource "juju_application" "opencti-sekoia-connector" {
     name    = "opencti-sekoia-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-sekoia-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 77
+    revision = 118
     base     = "ubuntu@24.04"
   }
 
