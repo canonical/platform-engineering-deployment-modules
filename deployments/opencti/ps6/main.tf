@@ -68,7 +68,7 @@ module "opencti" {
   opensearch = {
     channel = "2/edge"
     # renovate: charm="opensearch" track="2" risk="edge" base="22.04" arch="amd64"
-    revision    = 313
+    revision    = 359
     base        = "ubuntu@22.04"
     constraints = var.opensearch_constraints
     config      = var.opensearch_config
