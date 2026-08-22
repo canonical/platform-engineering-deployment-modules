@@ -530,7 +530,7 @@ resource "juju_application" "opencti-misp-feed-connector" {
     name    = "opencti-misp-feed-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-misp-feed-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 74
+    revision = 118
     base     = "ubuntu@24.04"
   }
 
