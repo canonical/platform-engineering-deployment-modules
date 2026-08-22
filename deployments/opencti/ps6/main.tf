@@ -550,7 +550,7 @@ resource "juju_application" "opencti-mitre-connector" {
     name    = "opencti-mitre-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-mitre-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 77
+    revision = 119
     base     = "ubuntu@24.04"
   }
 
