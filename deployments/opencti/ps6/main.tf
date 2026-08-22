@@ -614,7 +614,7 @@ resource "juju_application" "opencti-vxvault-connector" {
     name    = "opencti-vxvault-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-vxvault-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 76
+    revision = 121
     base     = "ubuntu@24.04"
   }
 
