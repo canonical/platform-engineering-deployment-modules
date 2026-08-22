@@ -88,7 +88,7 @@ module "opencti" {
   rabbitmq_server = {
     channel = "3.9/stable"
     # renovate: charm="rabbitmq-server" track="3.9" risk="stable" base="22.04" arch="amd64"
-    revision    = 227
+    revision    = 295
     base        = "ubuntu@22.04"
     constraints = var.rabbitmq_constraints
   }
