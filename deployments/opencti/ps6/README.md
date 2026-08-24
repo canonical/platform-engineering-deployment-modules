@@ -83,11 +83,6 @@ keys for connectors.
   - fields: `api-key`
   - content: Sekoia API token
 
-- nti
-  - path: `secret/prodstack6/roles/${var.model_name}/nti`
-  - fields: `api-key`
-  - content: NSFocus API token
-
 ### DNS Entry  
 
 The DNS entry for this environment is defined here:

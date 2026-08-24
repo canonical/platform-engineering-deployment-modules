@@ -17,7 +17,6 @@ locals {
     "opencti-sekoia-connector",
     "opencti-urlhaus-connector",
     "opencti-vxvault-connector",
-    "opencti-nti-connector",
     "opencti-woap-connector"
   ])
   machine_charms = toset([
@@ -48,15 +47,16 @@ resource "openstack_objectstorage_container_v1" "opensearch_backup" {
 }
 
 module "opencti" {
-  source        = "git::https://github.com/canonical/opencti-operator//terraform/product?ref=opencti-rev67&depth=1"
+  source        = "git::https://github.com/canonical/opencti-operator//terraform/product?ref=opencti-rev117&depth=1"
   model_uuid    = var.model_uuid
   db_model_uuid = var.db_model_uuid
   model_user    = var.model_name
   db_model_user = var.db_model_name
 
   opencti = {
-    channel     = "latest/edge"
-    revision    = 74
+    channel = "latest/edge"
+    # renovate: charm="opencti" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision    = 118
     base        = "ubuntu@24.04"
     constraints = "arch=amd64"
     units       = 1
@@ -66,15 +66,17 @@ module "opencti" {
   }
 
   opensearch = {
-    channel     = "2/edge"
-    revision    = 313
+    channel = "2/edge"
+    # renovate: charm="opensearch" track="2" risk="edge" base="22.04" arch="amd64"
+    revision    = 359
     base        = "ubuntu@22.04"
     constraints = var.opensearch_constraints
     config      = var.opensearch_config
   }
 
   self_signed_certificates = {
-    channel  = "latest/stable"
+    channel = "latest/stable"
+    # renovate: charm="self-signed-certificates" track="latest" risk="stable" base="22.04" arch="amd64"
     revision = 264
     base     = "ubuntu@22.04"
     config = {
@@ -84,15 +86,17 @@ module "opencti" {
   }
 
   rabbitmq_server = {
-    channel     = "3.9/stable"
-    revision    = 227
+    channel = "3.9/stable"
+    # renovate: charm="rabbitmq-server" track="3.9" risk="stable" base="22.04" arch="amd64"
+    revision    = 295
     base        = "ubuntu@22.04"
     constraints = var.rabbitmq_constraints
   }
 
   redis_k8s = {
-    channel     = "latest/edge"
-    revision    = 39
+    channel = "latest/edge"
+    # renovate: charm="redis-k8s" track="latest" risk="edge" base="22.04" arch="amd64"
+    revision    = 42
     base        = "ubuntu@22.04"
     constraints = "arch=amd64"
     storage = {
@@ -101,8 +105,9 @@ module "opencti" {
   }
 
   s3_integrator = {
-    channel     = "latest/stable"
-    revision    = 62
+    channel = "latest/stable"
+    # renovate: charm="s3-integrator" track="latest" risk="stable" base="22.04" arch="amd64"
+    revision    = 145
     base        = "ubuntu@22.04"
     constraints = "arch=amd64"
     config = {
@@ -112,8 +117,9 @@ module "opencti" {
   }
 
   s3_integrator_opensearch = {
-    channel     = "latest/stable"
-    revision    = 62
+    channel = "latest/stable"
+    # renovate: charm="s3-integrator" track="latest" risk="stable" base="22.04" arch="amd64"
+    revision    = 145
     base        = "ubuntu@22.04"
     constraints = "arch=amd64 cores=1"
     config = {
@@ -125,8 +131,9 @@ module "opencti" {
   }
 
   sysconfig = {
-    channel  = "latest/stable"
-    revision = 89
+    channel = "latest/stable"
+    # renovate: charm="sysconfig" track="latest" risk="stable" base="22.04" arch="amd64"
+    revision = 142
   }
 
   providers = {
@@ -158,8 +165,9 @@ resource "juju_application" "lego" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "lego"
-    channel  = "4/candidate"
+    name    = "lego"
+    channel = "4/candidate"
+    # renovate: charm="lego" track="4" risk="candidate" base="22.04" arch="amd64"
     revision = 128
   }
 
@@ -184,8 +192,9 @@ resource "juju_application" "gateway-api-integrator" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "gateway-api-integrator"
-    revision = 127
+    name = "gateway-api-integrator"
+    # renovate: charm="gateway-api-integrator" track="latest" risk="stable" base="24.04" arch="amd64"
+    revision = 151
     channel  = "latest/stable"
   }
 
@@ -201,8 +210,9 @@ resource "juju_application" "gateway-route-configurator" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "gateway-route-configurator"
-    revision = 8
+    name = "gateway-route-configurator"
+    # renovate: charm="gateway-route-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 26
     channel  = "latest/edge"
   }
 
@@ -230,8 +240,9 @@ resource "juju_application" "grafana-agent" {
   model_uuid = var.db_model_uuid
 
   charm {
-    name     = "grafana-agent"
-    revision = 490
+    name = "grafana-agent"
+    # renovate: charm="grafana-agent" track="1" risk="stable" base="22.04" arch="amd64"
+    revision = 603
     channel  = "1/stable"
     base     = "ubuntu@22.04"
   }
@@ -244,9 +255,10 @@ resource "juju_application" "opencti-abuseipdb-ipblacklist-connector" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "opencti-abuseipdb-ipblacklist-connector"
-    channel  = "latest/edge"
-    revision = 71
+    name    = "opencti-abuseipdb-ipblacklist-connector"
+    channel = "latest/edge"
+    # renovate: charm="opencti-abuseipdb-ipblacklist-connector" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 115
     base     = "ubuntu@24.04"
   }
 
@@ -266,9 +278,10 @@ resource "juju_application" "opencti-alienvault-connector" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "opencti-alienvault-connector"
-    channel  = "latest/edge"
-    revision = 72
+    name    = "opencti-alienvault-connector"
+    channel = "latest/edge"
+    # renovate: charm="opencti-alienvault-connector" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 118
     base     = "ubuntu@24.04"
   }
 
@@ -293,9 +306,10 @@ resource "juju_application" "opencti-cisa-kev-connector" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "opencti-cisa-kev-connector"
-    channel  = "latest/edge"
-    revision = 73
+    name    = "opencti-cisa-kev-connector"
+    channel = "latest/edge"
+    # renovate: charm="opencti-cisa-kev-connector" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 116
     base     = "ubuntu@24.04"
   }
 
@@ -314,9 +328,10 @@ resource "juju_application" "opencti-crowdstrike-connector" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "opencti-crowdstrike-connector"
-    channel  = "latest/edge"
-    revision = 75
+    name    = "opencti-crowdstrike-connector"
+    channel = "latest/edge"
+    # renovate: charm="opencti-crowdstrike-connector" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 118
     base     = "ubuntu@24.04"
   }
 
@@ -355,9 +370,10 @@ resource "juju_application" "opencti-cyber-campaign-connector" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "opencti-cyber-campaign-connector"
-    channel  = "latest/edge"
-    revision = 73
+    name    = "opencti-cyber-campaign-connector"
+    channel = "latest/edge"
+    # renovate: charm="opencti-cyber-campaign-connector" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 119
     base     = "ubuntu@24.04"
   }
 
@@ -375,9 +391,10 @@ resource "juju_application" "opencti-export-file-csv-connector" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "opencti-export-file-csv-connector"
-    channel  = "latest/edge"
-    revision = 75
+    name    = "opencti-export-file-csv-connector"
+    channel = "latest/edge"
+    # renovate: charm="opencti-export-file-csv-connector" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 119
     base     = "ubuntu@24.04"
   }
 
@@ -391,9 +408,10 @@ resource "juju_application" "opencti-export-file-stix-connector" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "opencti-export-file-stix-connector"
-    channel  = "latest/edge"
-    revision = 74
+    name    = "opencti-export-file-stix-connector"
+    channel = "latest/edge"
+    # renovate: charm="opencti-export-file-stix-connector" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 118
     base     = "ubuntu@24.04"
   }
 
@@ -407,9 +425,10 @@ resource "juju_application" "opencti-export-file-txt-connector" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "opencti-export-file-txt-connector"
-    channel  = "latest/edge"
-    revision = 73
+    name    = "opencti-export-file-txt-connector"
+    channel = "latest/edge"
+    # renovate: charm="opencti-export-file-txt-connector" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 117
     base     = "ubuntu@24.04"
   }
 
@@ -423,9 +442,10 @@ resource "juju_application" "opencti-import-document-connector" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "opencti-import-document-connector"
-    channel  = "latest/edge"
-    revision = 76
+    name    = "opencti-import-document-connector"
+    channel = "latest/edge"
+    # renovate: charm="opencti-import-document-connector" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 120
     base     = "ubuntu@24.04"
   }
 
@@ -444,9 +464,10 @@ resource "juju_application" "opencti-import-file-stix-connector" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "opencti-import-file-stix-connector"
-    channel  = "latest/edge"
-    revision = 77
+    name    = "opencti-import-file-stix-connector"
+    channel = "latest/edge"
+    # renovate: charm="opencti-import-file-stix-connector" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 123
     base     = "ubuntu@24.04"
   }
 
@@ -463,9 +484,10 @@ resource "juju_application" "opencti-ipinfo-connector" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "opencti-ipinfo-connector"
-    channel  = "latest/edge"
-    revision = 73
+    name    = "opencti-ipinfo-connector"
+    channel = "latest/edge"
+    # renovate: charm="opencti-ipinfo-connector" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 115
     base     = "ubuntu@24.04"
   }
 
@@ -485,9 +507,10 @@ resource "juju_application" "opencti-malwarebazaar-connector" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "opencti-malwarebazaar-connector"
-    channel  = "latest/edge"
-    revision = 71
+    name    = "opencti-malwarebazaar-connector"
+    channel = "latest/edge"
+    # renovate: charm="opencti-malwarebazaar-connector" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 115
     base     = "ubuntu@24.04"
   }
 
@@ -504,9 +527,10 @@ resource "juju_application" "opencti-misp-feed-connector" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "opencti-misp-feed-connector"
-    channel  = "latest/edge"
-    revision = 74
+    name    = "opencti-misp-feed-connector"
+    channel = "latest/edge"
+    # renovate: charm="opencti-misp-feed-connector" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 118
     base     = "ubuntu@24.04"
   }
 
@@ -523,9 +547,10 @@ resource "juju_application" "opencti-mitre-connector" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "opencti-mitre-connector"
-    channel  = "latest/edge"
-    revision = 77
+    name    = "opencti-mitre-connector"
+    channel = "latest/edge"
+    # renovate: charm="opencti-mitre-connector" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 119
     base     = "ubuntu@24.04"
   }
 
@@ -542,9 +567,10 @@ resource "juju_application" "opencti-sekoia-connector" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "opencti-sekoia-connector"
-    channel  = "latest/edge"
-    revision = 77
+    name    = "opencti-sekoia-connector"
+    channel = "latest/edge"
+    # renovate: charm="opencti-sekoia-connector" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 118
     base     = "ubuntu@24.04"
   }
 
@@ -562,9 +588,10 @@ resource "juju_application" "opencti-urlhaus-connector" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "opencti-urlhaus-connector"
-    channel  = "latest/edge"
-    revision = 71
+    name    = "opencti-urlhaus-connector"
+    channel = "latest/edge"
+    # renovate: charm="opencti-urlhaus-connector" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 115
     base     = "ubuntu@24.04"
   }
 
@@ -584,9 +611,10 @@ resource "juju_application" "opencti-vxvault-connector" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "opencti-vxvault-connector"
-    channel  = "latest/edge"
-    revision = 76
+    name    = "opencti-vxvault-connector"
+    channel = "latest/edge"
+    # renovate: charm="opencti-vxvault-connector" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 121
     base     = "ubuntu@24.04"
   }
 
@@ -599,40 +627,16 @@ resource "juju_application" "opencti-vxvault-connector" {
   }
 }
 
-resource "juju_application" "opencti-nti-connector" {
-  name       = "opencti-nti-connector"
-  model_uuid = var.model_uuid
-
-  charm {
-    name     = "opencti-nti-connector"
-    channel  = "latest/edge"
-    revision = 35
-    base     = "ubuntu@24.04"
-  }
-
-  config = {
-    connector-log-level       = "info",
-    connector-duration-period = "P1D"
-    connector-queue-threshold = 500
-    nti-base-url              = "https://nti.nsfocusglobal.com/api/v2/"
-    nti-api-key               = data.vault_generic_secret.nti.data["api-key"]
-    nti-tlp                   = "white"
-    nti-create-ioc            = true
-    nti-create-ip             = true
-    nti-create-domain         = true
-    nti-create-file           = true
-    nti-create-url            = true
-  }
-}
 
 resource "juju_application" "opencti-woap-connector" {
   name       = "opencti-woap-connector"
   model_uuid = var.model_uuid
 
   charm {
-    name     = "opencti-woap-connector"
-    channel  = "latest/edge"
-    revision = 2
+    name    = "opencti-woap-connector"
+    channel = "latest/edge"
+    # renovate: charm="opencti-woap-connector" track="latest" risk="edge" base="44.04" arch="amd64"
+    revision = 4
     base     = "ubuntu@24.04"
   }
 
@@ -789,7 +793,8 @@ resource "juju_application" "landscape-client" {
   model_uuid = var.db_model_uuid
 
   charm {
-    name     = "landscape-client"
+    name = "landscape-client"
+    # renovate: charm="landscape-client" track="latest" risk="stable" base="22.04" arch="amd64"
     revision = 72
     channel  = "latest/stable"
     base     = "ubuntu@22.04"
@@ -826,7 +831,8 @@ resource "juju_application" "ubuntu_pro" {
   model_uuid = var.db_model_uuid
 
   charm {
-    name     = "ubuntu-pro"
+    name = "ubuntu-pro"
+    # renovate: charm="ubuntu-pro" track="latest" risk="stable" base="22.04" arch="amd64"
     revision = 29
     channel  = "latest/stable"
     base     = "ubuntu@22.04"

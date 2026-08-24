@@ -11,10 +11,11 @@ resource "juju_secret" "lego_credentials" {
 }
 
 module "lego" {
-  source   = "git::https://github.com/canonical/lego-operator//terraform?ref=rev197&depth=1"
+  source   = "git::https://github.com/canonical/lego-operator//terraform?ref=rev516&depth=1"
   model    = var.model_uuid
   app_name = "lego"
   channel  = "4/candidate"
+  # renovate: charm="lego" track="4" risk="candidate" base="22.04" arch="amd64"
   revision = 128
   config = {
     "email" : "is-admin@canonical.com",

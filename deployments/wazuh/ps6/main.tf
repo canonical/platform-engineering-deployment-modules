@@ -19,7 +19,7 @@ resource "openstack_objectstorage_container_v1" "wazuh_indexer_backup" {
 }
 
 module "wazuh" {
-  source               = "git::https://github.com/canonical/wazuh-server-operator//terraform/product?ref=rev247&depth=1"
+  source               = "git::https://github.com/canonical/wazuh-server-operator//terraform/product?ref=rev260&depth=1"
   server_model_name    = var.server_model_name
   server_model_uuid    = var.server_model_uuid
   indexer_model_name   = var.indexer_model_name
@@ -29,8 +29,9 @@ module "wazuh" {
   indexer_consumers    = var.indexer_consumers
 
   wazuh_indexer = {
-    app_name    = "wazuh-indexer-v5"
-    channel     = "4.11/edge"
+    app_name = "wazuh-indexer-v5"
+    channel  = "4.11/edge"
+    # renovate: charm="wazuh-indexer" track="4.11" risk="edge" base="22.04" arch="amd64"
     revision    = 13
     config      = var.wazuh_indexer_config
     constraints = var.wazuh_indexer_constraints
@@ -38,13 +39,15 @@ module "wazuh" {
   }
 
   sysconfig = {
-    channel  = "latest/stable"
-    revision = 33
+    channel = "latest/stable"
+    # renovate: charm="sysconfig" track="latest" risk="stable" base="22.04" arch="amd64"
+    revision = 142
   }
 
   wazuh_dashboard = {
-    app_name    = "wazuh-dashboard-v5"
-    channel     = "4.11/edge"
+    app_name = "wazuh-dashboard-v5"
+    channel  = "4.11/edge"
+    # renovate: charm="wazuh-dashboard" track="4.11" risk="edge" base="22.04" arch="amd64"
     revision    = 21
     constraints = var.wazuh_dashboard_constraints
   }
@@ -52,7 +55,8 @@ module "wazuh" {
   wazuh_server = {
     app_name = "wazuh-server"
     channel  = "4.11/edge"
-    revision = 245
+    # renovate: charm="wazuh-server" track="4.11" risk="edge" base="22.04" arch="amd64"
+    revision = 273
     config = {
       logs-ca-cert             = var.logs_ca_certificate
       custom-config-ssh-key    = "secret:${juju_secret.git_ssh_key.secret_id}"
@@ -62,17 +66,20 @@ module "wazuh" {
   }
 
   traefik_k8s = {
-    channel  = "latest/stable"
-    revision = 236
+    channel = "latest/stable"
+    # renovate: charm="traefik-k8s" track="latest" risk="stable" base="20.04" arch="amd64"
+    revision = 377
     config = {
       external_hostname = var.wazuh_external_hostname
     }
+    units = 3
   }
 
   self_signed_certificates = {
     app_name = "self-signed-certificates"
     channel  = "1/edge"
-    revision = 518
+    # renovate: charm="self-signed-certificates" track="1" risk="edge" base="22.04" arch="amd64"
+    revision = 672
     base     = "ubuntu@22.04"
 
     config = {
@@ -82,7 +89,8 @@ module "wazuh" {
   }
 
   wazuh_indexer_backup = {
-    channel  = "latest/stable"
+    channel = "latest/stable"
+    # renovate: charm="s3-integrator" track="latest" risk="stable" base="22.04" arch="amd64"
     revision = 145
     config = {
       bucket         = openstack_objectstorage_container_v1.wazuh_indexer_backup.name
@@ -95,13 +103,15 @@ module "wazuh" {
   }
 
   wazuh_indexer_grafana_agent = {
-    channel  = "1/stable"
-    revision = 456
+    channel = "1/stable"
+    # renovate: charm="grafana-agent" track="1" risk="stable" base="22.04" arch="amd64"
+    revision = 603
   }
 
   wazuh_dashboard_grafana_agent = {
-    channel  = "1/stable"
-    revision = 456
+    channel = "1/stable"
+    # renovate: charm="grafana-agent" track="1" risk="stable" base="22.04" arch="amd64"
+    revision = 603
   }
 
   providers = {
@@ -128,8 +138,9 @@ resource "juju_application" "lego" {
   model_uuid = var.server_model_uuid
 
   charm {
-    name     = "lego"
-    channel  = "4/candidate"
+    name    = "lego"
+    channel = "4/candidate"
+    # renovate: charm="lego" track="4" risk="candidate" base="22.04" arch="amd64"
     revision = 128
   }
 
@@ -382,7 +393,8 @@ resource "juju_application" "landscape_client" {
   model_uuid = var.indexer_model_uuid
 
   charm {
-    name     = "landscape-client"
+    name = "landscape-client"
+    # renovate: charm="landscape-client" track="latest" risk="stable" base="24.04" arch="amd64"
     revision = 72
     channel  = "latest/stable"
     base     = "ubuntu@24.04"
@@ -403,7 +415,8 @@ resource "juju_application" "landscape_client_dashboard" {
   model_uuid = var.dashboard_model_uuid
 
   charm {
-    name     = "landscape-client"
+    name = "landscape-client"
+    # renovate: charm="landscape-client" track="latest" risk="stable" base="24.04" arch="amd64"
     revision = 72
     channel  = "latest/stable"
     base     = "ubuntu@24.04"
@@ -456,7 +469,8 @@ resource "juju_application" "ubuntu_pro" {
   model_uuid = var.indexer_model_uuid
 
   charm {
-    name     = "ubuntu-pro"
+    name = "ubuntu-pro"
+    # renovate: charm="ubuntu-pro" track="latest" risk="stable" base="22.04" arch="amd64"
     revision = 29
     channel  = "latest/stable"
     base     = "ubuntu@22.04"
@@ -475,7 +489,8 @@ resource "juju_application" "ubuntu_pro_dashboard" {
   model_uuid = var.dashboard_model_uuid
 
   charm {
-    name     = "ubuntu-pro"
+    name = "ubuntu-pro"
+    # renovate: charm="ubuntu-pro" track="latest" risk="stable" base="22.04" arch="amd64"
     revision = 29
     channel  = "latest/stable"
     base     = "ubuntu@22.04"

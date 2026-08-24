@@ -1,0 +1,28 @@
+# Copyright 2025 Canonical Ltd.
+# See LICENSE file for licensing details.
+#
+# Consumed by prek (https://github.com/j178/prek), a drop-in pre-commit
+# replacement. Run `prek run --all-files` to execute all hooks manually, or
+# `prek install` to wire them into the local git pre-commit hook.
+repos:
+  - repo: local
+    hooks:
+      - id: terraform-lint
+        name: Terraform fmt + tflint
+        description: >-
+          Runs the same Terraform checks as .github/workflows/lint.yaml
+          (terraform fmt -check + tflint) against the deployments/ tree.
+        entry: scripts/terraform-lint.sh
+        language: system
+        files: \.tf$
+        pass_filenames: false
+      - id: renovate-revision-comments
+        name: Charm revisions have a renovate comment
+        description: >-
+          Ensures every `revision = N` line in deployments/**/main.tf is
+          immediately preceded by a `# renovate: charm="..." track="..."
+          risk="..." base="..." arch="..."` comment, so Renovate keeps
+          tracking it for updates.
+        entry: scripts/check-renovate-comments.py
+        language: system
+        files: ^deployments/.*/main\.tf$

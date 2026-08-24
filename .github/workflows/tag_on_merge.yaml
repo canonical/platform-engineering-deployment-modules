@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v7.0.0
+      - uses: actions/checkout@v7.0.1
 
       - name: Fetch tags
         run: git fetch --tags
@@ -52,7 +52,7 @@ jobs:
           git push origin ${{ steps.generate_tag.outputs.next_tag }}
 
       - name: Create Release
-        uses: softprops/action-gh-release@v3.0.1
+        uses: softprops/action-gh-release@v3.0.2
         with:
           name: Release ${{ steps.generate_tag.outputs.next_tag }}
           tag_name: ${{ steps.generate_tag.outputs.next_tag }}
