@@ -68,7 +68,7 @@ module "wazuh" {
   traefik_k8s = {
     channel = "latest/stable"
     # renovate: charm="traefik-k8s" track="latest" risk="stable" base="20.04" arch="amd64"
-    revision = 236
+    revision = 377
     config = {
       external_hostname = var.wazuh_external_hostname
     }
