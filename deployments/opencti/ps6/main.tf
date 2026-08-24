@@ -133,7 +133,7 @@ module "opencti" {
   sysconfig = {
     channel = "latest/stable"
     # renovate: charm="sysconfig" track="latest" risk="stable" base="22.04" arch="amd64"
-    revision = 89
+    revision = 142
   }
 
   providers = {

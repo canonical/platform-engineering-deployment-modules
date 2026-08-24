@@ -41,7 +41,7 @@ module "wazuh" {
   sysconfig = {
     channel = "latest/stable"
     # renovate: charm="sysconfig" track="latest" risk="stable" base="22.04" arch="amd64"
-    revision = 33
+    revision = 142
   }
 
   wazuh_dashboard = {
