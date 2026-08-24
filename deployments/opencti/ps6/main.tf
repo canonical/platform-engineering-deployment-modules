@@ -96,7 +96,7 @@ module "opencti" {
   redis_k8s = {
     channel = "latest/edge"
     # renovate: charm="redis-k8s" track="latest" risk="edge" base="22.04" arch="amd64"
-    revision    = 39
+    revision    = 42
     base        = "ubuntu@22.04"
     constraints = "arch=amd64"
     storage = {
