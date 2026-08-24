@@ -1,5 +1,5 @@
 module "falco" {
-  source = "git::https://github.com/canonical/falco-operators//falco-operator/terraform?ref=falco-rev112&depth=1"
+  source = "git::https://github.com/canonical/falco-operators//falco-operator/terraform?ref=falco-rev116&depth=1"
 
   model_uuid = var.model_uuid
   channel    = "0.42/edge"
