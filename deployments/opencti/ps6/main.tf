@@ -107,7 +107,7 @@ module "opencti" {
   s3_integrator = {
     channel = "latest/stable"
     # renovate: charm="s3-integrator" track="latest" risk="stable" base="22.04" arch="amd64"
-    revision    = 62
+    revision    = 145
     base        = "ubuntu@22.04"
     constraints = "arch=amd64"
     config = {
@@ -119,7 +119,7 @@ module "opencti" {
   s3_integrator_opensearch = {
     channel = "latest/stable"
     # renovate: charm="s3-integrator" track="latest" risk="stable" base="22.04" arch="amd64"
-    revision    = 62
+    revision    = 145
     base        = "ubuntu@22.04"
     constraints = "arch=amd64 cores=1"
     config = {
