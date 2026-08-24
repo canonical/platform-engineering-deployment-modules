@@ -56,7 +56,7 @@ module "wazuh" {
     app_name = "wazuh-server"
     channel  = "4.11/edge"
     # renovate: charm="wazuh-server" track="4.11" risk="edge" base="22.04" arch="amd64"
-    revision = 245
+    revision = 273
     config = {
       logs-ca-cert             = var.logs_ca_certificate
       custom-config-ssh-key    = "secret:${juju_secret.git_ssh_key.secret_id}"
