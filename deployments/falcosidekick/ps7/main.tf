@@ -15,7 +15,7 @@ module "falcosidekick" {
   model_uuid = var.model_uuid
   channel    = "2/edge"
   # renovate: charm="falcosidekick-k8s" track="2" risk="edge" base="24.04" arch="amd64"
-  revision = 102
+  revision = 103
 }
 
 resource "juju_integration" "falcosidekick_ingress" {
