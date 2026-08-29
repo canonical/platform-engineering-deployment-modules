@@ -212,7 +212,7 @@ resource "juju_application" "gateway-route-configurator" {
   charm {
     name = "gateway-route-configurator"
     # renovate: charm="gateway-route-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 27
+    revision = 28
     channel  = "latest/edge"
   }
 
