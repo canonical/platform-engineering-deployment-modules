@@ -10,7 +10,7 @@ module "ingress_configurator" {
 }
 
 module "falcosidekick" {
-  source = "git::https://github.com/canonical/falco-operators//falcosidekick-k8s-operator/terraform?ref=falco-rev117&depth=1"
+  source = "git::https://github.com/canonical/falco-operators//falcosidekick-k8s-operator/terraform?ref=falco-rev119&depth=1"
 
   model_uuid = var.model_uuid
   channel    = "2/edge"
