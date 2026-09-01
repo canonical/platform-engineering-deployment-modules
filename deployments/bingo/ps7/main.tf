@@ -5,12 +5,8 @@
 # of every bundled charm for the PS7 stack. It intentionally does NOT deploy
 # ingress: ingress is deployment-specific and managed by the consuming
 # deployment (see Layer 3).
-#
-# TODO: once canonical/bingo cuts a `tf-X.Y.Z` tag for the terraform module
-# (see CC008 "Module Lifecycle" — in-repo modules should tag as tf-X.Y.Z),
-# replace the `ref` below with that tag instead of a raw commit hash.
 module "bingo" {
-  source     = "git::https://github.com/canonical/bingo//terraform/product?ref=c4ce57a27308cbe6c17b6856b2da7e201cc7b678&depth=1"
+  source     = "git::https://github.com/canonical/bingo//terraform/product?ref=tf-1.0.0&depth=1"
   model_uuid = var.model_uuid
 
   deploy_postgresql = var.deploy_postgresql
@@ -18,16 +14,16 @@ module "bingo" {
   deploy_ingress    = false
 
   bingo = {
-    channel = "latest/edge"
-    # renovate: depName="bingo"
-    revision = null # TODO: pin to a tested revision once bingo publishes one
+    channel = "1/stable"
+    # renovate: charm="bingo" track="1" risk="stable" base="24.04" arch="amd64"
+    revision = 3
     config   = var.bingo_config
     units    = var.bingo_units
   }
 
   postgresql = {
     channel = "14/stable"
-    # renovate: depName="postgresql-k8s"
+    # renovate: charm="postgresql-k8s" track="14" risk="stable" base="24.04" arch="amd64"
     revision = 774
     config   = var.postgresql_config
     units    = var.postgresql_units
@@ -35,7 +31,7 @@ module "bingo" {
 
   oauth = {
     channel = "latest/edge"
-    # renovate: depName="oauth-external-idp-integrator"
+    # renovate: charm="oauth-external-idp-integrator" track="latest" risk="edge" base="24.04" arch="amd64"
     revision = 6
     config   = var.oauth_config
   }
