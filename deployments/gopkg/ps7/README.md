@@ -10,12 +10,23 @@ This deployment is done on top of a single Kubernetes model.
 
 ## Proxy Access
 
-N/A — gopkg serves static import-path metadata and makes no outbound calls.
+**Required.** gopkg makes outbound HTTPS calls while serving requests:
+
+| Destination | Why | Impact if blocked |
+|---|---|---|
+| `github.com` | `fetchRefs()` fetches `/info/refs?service=git-upload-pack` to resolve which git tag satisfies a requested major version | **Core function fails** — no version can be resolved |
+| `godoc.org`, `api.godoc.org` | package page rendering and search | HTML page degrades; `go get` still works |
+
+`go get` only needs the `go-import` meta tag, which is served from the resolved
+refs — so GitHub egress is not optional.
 
 ## Firewall Rules
 
-Inbound HTTPS to `external_hostname` via the PS7 ingress. Rules are defined by
-the consuming deployment.
+- **Inbound:** HTTPS to `external_hostname` via the PS7 ingress.
+- **Outbound:** HTTPS to `github.com` (required) and `godoc.org` /
+  `api.godoc.org` (page rendering only). See Proxy Access above.
+
+Rules are defined by the consuming deployment.
 
 ## Vault Secrets
 
