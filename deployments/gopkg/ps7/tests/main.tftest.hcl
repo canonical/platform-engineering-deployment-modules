@@ -24,7 +24,7 @@ run "basic_plan" {
   }
 
   assert {
-    condition     = output.components.ingress_configurator.app_name == "ingress-configurator"
+    condition     = output.components.ingress_configurator.application.name == "ingress-configurator"
     error_message = "ingress-configurator app_name did not match expected"
   }
 }
