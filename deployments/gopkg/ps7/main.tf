@@ -5,7 +5,7 @@
 # gopkg product module (deploy_ingress = false below). ingress-configurator is
 # the ingress charm used on PS7 Kubernetes models; see falcosidekick/ps7.
 module "ingress_configurator" {
-  source     = "git::https://github.com/canonical/ingress-configurator-operator//terraform?ref=rev95&depth=1"
+  source     = "git::https://github.com/canonical/ingress-configurator-operator//terraform?ref=ingress-configurator-rev103&depth=1"
   app_name   = "ingress-configurator"
   model_uuid = var.model_uuid
   channel    = "latest/edge"
@@ -47,7 +47,7 @@ resource "juju_integration" "gopkg_ingress" {
   }
 
   application {
-    name     = module.ingress_configurator.app_name
-    endpoint = module.ingress_configurator.endpoints.ingress
+    name     = module.ingress_configurator.provides.ingress.name
+    endpoint = module.ingress_configurator.provides.ingress.endpoint
   }
 }
