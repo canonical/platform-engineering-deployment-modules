@@ -1,9 +1,36 @@
 # Copyright 2025 Canonical Ltd.
 # See LICENSE file for licensing details.
 
-# This module inherits the mattermost-k8s-operator product module and pins the
-# revisions/channels of every charm. It intentionally does NOT deploy ingress:
-# ingress is deployment-specific and managed by the consuming deployment.
+# This module inherits the mattermost-k8s-operator product module, pins the
+# revisions/channels of every charm, and deploys the ingress-configurator
+# fronted by HAProxy. It is intentionally opinionated: shared/PS7 defaults live
+# here, and only environment- and model-specific values are taken as inputs.
+locals {
+  # S3: the bucket is environment-specific; the RadosGW endpoint and region are
+  # PS7 constants set here so consumers only need to pass the bucket.
+  s3_config = merge({
+    endpoint = "https://radosgw.ps7.canonical.com"
+    region   = "prodstack7"
+  }, var.s3_config)
+
+  # SMTP: the relay host, port, auth type, transport security and sender are
+  # shared Canonical defaults; only the AUTH user (and password) are
+  # environment-specific.
+  smtp_config = merge({
+    host               = "mattermost.smtp.canonical.com"
+    port               = "25"
+    auth_type          = "plain"
+    transport_security = "starttls"
+    smtp_sender        = "noreply+chat@canonical.com"
+  }, var.smtp_config)
+
+  # OAuth: the requested scope is an opinionated default; client credentials and
+  # IdP endpoints are environment-specific.
+  oauth_config = merge({
+    scope = "openid profile email"
+  }, var.oauth_config)
+}
+
 module "mattermost" {
   source     = "git::https://github.com/canonical/mattermost-k8s-operator//terraform/product?ref=main&depth=1"
   model_uuid = var.model_uuid
@@ -28,7 +55,7 @@ module "mattermost" {
   s3_integrator = {
     channel    = "1/stable"
     revision   = 330
-    config     = var.s3_config
+    config     = local.s3_config
     access_key = var.s3_access_key
     secret_key = var.s3_secret_key
   }
@@ -36,7 +63,7 @@ module "mattermost" {
   smtp_integrator = {
     channel  = "latest/stable"
     revision = 121
-    config   = var.smtp_config
+    config   = local.smtp_config
   }
 
   smtp_password = var.smtp_password
@@ -50,6 +77,62 @@ module "mattermost" {
     channel  = "latest/edge"
     revision = 6
     base     = "ubuntu@22.04"
-    config   = var.oauth_config
+    config   = local.oauth_config
+  }
+}
+
+# Ingress: the ingress-configurator charm (pinned here) fronted by the HAProxy
+# offer. Only the external hostname and the HAProxy offer URL are environment-
+# specific; the charm revision and the X-Forwarded-Proto rewrite are opinionated.
+resource "juju_application" "ingress_configurator" {
+  name       = "ingress-configurator"
+  model_uuid = var.model_uuid
+
+  charm {
+    name     = "ingress-configurator"
+    channel  = "latest/edge"
+    revision = 72
+    base     = "ubuntu@24.04"
+  }
+
+  config = {
+    hostname = var.external_hostname
+
+    # HAProxy terminates TLS and forwards plain HTTP to the workload without any
+    # X-Forwarded-* headers. Mattermost derives the OAuth token-exchange
+    # redirect_uri from the request scheme (GetProtocol(r) -> X-Forwarded-Proto),
+    # so without this it sends http:// while the authorize step uses the https://
+    # SiteURL, causing the IdP to reject the exchange with redirect_uri mismatch.
+    # Inject the scheme so both redirect_uris match.
+    "header-rewrite-expressions" = "X-Forwarded-Proto:https"
+  }
+  trust = true
+  units = 1
+}
+
+resource "juju_integration" "mattermost_ingress" {
+  model_uuid = var.model_uuid
+
+  application {
+    name     = module.mattermost.mattermost.app_name
+    endpoint = module.mattermost.mattermost.requires.ingress
+  }
+
+  application {
+    name     = juju_application.ingress_configurator.name
+    endpoint = "ingress"
+  }
+}
+
+resource "juju_integration" "haproxy_ingress_configurator" {
+  model_uuid = var.model_uuid
+
+  application {
+    offer_url = var.haproxy_offer_url
+  }
+
+  application {
+    name     = juju_application.ingress_configurator.name
+    endpoint = "haproxy-route"
   }
 }

@@ -37,7 +37,7 @@ variable "postgresql_units" {
 }
 
 variable "s3_config" {
-  description = "S3 integrator charm configuration (bucket, endpoint, region, etc.)"
+  description = "Environment-specific S3 integrator config (typically just `bucket`). The RadosGW `endpoint` and `region` default in the module."
   type        = map(string)
 }
 
@@ -54,7 +54,7 @@ variable "s3_secret_key" {
 }
 
 variable "smtp_config" {
-  description = "SMTP integrator charm configuration (host, port, etc.)"
+  description = "Environment-specific SMTP integrator config (typically just `user`). The relay `host`/`port`/`auth_type`/`transport_security`/`smtp_sender` default in the module."
   type        = map(string)
 }
 
@@ -66,7 +66,17 @@ variable "smtp_password" {
 }
 
 variable "oauth_config" {
-  description = "OAuth external IdP integrator charm configuration (client_id, client_secret, issuer_url, etc.)"
+  description = "Environment-specific OAuth integrator config (client_id, client_secret, issuer_url and the IdP endpoints). The `scope` defaults in the module."
   type        = map(string)
   default     = {}
+}
+
+variable "external_hostname" {
+  description = "External hostname to expose Mattermost on via the ingress (e.g. chat-ps7.pfe.staging.canonical.com)."
+  type        = string
+}
+
+variable "haproxy_offer_url" {
+  description = "Juju offer URL of the HAProxy ingress that the ingress-configurator integrates with over the haproxy-route relation."
+  type        = string
 }
