@@ -47,7 +47,7 @@ resource "openstack_objectstorage_container_v1" "opensearch_backup" {
 }
 
 module "opencti" {
-  source        = "git::https://github.com/canonical/opencti-operator//terraform/product?ref=opencti-rev117&depth=1"
+  source        = "git::https://github.com/canonical/opencti-operator//terraform/product?ref=opencti-rev118&depth=1"
   model_uuid    = var.model_uuid
   db_model_uuid = var.db_model_uuid
   model_user    = var.model_name
@@ -68,7 +68,7 @@ module "opencti" {
   opensearch = {
     channel = "2/edge"
     # renovate: charm="opensearch" track="2" risk="edge" base="22.04" arch="amd64"
-    revision    = 359
+    revision    = 361
     base        = "ubuntu@22.04"
     constraints = var.opensearch_constraints
     config      = var.opensearch_config
@@ -212,7 +212,7 @@ resource "juju_application" "gateway-route-configurator" {
   charm {
     name = "gateway-route-configurator"
     # renovate: charm="gateway-route-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 26
+    revision = 28
     channel  = "latest/edge"
   }
 

@@ -4,18 +4,18 @@ module "ingress_configurator" {
   model_uuid = var.model_uuid
   channel    = "latest/edge"
   # renovate: charm="ingress-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
-  revision = 99
+  revision = 103
   config   = { hostname = var.external_hostname }
   trust    = true
 }
 
 module "falcosidekick" {
-  source = "git::https://github.com/canonical/falco-operators//falcosidekick-k8s-operator/terraform?ref=falco-rev112&depth=1"
+  source = "git::https://github.com/canonical/falco-operators//falcosidekick-k8s-operator/terraform?ref=falco-rev120&depth=1"
 
   model_uuid = var.model_uuid
   channel    = "2/edge"
   # renovate: charm="falcosidekick-k8s" track="2" risk="edge" base="24.04" arch="amd64"
-  revision = 102
+  revision = 106
 }
 
 resource "juju_integration" "falcosidekick_ingress" {
