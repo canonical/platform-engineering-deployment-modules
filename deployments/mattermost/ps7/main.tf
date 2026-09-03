@@ -32,28 +32,31 @@ locals {
 }
 
 module "mattermost" {
-  source     = "git::https://github.com/canonical/mattermost-k8s-operator//terraform/product?ref=main&depth=1"
+  source     = "git::https://github.com/canonical/mattermost-k8s-operator//terraform/product?ref=rev50&depth=1"
   model_uuid = var.model_uuid
 
   deploy_postgresql = var.deploy_postgresql
   deploy_ingress    = false
 
   mattermost = {
-    channel  = "latest/edge"
+    channel = "latest/edge"
+    # renovate: charm="mattermost-k8s" track="latest" risk="edge" base="24.04" arch="amd64"
     revision = 49
     config   = var.mattermost_config
     units    = var.mattermost_units
   }
 
   postgresql = {
-    channel  = "14/stable"
+    channel = "14/stable"
+    # renovate: charm="postgresql-k8s" track="14" risk="stable" base="22.04" arch="amd64"
     revision = 774
     config   = var.postgresql_config
     units    = var.postgresql_units
   }
 
   s3_integrator = {
-    channel    = "1/stable"
+    channel = "1/stable"
+    # renovate: charm="s3-integrator" track="1" risk="stable" base="22.04" arch="amd64"
     revision   = 330
     config     = local.s3_config
     access_key = var.s3_access_key
@@ -61,7 +64,8 @@ module "mattermost" {
   }
 
   smtp_integrator = {
-    channel  = "latest/stable"
+    channel = "latest/stable"
+    # renovate: charm="smtp-integrator" track="latest" risk="stable" base="22.04" arch="amd64"
     revision = 121
     config   = local.smtp_config
   }
@@ -69,12 +73,14 @@ module "mattermost" {
   smtp_password = var.smtp_password
 
   self_signed_certificates = {
-    channel  = "latest/stable"
+    channel = "latest/stable"
+    # renovate: charm="self-signed-certificates" track="latest" risk="stable" base="22.04" arch="amd64"
     revision = 518
   }
 
   oauth = {
-    channel  = "latest/edge"
+    channel = "latest/edge"
+    # renovate: charm="oauth-external-idp-integrator" track="latest" risk="edge" base="22.04" arch="amd64"
     revision = 6
     base     = "ubuntu@22.04"
     config   = local.oauth_config
@@ -89,8 +95,9 @@ resource "juju_application" "ingress_configurator" {
   model_uuid = var.model_uuid
 
   charm {
-    name     = "ingress-configurator"
-    channel  = "latest/edge"
+    name    = "ingress-configurator"
+    channel = "latest/edge"
+    # renovate: charm="ingress-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
     revision = 72
     base     = "ubuntu@24.04"
   }
