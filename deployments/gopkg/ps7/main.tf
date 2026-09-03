@@ -8,9 +8,9 @@ module "ingress_configurator" {
   source     = "git::https://github.com/canonical/ingress-configurator-operator//terraform?ref=ingress-configurator-rev103&depth=1"
   app_name   = "ingress-configurator"
   model_uuid = var.model_uuid
-  channel    = "latest/edge"
-  # renovate: charm="ingress-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
-  revision = 103
+  channel    = "latest/stable"
+  # renovate: charm="ingress-configurator" track="latest" risk="stable" base="24.04" arch="amd64"
+  revision = 95
   config   = { hostname = var.external_hostname }
   trust    = true
 }
@@ -25,7 +25,8 @@ module "gopkg" {
   external_hostname = var.external_hostname
 
   gopkg = {
-    channel = "latest/edge"
+    app_name = "gopkg-charmed"
+    channel  = "latest/edge"
     # renovate: charm="gopkg-charmed" track="latest" risk="edge" base="24.04" arch="amd64"
     revision = 1
     config   = var.gopkg_config
