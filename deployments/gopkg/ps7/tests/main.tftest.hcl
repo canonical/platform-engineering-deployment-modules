@@ -19,7 +19,7 @@ run "basic_plan" {
   }
 
   assert {
-    condition     = output.components.gopkg.gopkg.app_name == "gopkg-charned"
+    condition     = output.components.gopkg.gopkg.app_name == "gopkg-charmed"
     error_message = "gopkg app_name did not match expected"
   }
 
