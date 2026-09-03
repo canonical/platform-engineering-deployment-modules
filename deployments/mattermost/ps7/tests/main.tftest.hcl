@@ -24,6 +24,8 @@ run "basic_plan" {
       host = "smtp.example.com"
       port = "587"
     }
+    external_hostname = "chat.example.com"
+    haproxy_offer_url = "test-uuid@serviceaccount/test-offer.haproxy"
   }
 
   assert {
