@@ -79,7 +79,7 @@ module "wazuh" {
     app_name = "self-signed-certificates"
     channel  = "1/edge"
     # renovate: charm="self-signed-certificates" track="1" risk="edge" base="22.04" arch="amd64"
-    revision = 672
+    revision = 677
     base     = "ubuntu@22.04"
 
     config = {
