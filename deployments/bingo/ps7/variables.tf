@@ -42,3 +42,13 @@ variable "oauth_config" {
   default     = {}
   sensitive   = true
 }
+
+variable "external_hostname" {
+  description = "External hostname to expose bingo on via the ingress (e.g. paste-ps7.pfe.staging.canonical.com)."
+  type        = string
+}
+
+variable "haproxy_offer_url" {
+  description = "Juju offer URL of the HAProxy ingress that the ingress-configurator integrates with over the haproxy-route relation."
+  type        = string
+}

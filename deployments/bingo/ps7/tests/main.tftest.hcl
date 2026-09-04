@@ -19,6 +19,8 @@ run "basic_plan" {
       client_id     = "test-client"
       client_secret = "test-secret"
     }
+    external_hostname = "paste.example.com"
+    haproxy_offer_url = "test-uuid@serviceaccount/test-offer.haproxy"
   }
 
   assert {
