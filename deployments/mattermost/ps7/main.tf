@@ -80,8 +80,8 @@ module "mattermost" {
 
   oauth = {
     channel = "latest/edge"
-    # renovate: charm="oauth-external-idp-integrator" track="latest" risk="edge" base="22.04" arch="amd64"
-    revision = 6
+    # renovate: charm="oauth-external-idp-integrator" track="latest" risk="edge" base="22.04" arch="amd74"
+    revision = 7
     base     = "ubuntu@22.04"
     config   = local.oauth_config
   }
