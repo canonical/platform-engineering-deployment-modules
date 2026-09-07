@@ -10,8 +10,10 @@
       "managerFilePatterns": [
         "/^deployments/.+/main\\.tf$/"
       ],
+      "matchStringsStrategy": "recursive",
       "matchStrings": [
-        "(?<=#\\s*renovate:\\s*charm=\"(?<depName>[^\"]+)\"\\s+track=\"(?<depTrack>[^\"]*)\"\\s+risk=\"(?<depRisk>[^\"]+)\"\\s+base=\"(?<depBase>[^\"]+)\"\\s+arch=\"(?<depArch>[^\"]+)\"\\s*\\n\\s*)revision\\s*=\\s*(?<currentValue>\\d+)\\s*\\n"
+        "#\\s*renovate:\\s*charm=\"(?<depName>[^\"]+)\"\\s+track=\"(?<depTrack>[^\"]*)\"\\s+risk=\"(?<depRisk>[^\"]+)\"\\s+base=\"(?<depBase>[^\"]+)\"\\s+arch=\"(?<depArch>[^\"]+)\"\\s*\\n\\s*revision\\s*=\\s*\\d+\\s*\\n",
+        "revision\\s*=\\s*(?<currentValue>\\d+)\\s*\\n"
       ],
       "packageNameTemplate": "{{{depName}}}:{{{depTrack}}}:{{{depRisk}}}:{{{depBase}}}:{{{depArch}}}",
       "registryUrlTemplate": "https://api.charmhub.io/v2/charms/info/{{{depName}}}?fields=channel-map",
