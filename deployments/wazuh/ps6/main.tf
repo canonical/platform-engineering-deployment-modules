@@ -543,7 +543,7 @@ module "haproxy" {
   haproxy = {
     channel = "2.8/edge"
     # renovate: charm="haproxy" track="2.8" risk="edge" base="24.04" arch="amd64"
-    revision = 290
+    revision = 551
     base     = "ubuntu@24.04"
     units    = 1
   }
