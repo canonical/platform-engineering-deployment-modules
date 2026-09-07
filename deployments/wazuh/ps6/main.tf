@@ -541,7 +541,8 @@ module "haproxy" {
   model_uuid = var.dashboard_model_uuid
 
   haproxy = {
-    channel  = "2.8/edge"
+    channel = "2.8/edge"
+    # renovate: charm="haproxy" track="2.8" risk="edge" base="24.04" arch="amd64"
     revision = 290
     base     = "ubuntu@24.04"
     units    = 1
@@ -550,6 +551,7 @@ module "haproxy" {
   grafana_agent = {
     app_name = "haproxy-grafana-agent"
     channel  = "2/stable"
+    # renovate: charm="grafana-agent" track="2" risk="stable" base="20.04" arch="amd64"
     revision = 687
   }
 
@@ -577,8 +579,9 @@ resource "juju_application" "ingress_configurator" {
   model_uuid = var.dashboard_model_uuid
 
   charm {
-    name     = "ingress-configurator"
-    channel  = "latest/edge"
+    name    = "ingress-configurator"
+    channel = "latest/edge"
+    # renovate: charm="ingress-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
     revision = 36
   }
   units = 1
