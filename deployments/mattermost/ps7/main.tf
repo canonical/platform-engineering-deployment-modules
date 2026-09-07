@@ -49,7 +49,7 @@ module "mattermost" {
   postgresql = {
     channel = "14/stable"
     # renovate: charm="postgresql-k8s" track="14" risk="stable" base="22.04" arch="amd64"
-    revision = 774
+    revision = 925
     config   = var.postgresql_config
     units    = var.postgresql_units
   }
