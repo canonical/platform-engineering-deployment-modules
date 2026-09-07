@@ -57,7 +57,7 @@ module "mattermost" {
   s3_integrator = {
     channel = "1/stable"
     # renovate: charm="s3-integrator" track="1" risk="stable" base="22.04" arch="amd64"
-    revision   = 330
+    revision   = 562
     config     = local.s3_config
     access_key = var.s3_access_key
     secret_key = var.s3_secret_key
