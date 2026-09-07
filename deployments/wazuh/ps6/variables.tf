@@ -100,3 +100,25 @@ variable "wazuh_server_storage" {
   description = "Storage constraints for the Wazuh Server"
   type        = map(string)
 }
+
+variable "dashboard_ingress_hostname" {
+  description = "Hostname exposed for the Wazuh Dashboard via the haproxy ingress-configurator"
+  type        = string
+}
+
+variable "dashboard_ingress_backend_addresses" {
+  description = "Comma-separated Wazuh Dashboard unit IP addresses used as ingress-configurator backend-addresses"
+  type        = string
+}
+
+variable "dashboard_ingress_backend_ports" {
+  description = "Backend port used by the ingress-configurator to reach the Wazuh Dashboard"
+  type        = number
+  default     = 5601
+}
+
+variable "dashboard_ingress_backend_protocol" {
+  description = "Backend protocol used by the ingress-configurator to reach the Wazuh Dashboard"
+  type        = string
+  default     = "https"
+}
