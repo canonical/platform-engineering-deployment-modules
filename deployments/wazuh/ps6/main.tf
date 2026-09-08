@@ -79,7 +79,7 @@ module "wazuh" {
     app_name = "self-signed-certificates"
     channel  = "1/edge"
     # renovate: charm="self-signed-certificates" track="1" risk="edge" base="22.04" arch="amd64"
-    revision = 677
+    revision = 682
     base     = "ubuntu@22.04"
 
     config = {
@@ -534,4 +534,91 @@ resource "juju_integration" "ubuntu_pro_dashboard" {
   }
 
   provider = juju.wazuh_dashboard
+}
+
+module "haproxy" {
+  source     = "git::https://github.com/canonical/haproxy-operator//terraform/product?ref=tf-manual&depth=1"
+  model_uuid = var.dashboard_model_uuid
+
+  haproxy = {
+    channel = "2.8/edge"
+    # renovate: charm="haproxy" track="2.8" risk="edge" base="24.04" arch="amd64"
+    revision = 553
+    base     = "ubuntu@24.04"
+    units    = 1
+  }
+
+  grafana_agent = {
+    app_name = "haproxy-grafana-agent"
+    channel  = "2/stable"
+    # renovate: charm="grafana-agent" track="2" risk="stable" base="20.04" arch="amd64"
+    revision = 851
+  }
+
+  providers = {
+    juju = juju.wazuh_dashboard
+  }
+}
+
+resource "juju_integration" "haproxy_lego" {
+  provider   = juju.wazuh_dashboard
+  model_uuid = var.dashboard_model_uuid
+
+  application {
+    offer_url = juju_offer.lego.url
+  }
+
+  application {
+    name     = module.haproxy.haproxy_app_name
+    endpoint = module.haproxy.requires.certificates
+  }
+}
+
+resource "juju_application" "ingress_configurator" {
+  provider   = juju.wazuh_dashboard
+  model_uuid = var.dashboard_model_uuid
+
+  charm {
+    name    = "ingress-configurator"
+    channel = "latest/edge"
+    # renovate: charm="ingress-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 105
+  }
+  units = 1
+  config = {
+    backend-addresses = var.dashboard_ingress_backend_addresses
+    backend-ports     = var.dashboard_ingress_backend_ports
+    backend-protocol  = var.dashboard_ingress_backend_protocol
+    hostname          = var.dashboard_ingress_hostname
+  }
+}
+
+resource "juju_integration" "haproxy_ingress" {
+  provider   = juju.wazuh_dashboard
+  model_uuid = var.dashboard_model_uuid
+
+  application {
+    name     = module.haproxy.haproxy_app_name
+    endpoint = module.haproxy.provides.haproxy_route
+  }
+
+  application {
+    name     = juju_application.ingress_configurator.name
+    endpoint = "haproxy-route"
+  }
+}
+
+resource "juju_integration" "haproxy_ca_certs" {
+  provider   = juju.wazuh_dashboard
+  model_uuid = var.dashboard_model_uuid
+
+  application {
+    name     = module.haproxy.haproxy_app_name
+    endpoint = module.haproxy.requires.receive_ca_certs
+  }
+
+  application {
+    offer_url = module.wazuh.self_signed_certificates_offer_url
+    endpoint  = "send-ca-cert"
+  }
 }

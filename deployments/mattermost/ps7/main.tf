@@ -41,7 +41,7 @@ module "mattermost" {
   mattermost = {
     channel = "latest/edge"
     # renovate: charm="mattermost-k8s" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 49
+    revision = 50
     config   = var.mattermost_config
     units    = var.mattermost_units
   }
@@ -49,7 +49,7 @@ module "mattermost" {
   postgresql = {
     channel = "14/stable"
     # renovate: charm="postgresql-k8s" track="14" risk="stable" base="22.04" arch="amd64"
-    revision = 774
+    revision = 925
     config   = var.postgresql_config
     units    = var.postgresql_units
   }
@@ -57,7 +57,7 @@ module "mattermost" {
   s3_integrator = {
     channel = "1/stable"
     # renovate: charm="s3-integrator" track="1" risk="stable" base="22.04" arch="amd64"
-    revision   = 330
+    revision   = 562
     config     = local.s3_config
     access_key = var.s3_access_key
     secret_key = var.s3_secret_key
@@ -81,7 +81,7 @@ module "mattermost" {
   oauth = {
     channel = "latest/edge"
     # renovate: charm="oauth-external-idp-integrator" track="latest" risk="edge" base="22.04" arch="amd64"
-    revision = 6
+    revision = 7
     base     = "ubuntu@22.04"
     config   = local.oauth_config
   }
@@ -98,7 +98,7 @@ resource "juju_application" "ingress_configurator" {
     name    = "ingress-configurator"
     channel = "latest/edge"
     # renovate: charm="ingress-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 72
+    revision = 105
     base     = "ubuntu@24.04"
   }
 
