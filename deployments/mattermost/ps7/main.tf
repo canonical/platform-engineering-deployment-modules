@@ -32,7 +32,7 @@ locals {
 }
 
 module "mattermost" {
-  source     = "git::https://github.com/canonical/mattermost-k8s-operator//terraform/product?ref=rev50&depth=1"
+  source     = "git::https://github.com/canonical/mattermost-k8s-operator//terraform/product?ref=rev51&depth=1"
   model_uuid = var.model_uuid
 
   deploy_postgresql = var.deploy_postgresql
@@ -98,7 +98,7 @@ resource "juju_application" "ingress_configurator" {
     name    = "ingress-configurator"
     channel = "latest/edge"
     # renovate: charm="ingress-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 106
+    revision = 107
     base     = "ubuntu@24.04"
   }
 

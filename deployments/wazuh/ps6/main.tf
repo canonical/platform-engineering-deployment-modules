@@ -543,7 +543,7 @@ module "haproxy" {
   haproxy = {
     channel = "2.8/edge"
     # renovate: charm="haproxy" track="2.8" risk="edge" base="24.04" arch="amd64"
-    revision = 553
+    revision = 555
     base     = "ubuntu@24.04"
     units    = 1
   }
@@ -582,7 +582,7 @@ resource "juju_application" "ingress_configurator" {
     name    = "ingress-configurator"
     channel = "latest/edge"
     # renovate: charm="ingress-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 106
+    revision = 107
   }
   units = 1
   config = {
