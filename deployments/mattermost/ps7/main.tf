@@ -32,7 +32,7 @@ locals {
 }
 
 module "mattermost" {
-  source     = "git::https://github.com/canonical/mattermost-k8s-operator//terraform/product?ref=rev50&depth=1"
+  source     = "git::https://github.com/canonical/mattermost-k8s-operator//terraform/product?ref=rev51&depth=1"
   model_uuid = var.model_uuid
 
   deploy_postgresql = var.deploy_postgresql
