@@ -41,7 +41,7 @@ module "mattermost" {
   mattermost = {
     channel = "latest/edge"
     # renovate: charm="mattermost-k8s" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 51
+    revision = 53
     config   = var.mattermost_config
     units    = var.mattermost_units
   }
