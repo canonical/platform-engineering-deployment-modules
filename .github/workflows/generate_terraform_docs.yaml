@@ -1,0 +1,30 @@
+# Copyright 2026 Canonical Ltd.
+# See LICENSE file for licensing details.
+
+name: Update Terraform documentation
+
+# Keep the `paths` filters below and the `terraform-directory` input in sync with
+# the directories where the Terraform deployment modules live.
+on:
+  pull_request:
+    paths:
+      - "deployments/**"
+  push:
+    branches:
+      - main
+    paths:
+      - "deployments/**"
+
+jobs:
+  terraform-docs:
+    name: Update Terraform documentation
+    uses: canonical/operator-workflows/.github/workflows/generate_terraform_docs.yaml@1e2cab8312dc6e0b8da15f78f098c61b50b5fd73  # main
+    secrets: inherit
+    with:
+      terraform-directory: >-
+        deployments/bingo/ps7,
+        deployments/falco/ps7,
+        deployments/falcosidekick/ps7,
+        deployments/lego/ps6,
+        deployments/opencti/ps6,
+        deployments/wazuh/ps6
