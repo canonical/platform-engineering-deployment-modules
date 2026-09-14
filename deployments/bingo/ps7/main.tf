@@ -86,3 +86,21 @@ resource "juju_integration" "haproxy_ingress_configurator" {
     endpoint = "haproxy-route"
   }
 }
+
+# External PostgreSQL (DBaaS): when deploy_postgresql = false, the bundled
+# postgresql-k8s charm is not deployed and bingo's postgresql relation is left
+# unwired by Layer 1. If a postgresql_offer_url is supplied, integrate bingo
+# directly with that external offer instead.
+resource "juju_integration" "bingo_postgresql_offer" {
+  count      = !var.deploy_postgresql && var.postgresql_offer_url != null ? 1 : 0
+  model_uuid = var.model_uuid
+
+  application {
+    name     = module.bingo.bingo.app_name
+    endpoint = module.bingo.bingo.requires.postgresql
+  }
+
+  application {
+    offer_url = var.postgresql_offer_url
+  }
+}

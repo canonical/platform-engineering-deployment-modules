@@ -7,7 +7,7 @@ variable "model_uuid" {
 }
 
 variable "deploy_postgresql" {
-  description = "Whether to deploy the bundled postgresql-k8s charm. Set to false to integrate an external PostgreSQL (e.g. a DBaaS offer) in the consuming deployment."
+  description = "Whether to deploy the bundled postgresql-k8s charm. Set to false to integrate an external PostgreSQL (e.g. a DBaaS offer) in the consuming deployment. See also postgresql_offer_url."
   type        = bool
   default     = true
 }
@@ -51,4 +51,10 @@ variable "external_hostname" {
 variable "haproxy_offer_url" {
   description = "Juju offer URL of the HAProxy ingress that the ingress-configurator integrates with over the haproxy-route relation."
   type        = string
+}
+
+variable "postgresql_offer_url" {
+  description = "Juju offer URL of an external PostgreSQL (e.g. a DBaaS offer) to integrate bingo with when deploy_postgresql = false. Ignored if deploy_postgresql = true."
+  type        = string
+  default     = null
 }
