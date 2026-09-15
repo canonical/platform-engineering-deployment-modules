@@ -10,7 +10,9 @@ module "bingo" {
   source     = "git::https://github.com/canonical/bingo//terraform/product?ref=tf-1.0.0&depth=1"
   model_uuid = var.model_uuid
 
-  deploy_postgresql = var.deploy_postgresql
+  # A postgresql_offer_url means an external PostgreSQL (e.g. DBaaS) is used
+  # instead of the bundled charm — see the postgresql_offer_url variable.
+  deploy_postgresql = var.postgresql_offer_url == null
   deploy_oauth      = true
   deploy_ingress    = false
 
@@ -87,12 +89,11 @@ resource "juju_integration" "haproxy_ingress_configurator" {
   }
 }
 
-# External PostgreSQL (DBaaS): when deploy_postgresql = false, the bundled
-# postgresql-k8s charm is not deployed and bingo's postgresql relation is left
-# unwired by Layer 1. If a postgresql_offer_url is supplied, integrate bingo
-# directly with that external offer instead.
+# External PostgreSQL (DBaaS): if postgresql_offer_url is set, the bundled
+# postgresql-k8s charm is not deployed (see deploy_postgresql above) and
+# bingo integrates directly with this external offer instead.
 resource "juju_integration" "bingo_postgresql_offer" {
-  count      = !var.deploy_postgresql && var.postgresql_offer_url != null ? 1 : 0
+  count      = var.postgresql_offer_url != null ? 1 : 0
   model_uuid = var.model_uuid
 
   application {

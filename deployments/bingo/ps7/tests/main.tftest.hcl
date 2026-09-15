@@ -41,12 +41,11 @@ run "external_postgresql_plan" {
     }
     external_hostname    = "paste.example.com"
     haproxy_offer_url    = "test-uuid@serviceaccount/test-offer.haproxy"
-    deploy_postgresql    = false
     postgresql_offer_url = "test-uuid@serviceaccount/test-offer.postgresql"
   }
 
   assert {
     condition     = output.postgresql_app_name == null
-    error_message = "postgresql_app_name should be null when deploy_postgresql = false"
+    error_message = "postgresql_app_name should be null when postgresql_offer_url is set"
   }
 }

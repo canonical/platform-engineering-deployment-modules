@@ -55,13 +55,12 @@ N/A
 |------|-------------|------|---------|:--------:|
 | <a name="input_bingo_config"></a> [bingo\_config](#input\_bingo\_config) | bingo charm configuration (base-url, max-paste-size-bytes, log-level, web-dir, oauth-redirect-path, oauth-scopes, oauth-user-name-attribute). | `map(string)` | `{}` | no |
 | <a name="input_bingo_units"></a> [bingo\_units](#input\_bingo\_units) | Number of bingo units to deploy. | `number` | `1` | no |
-| <a name="input_deploy_postgresql"></a> [deploy\_postgresql](#input\_deploy\_postgresql) | Whether to deploy the bundled postgresql-k8s charm. Set to false to integrate an external PostgreSQL (e.g. a DBaaS offer) in the consuming deployment. See also postgresql\_offer\_url. | `bool` | `true` | no |
 | <a name="input_external_hostname"></a> [external\_hostname](#input\_external\_hostname) | External hostname to expose bingo on via the ingress (e.g. paste-ps7.pfe.staging.canonical.com). | `string` | n/a | yes |
 | <a name="input_haproxy_offer_url"></a> [haproxy\_offer\_url](#input\_haproxy\_offer\_url) | Juju offer URL of the HAProxy ingress that the ingress-configurator integrates with over the haproxy-route relation. | `string` | n/a | yes |
 | <a name="input_model_uuid"></a> [model\_uuid](#input\_model\_uuid) | Juju model UUID | `string` | n/a | yes |
 | <a name="input_oauth_config"></a> [oauth\_config](#input\_oauth\_config) | oauth-external-idp-integrator charm configuration (issuer\_url, client\_id, client\_secret, scope, etc.). Marked sensitive because it carries the IdP client secret. | `map(string)` | `{}` | no |
 | <a name="input_postgresql_config"></a> [postgresql\_config](#input\_postgresql\_config) | PostgreSQL K8s charm configuration. | `map(string)` | `{}` | no |
-| <a name="input_postgresql_offer_url"></a> [postgresql\_offer\_url](#input\_postgresql\_offer\_url) | Juju offer URL of an external PostgreSQL (e.g. a DBaaS offer) to integrate bingo with when deploy\_postgresql = false. Ignored if deploy\_postgresql = true. | `string` | `null` | no |
+| <a name="input_postgresql_offer_url"></a> [postgresql\_offer\_url](#input\_postgresql\_offer\_url) | Juju offer URL of an external PostgreSQL (e.g. a DBaaS offer) to integrate bingo with. If set, the bundled postgresql-k8s charm is not deployed and bingo integrates with this offer instead. If unset (null), the bundled postgresql-k8s charm is deployed. | `string` | `null` | no |
 | <a name="input_postgresql_units"></a> [postgresql\_units](#input\_postgresql\_units) | Number of PostgreSQL units to deploy. | `number` | `1` | no |
 
 ## Outputs

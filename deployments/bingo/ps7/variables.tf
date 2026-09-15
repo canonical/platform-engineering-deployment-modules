@@ -6,12 +6,6 @@ variable "model_uuid" {
   type        = string
 }
 
-variable "deploy_postgresql" {
-  description = "Whether to deploy the bundled postgresql-k8s charm. Set to false to integrate an external PostgreSQL (e.g. a DBaaS offer) in the consuming deployment. See also postgresql_offer_url."
-  type        = bool
-  default     = true
-}
-
 variable "bingo_config" {
   description = "bingo charm configuration (base-url, max-paste-size-bytes, log-level, web-dir, oauth-redirect-path, oauth-scopes, oauth-user-name-attribute)."
   type        = map(string)
@@ -54,7 +48,7 @@ variable "haproxy_offer_url" {
 }
 
 variable "postgresql_offer_url" {
-  description = "Juju offer URL of an external PostgreSQL (e.g. a DBaaS offer) to integrate bingo with when deploy_postgresql = false. Ignored if deploy_postgresql = true."
+  description = "Juju offer URL of an external PostgreSQL (e.g. a DBaaS offer) to integrate bingo with. If set, the bundled postgresql-k8s charm is not deployed and bingo integrates with this offer instead. If unset (null), the bundled postgresql-k8s charm is deployed."
   type        = string
   default     = null
 }
