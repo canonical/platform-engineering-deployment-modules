@@ -551,8 +551,8 @@ module "haproxy" {
   grafana_agent = {
     app_name = "haproxy-grafana-agent"
     channel  = "2/stable"
-    # renovate: charm="grafana-agent" track="2" risk="stable" base="20.04" arch="amd64"
-    revision = 851
+    # renovate: charm="grafana-agent" track="2" risk="stable" base="24.04" arch="amd64"
+    revision = 848
   }
 
   providers = {
