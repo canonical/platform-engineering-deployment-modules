@@ -1,6 +1,6 @@
 # gopkg deployment
 
-Deploys [gopkg-charmed](https://github.com/canonical/gopkg-charmed) (the
+Deploys [gopkg-k8s](https://github.com/canonical/gopkg-charmed) (the
 gopkg.in versioned import-path service) on a PS7 Kubernetes model, fronted by
 ingress-configurator and shipping logs to a Loki offer.
 
@@ -63,7 +63,7 @@ input from the consuming deployment.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_gopkg"></a> [gopkg](#module\_gopkg) | git::https://github.com/canonical/gopkg-charmed//terraform/product | rev1&depth=1 |
+| <a name="module_gopkg"></a> [gopkg](#module\_gopkg) | git::https://github.com/canonical/gopkg-charmed//terraform/product | rev2&depth=1 |
 | <a name="module_ingress_configurator"></a> [ingress\_configurator](#module\_ingress\_configurator) | git::https://github.com/canonical/ingress-configurator-operator//terraform | ingress-configurator-rev103&depth=1 |
 
 ## Resources
