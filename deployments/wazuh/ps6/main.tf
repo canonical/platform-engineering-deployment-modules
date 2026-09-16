@@ -32,7 +32,7 @@ module "wazuh" {
     app_name = "wazuh-indexer-v5"
     channel  = "4.11/edge"
     # renovate: charm="wazuh-indexer" track="4.11" risk="edge" base="22.04" arch="amd64"
-    revision    = 13
+    revision    = 14
     config      = var.wazuh_indexer_config
     constraints = var.wazuh_indexer_constraints
     units       = var.wazuh_indexer_units
@@ -56,7 +56,7 @@ module "wazuh" {
     app_name = "wazuh-server"
     channel  = "4.11/edge"
     # renovate: charm="wazuh-server" track="4.11" risk="edge" base="22.04" arch="amd64"
-    revision = 279
+    revision = 280
     config = {
       logs-ca-cert             = var.logs_ca_certificate
       custom-config-ssh-key    = "secret:${juju_secret.git_ssh_key.secret_id}"
@@ -543,7 +543,7 @@ module "haproxy" {
   haproxy = {
     channel = "2.8/edge"
     # renovate: charm="haproxy" track="2.8" risk="edge" base="24.04" arch="amd64"
-    revision = 555
+    revision = 557
     base     = "ubuntu@24.04"
     units    = 1
   }
