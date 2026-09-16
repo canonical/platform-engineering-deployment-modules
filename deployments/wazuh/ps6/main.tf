@@ -32,7 +32,7 @@ module "wazuh" {
     app_name = "wazuh-indexer-v5"
     channel  = "4.11/edge"
     # renovate: charm="wazuh-indexer" track="4.11" risk="edge" base="22.04" arch="amd64"
-    revision    = 13
+    revision    = 14
     config      = var.wazuh_indexer_config
     constraints = var.wazuh_indexer_constraints
     units       = var.wazuh_indexer_units
