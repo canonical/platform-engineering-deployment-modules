@@ -34,13 +34,11 @@ variable "loki_offer_url" {
 }
 
 variable "prometheus_offer_url" {
-  description = "Prometheus scrape offer URL for gopkg's metrics-endpoint. Leave null to skip."
+  description = "Prometheus offer URL for gopkg's metrics-endpoint. Required: on PS7 the COS model offers prometheus-metrics-endpoint (requirer, prometheus_scrape)."
   type        = string
-  default     = null
 }
 
 variable "grafana_dashboard_offer_url" {
-  description = "Grafana dashboard offer URL for gopkg's grafana-dashboard endpoint. Leave null to skip."
+  description = "Grafana offer URL for gopkg's grafana-dashboard endpoint. Required: on PS7 the COS model offers grafana-dashboards (requirer, grafana_dashboard). The charm ships its own dashboard and alert rules, which reach Grafana only over this relation."
   type        = string
-  default     = null
 }
