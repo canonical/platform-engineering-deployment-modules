@@ -1,10 +1,10 @@
 module "falco" {
-  source = "git::https://github.com/canonical/falco-operators//falco-operator/terraform?ref=falco-rev124&depth=1"
+  source = "git::https://github.com/canonical/falco-operators//falco-operator/terraform?ref=falco-rev125&depth=1"
 
   model_uuid = var.model_uuid
   channel    = "0.42/edge"
   # renovate: charm="falco" track="0.42" risk="edge" base="24.04" arch="amd64"
-  revision = 122
+  revision = 125
 }
 
 resource "juju_integration" "falco_falcosidekick_http_endpoint" {
