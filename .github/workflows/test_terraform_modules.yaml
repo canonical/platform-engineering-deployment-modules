@@ -16,7 +16,7 @@ jobs:
     secrets: inherit
     with:
       k8s-controller: true
-      terraform-directories: '["deployments/falcosidekick/ps7"]'
+      terraform-directories: '["deployments/falcosidekick/ps7", "deployments/gopkg/ps7"]'
   terraform-lxd-mixed-tests:
     uses: canonical/operator-workflows/.github/workflows/terraform_modules_test.yaml@main
     secrets: inherit
