@@ -41,7 +41,7 @@ module "mattermost" {
   mattermost = {
     channel = "latest/edge"
     # renovate: charm="mattermost-k8s" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 53
+    revision = 54
     config   = var.mattermost_config
     units    = var.mattermost_units
   }
@@ -49,7 +49,7 @@ module "mattermost" {
   postgresql = {
     channel = "14/stable"
     # renovate: charm="postgresql-k8s" track="14" risk="stable" base="22.04" arch="amd64"
-    revision = 925
+    revision = 960
     config   = var.postgresql_config
     units    = var.postgresql_units
   }
