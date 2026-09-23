@@ -17,8 +17,14 @@ module "ingress_configurator" {
 
 # The product module threads external_hostname into gopkg's `hostname` config
 # so go-import metadata matches the host ingress-configurator serves.
+#
+# Pinned to a `gopkg-k8s-rev<N>` tag, not the older bare `rev<N>` one: charm-ci
+# tags each publish `<charm>-rev<revision>`, and the compatibility group in this
+# file's versioning rule (renovate.json) keeps a ref inside the tag family it
+# already uses. A bare `rev2` pin would sit in a family nothing publishes to any
+# more, so Renovate would silently stop proposing updates for this line.
 module "gopkg" {
-  source     = "git::https://github.com/canonical/gopkg-charmed//terraform/product?ref=rev2&depth=1"
+  source     = "git::https://github.com/canonical/gopkg-charmed//terraform/product?ref=gopkg-k8s-rev2&depth=1"
   model_uuid = var.model_uuid
 
   deploy_ingress    = false
