@@ -19,7 +19,7 @@ module "bingo" {
   bingo = {
     channel = "1/stable"
     # renovate: charm="bingo" track="1" risk="stable" base="24.04" arch="amd64"
-    revision = 4
+    revision = 11
     config   = var.bingo_config
     units    = var.bingo_units
   }
