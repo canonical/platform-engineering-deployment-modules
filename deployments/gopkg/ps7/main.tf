@@ -28,7 +28,7 @@ module "gopkg" {
     app_name = "gopkg-k8s"
     channel  = "latest/edge"
     # renovate: charm="gopkg-k8s" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 1
+    revision = 5
     config   = var.gopkg_config
     units    = var.gopkg_units
   }
