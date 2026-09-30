@@ -32,7 +32,7 @@ locals {
 }
 
 module "mattermost" {
-  source     = "git::https://github.com/canonical/mattermost-k8s-operator//terraform/product?ref=rev54&depth=1"
+  source     = "git::https://github.com/canonical/mattermost-k8s-operator//terraform/product?ref=rev55&depth=1"
   model_uuid = var.model_uuid
 
   deploy_postgresql = var.deploy_postgresql
@@ -85,6 +85,10 @@ module "mattermost" {
     base     = "ubuntu@22.04"
     config   = local.oauth_config
   }
+
+  metrics_offer_url           = var.metrics_offer_url
+  logging_offer_url           = var.logging_offer_url
+  grafana_dashboard_offer_url = var.grafana_dashboard_offer_url
 }
 
 # Ingress: the ingress-configurator charm (pinned here) fronted by the HAProxy
