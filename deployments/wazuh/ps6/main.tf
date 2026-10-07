@@ -2,12 +2,27 @@ locals {
   machine_dashboard_charms = toset([
     "wazuh-dashboard-v5"
   ])
+  # Machine charms on ubuntu@24.04, which get their own OSQuery application
+  machine_dashboard_noble_charms = toset([
+    "haproxy",
+    "ingress-configurator"
+  ])
   machine_indexer_charms = toset([
     "data-integrator",
     "wazuh-indexer-v5",
     "wazuh-indexer-v5-backup",
     "self-signed-certificates"
   ])
+  # All environments enroll into the same OSQuery controller environment
+  osquery_config = {
+    controller-uri               = "os.collector.siem.canonical.com"
+    controller-env-uuid          = "ddf756af-37fb-4957-9ac2-d5691c01a403"
+    config-refresh               = 60
+    config-tls-max-attempts      = 10
+    logger-tls-period            = 10
+    distributed-tls-max-attempts = 10
+    watchdog-memory-limit        = 512
+  }
 }
 resource "openstack_identity_ec2_credential_v3" "wazuh_indexer_s3_creds" {}
 
@@ -621,4 +636,156 @@ resource "juju_integration" "haproxy_ca_certs" {
     offer_url = module.wazuh.self_signed_certificates_offer_url
     endpoint  = "send-ca-cert"
   }
+}
+
+# OSQuery is built per base: each model gets one application per base in use.
+
+resource "juju_secret" "osquery_enroll" {
+  model_uuid = var.indexer_model_uuid
+  name       = "osquery-enroll"
+  value = {
+    enroll-secret = data.vault_generic_secret.osquery.data["enroll-secret"]
+  }
+  info = "Enrollment secret for the OSQuery controller"
+
+  provider = juju.wazuh_indexer
+}
+
+resource "juju_access_secret" "osquery_enroll_access" {
+  model_uuid = var.indexer_model_uuid
+  applications = [
+    juju_application.osquery.name,
+  ]
+  secret_id = juju_secret.osquery_enroll.secret_id
+
+  provider = juju.wazuh_indexer
+}
+
+resource "juju_secret" "osquery_enroll_dashboard" {
+  model_uuid = var.dashboard_model_uuid
+  name       = "osquery-enroll"
+  value = {
+    enroll-secret = data.vault_generic_secret.osquery.data["enroll-secret"]
+  }
+  info = "Enrollment secret for the OSQuery controller"
+
+  provider = juju.wazuh_dashboard
+}
+
+resource "juju_access_secret" "osquery_enroll_dashboard_access" {
+  model_uuid = var.dashboard_model_uuid
+  applications = [
+    juju_application.osquery_dashboard.name,
+    juju_application.osquery_dashboard_noble.name,
+  ]
+  secret_id = juju_secret.osquery_enroll_dashboard.secret_id
+
+  provider = juju.wazuh_dashboard
+}
+
+resource "juju_application" "osquery" {
+  name       = "osquery-jammy"
+  model_uuid = var.indexer_model_uuid
+
+  charm {
+    name = "osquery"
+    # renovate: charm="osquery" track="latest" risk="edge" base="22.04" arch="amd64"
+    revision = 13
+    channel  = "latest/edge"
+    base     = "ubuntu@22.04"
+  }
+
+  config = merge(local.osquery_config, {
+    enroll-secret = "secret:${juju_secret.osquery_enroll.secret_id}"
+  })
+
+  provider = juju.wazuh_indexer
+}
+
+resource "juju_application" "osquery_dashboard" {
+  name       = "osquery-jammy"
+  model_uuid = var.dashboard_model_uuid
+
+  charm {
+    name = "osquery"
+    # renovate: charm="osquery" track="latest" risk="edge" base="22.04" arch="amd64"
+    revision = 13
+    channel  = "latest/edge"
+    base     = "ubuntu@22.04"
+  }
+
+  config = merge(local.osquery_config, {
+    enroll-secret = "secret:${juju_secret.osquery_enroll_dashboard.secret_id}"
+  })
+
+  provider = juju.wazuh_dashboard
+}
+
+resource "juju_application" "osquery_dashboard_noble" {
+  name       = "osquery-noble"
+  model_uuid = var.dashboard_model_uuid
+
+  charm {
+    name = "osquery"
+    # renovate: charm="osquery" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 14
+    channel  = "latest/edge"
+    base     = "ubuntu@24.04"
+  }
+
+  config = merge(local.osquery_config, {
+    enroll-secret = "secret:${juju_secret.osquery_enroll_dashboard.secret_id}"
+  })
+
+  provider = juju.wazuh_dashboard
+}
+
+resource "juju_integration" "osquery" {
+  for_each   = local.machine_indexer_charms
+  model_uuid = var.indexer_model_uuid
+
+  application {
+    name     = each.key
+    endpoint = "juju-info"
+  }
+  application {
+    name     = juju_application.osquery.name
+    endpoint = "general-info"
+  }
+
+  provider = juju.wazuh_indexer
+}
+
+resource "juju_integration" "osquery_dashboard" {
+  for_each   = local.machine_dashboard_charms
+  model_uuid = var.dashboard_model_uuid
+
+  application {
+    name     = each.key
+    endpoint = "juju-info"
+  }
+  application {
+    name     = juju_application.osquery_dashboard.name
+    endpoint = "general-info"
+  }
+
+  provider = juju.wazuh_dashboard
+}
+
+resource "juju_integration" "osquery_dashboard_noble" {
+  for_each   = local.machine_dashboard_noble_charms
+  model_uuid = var.dashboard_model_uuid
+
+  application {
+    name     = each.key
+    endpoint = "juju-info"
+  }
+  application {
+    name     = juju_application.osquery_dashboard_noble.name
+    endpoint = "general-info"
+  }
+
+  provider = juju.wazuh_dashboard
+
+  depends_on = [module.haproxy, juju_application.ingress_configurator]
 }

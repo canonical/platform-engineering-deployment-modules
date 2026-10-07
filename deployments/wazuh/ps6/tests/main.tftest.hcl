@@ -5,12 +5,13 @@ mock_provider "vault" {
   mock_data "vault_generic_secret" {
     defaults = {
       data = {
-        endpoint_url = "https://mock-s3.example.com"
-        username     = "mock-username"
-        password     = "mock-password"
-        private_key  = "mock-private-key"
-        key          = "mock-key"
-        token        = "mock-token"
+        endpoint_url  = "https://mock-s3.example.com"
+        username      = "mock-username"
+        password      = "mock-password"
+        private_key   = "mock-private-key"
+        key           = "mock-key"
+        token         = "mock-token"
+        enroll-secret = "mock-enroll-secret"
       }
     }
   }

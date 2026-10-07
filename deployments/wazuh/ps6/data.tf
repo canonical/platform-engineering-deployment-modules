@@ -17,3 +17,7 @@ data "vault_generic_secret" "s3" {
 data "vault_generic_secret" "git_ssh_key" {
   path = "secret/prodstack6/roles/${var.server_model_name}/github-ssh-key"
 }
+
+data "vault_generic_secret" "osquery" {
+  path = "secret/prodstack6/roles/prod-pfe-staging-opencti-db/osctrl"
+}

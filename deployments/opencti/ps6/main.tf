@@ -27,6 +27,16 @@ locals {
     "s3-integrator",
     "self-signed-certificates"
   ])
+  # All environments enroll into the same OSQuery controller environment
+  osquery_config = {
+    controller-uri               = "os.collector.siem.canonical.com"
+    controller-env-uuid          = "ddf756af-37fb-4957-9ac2-d5691c01a403"
+    config-refresh               = 60
+    config-tls-max-attempts      = 10
+    logger-tls-period            = 10
+    distributed-tls-max-attempts = 10
+    watchdog-memory-limit        = 512
+  }
 }
 resource "openstack_identity_ec2_credential_v3" "opencti_s3_creds" {}
 
@@ -874,4 +884,60 @@ resource "juju_integration" "woap_connector_indexer" {
   application {
     offer_url = var.indexer_offer_url
   }
+}
+
+resource "juju_secret" "osquery_enroll" {
+  model_uuid = var.db_model_uuid
+  name       = "osquery-enroll"
+  value = {
+    enroll-secret = data.vault_generic_secret.osquery.data["enroll-secret"]
+  }
+  info = "Enrollment secret for the OSQuery controller"
+
+  provider = juju.opencti_db
+}
+
+resource "juju_access_secret" "osquery_enroll_access" {
+  model_uuid = var.db_model_uuid
+  applications = [
+    juju_application.osquery.name,
+  ]
+  secret_id = juju_secret.osquery_enroll.secret_id
+
+  provider = juju.opencti_db
+}
+
+resource "juju_application" "osquery" {
+  name       = "osquery-jammy"
+  model_uuid = var.db_model_uuid
+
+  charm {
+    name = "osquery"
+    # renovate: charm="osquery" track="latest" risk="edge" base="22.04" arch="amd64"
+    revision = 13
+    channel  = "latest/edge"
+    base     = "ubuntu@22.04"
+  }
+
+  config = merge(local.osquery_config, {
+    enroll-secret = "secret:${juju_secret.osquery_enroll.secret_id}"
+  })
+
+  provider = juju.opencti_db
+}
+
+resource "juju_integration" "osquery" {
+  for_each   = local.machine_charms
+  model_uuid = var.db_model_uuid
+
+  application {
+    name     = each.key
+    endpoint = "juju-info"
+  }
+  application {
+    name     = juju_application.osquery.name
+    endpoint = "general-info"
+  }
+
+  provider = juju.opencti_db
 }

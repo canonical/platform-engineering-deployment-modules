@@ -14,6 +14,7 @@ mock_provider "vault" {
         "api-key"       = "mock-api-key"
         "client-id"     = "mock-client-id"
         "client-secret" = "mock-client-secret"
+        "enroll-secret" = "mock-enroll-secret"
       }
     }
   }
