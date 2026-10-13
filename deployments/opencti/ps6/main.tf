@@ -373,7 +373,7 @@ resource "juju_application" "opencti-cyber-campaign-connector" {
     name    = "opencti-cyber-campaign-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-cyber-campaign-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 119
+    revision = 125
     base     = "ubuntu@24.04"
   }
 
