@@ -94,13 +94,9 @@ module "wazuh" {
     revision = 544
     base     = "ubuntu@24.04"
     config = {
-      bucket   = openstack_objectstorage_container_v1.wazuh_indexer_backup.name
-      endpoint = data.vault_generic_secret.s3.data["endpoint_url"]
-      path     = "/opensearch"
-      # The RadosGW endpoint (data.vault_generic_secret.s3) is a single-zonegroup Ceph
-      # cluster and does not use OpenStack-style region names. The track-2 s3-integrator
-      # (unlike track-1) actively calls CreateBucket and forwards a non-empty `region` as
-      # the S3 LocationConstraint, which this endpoint rejects with InvalidLocationConstraint.
+      bucket         = openstack_objectstorage_container_v1.wazuh_indexer_backup.name
+      endpoint       = data.vault_generic_secret.s3.data["endpoint_url"]
+      path           = "/opensearch"
       region         = ""
       s3-api-version = ""
       s3-uri-style   = "path"
