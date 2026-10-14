@@ -6,6 +6,8 @@ mock_provider "vault" {
     defaults = {
       data = {
         endpoint_url = "https://mock-s3.example.com"
+        access_key   = "mock-access-key"
+        secret_key   = "mock-secret-key"
         username     = "mock-username"
         password     = "mock-password"
         private_key  = "mock-private-key"
