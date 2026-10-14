@@ -124,6 +124,7 @@ module "wazuh" {
 }
 
 resource "juju_secret" "wazuh_indexer_backup_credentials" {
+  provider   = juju.wazuh_indexer
   model_uuid = var.indexer_model_uuid
   name       = "wazuh-indexer-backup-credentials"
   value = {
@@ -133,6 +134,7 @@ resource "juju_secret" "wazuh_indexer_backup_credentials" {
 }
 
 resource "juju_access_secret" "wazuh_indexer_backup_credentials_access" {
+  provider   = juju.wazuh_indexer
   model_uuid = var.indexer_model_uuid
   applications = [
     # Matches the app_name the wazuh-server-operator product module derives for the
