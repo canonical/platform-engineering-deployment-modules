@@ -89,9 +89,10 @@ module "wazuh" {
   }
 
   wazuh_indexer_backup = {
-    channel = "latest/stable"
-    # renovate: charm="s3-integrator" track="latest" risk="stable" base="22.04" arch="amd64"
-    revision = 145
+    channel = "2/stable"
+    # renovate: charm="s3-integrator" track="2" risk="stable" base="24.04" arch="amd64"
+    revision = 544
+    base     = "ubuntu@24.04"
     config = {
       bucket         = openstack_objectstorage_container_v1.wazuh_indexer_backup.name
       endpoint       = data.vault_generic_secret.s3.data["endpoint_url"]
@@ -99,6 +100,7 @@ module "wazuh" {
       region         = openstack_objectstorage_container_v1.wazuh_indexer_backup.region
       s3-api-version = ""
       s3-uri-style   = "path"
+      credentials    = "secret:${juju_secret.wazuh_indexer_backup_credentials.secret_id}"
     }
   }
 
@@ -119,6 +121,31 @@ module "wazuh" {
     juju.wazuh_indexer   = juju.wazuh_indexer
     juju.wazuh_dashboard = juju.wazuh_dashboard
   }
+}
+
+resource "juju_secret" "wazuh_indexer_backup_credentials" {
+  model_uuid = var.indexer_model_uuid
+  name       = "wazuh-indexer-backup-credentials"
+  value = {
+    access-key = data.vault_generic_secret.s3.data["access_key"]
+    secret-key = data.vault_generic_secret.s3.data["secret_key"]
+  }
+}
+
+resource "juju_access_secret" "wazuh_indexer_backup_credentials_access" {
+  model_uuid = var.indexer_model_uuid
+  applications = [
+    # Matches the app_name the wazuh-server-operator product module derives for the
+    # backup s3-integrator: "${wazuh_indexer.app_name}-backup" (see locals.machine_indexer_charms above).
+    # TODO: switch to a `module.wazuh.wazuh_indexer_backup_name` output once the upstream
+    # wazuh-server-operator product module exposes one (it currently doesn't).
+    "wazuh-indexer-v5-backup"
+  ]
+  secret_id = juju_secret.wazuh_indexer_backup_credentials.secret_id
+
+  depends_on = [
+    module.wazuh
+  ]
 }
 
 resource "juju_secret" "lego_credentials" {
