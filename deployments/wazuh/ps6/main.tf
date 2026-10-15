@@ -97,7 +97,7 @@ module "wazuh" {
       bucket         = openstack_objectstorage_container_v1.wazuh_indexer_backup.name
       endpoint       = data.vault_generic_secret.s3.data["endpoint_url"]
       path           = "/opensearch"
-      region         = ""
+      region         = "us-east-1"
       s3-api-version = ""
       s3-uri-style   = "path"
       credentials    = "secret:${juju_secret.wazuh_indexer_backup_credentials.secret_id}"
