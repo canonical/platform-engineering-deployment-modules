@@ -11,10 +11,7 @@
 # secrets, DBaaS offer) are provided by the consuming Layer 3 deployment as
 # inputs.
 module "indico" {
-  # NOTE: switch ref to `main` once the Layer 1 branch is merged.
-  # TRIAL: local source (branch not pushed). Revert to the git ref below.
-  source = "../../../../../indico-operator/terraform/product"
-  # source = "git::https://github.com/canonical/indico-operator//terraform/product?ref=feat/indico-ps7-staging-12f&depth=1"
+  source = "git::https://github.com/canonical/indico-operator//terraform/product?ref=rev349&depth=1"
 
   # The Juju model is provisioned externally (platform-team environment
   # request); this module only deploys applications into it.
@@ -29,7 +26,7 @@ module "indico" {
     indico                        = var.indico_channel
     redis                         = "latest/edge"
     s3_integrator_media           = "latest/edge"
-    smtp_integrator               = "latest/edge"
+    smtp_integrator               = "latest/stable"
     oauth_external_idp_integrator = "latest/edge"
     local_postgresql              = "14/stable"
   }
@@ -42,7 +39,7 @@ module "indico" {
     # renovate: depName="s3-integrator"
     s3_integrator_media = 18
     # renovate: depName="smtp-integrator"
-    smtp_integrator = 10
+    smtp_integrator = 121
     # renovate: depName="oauth-external-idp-integrator"
     oauth_external_idp_integrator = 6
     # renovate: depName="postgresql-k8s"
