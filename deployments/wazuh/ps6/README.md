@@ -1,6 +1,14 @@
 # Wazuh Deployment
 Template for IS Application Environments
 
+## Dashboard Ingress
+
+Every deployment of this module provisions haproxy and an `ingress-configurator`
+application in the Wazuh Dashboard model, fronting the Wazuh Dashboard. The
+public hostname and dashboard backend unit addresses are per-environment and
+must be supplied via the `dashboard_ingress_hostname` and
+`dashboard_ingress_backend_addresses` variables.
+
 ## Models
 
 The Wazuh deployment requires three models: two Juju machine models for machine charms, mainly

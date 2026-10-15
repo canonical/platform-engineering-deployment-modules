@@ -19,7 +19,7 @@ resource "openstack_objectstorage_container_v1" "wazuh_indexer_backup" {
 }
 
 module "wazuh" {
-  source               = "git::https://github.com/canonical/wazuh-server-operator//terraform/product?ref=rev260&depth=1"
+  source               = "git::https://github.com/canonical/wazuh-server-operator//terraform/product?ref=wazuh-server-rev279&depth=1"
   server_model_name    = var.server_model_name
   server_model_uuid    = var.server_model_uuid
   indexer_model_name   = var.indexer_model_name
@@ -32,7 +32,7 @@ module "wazuh" {
     app_name = "wazuh-indexer-v5"
     channel  = "4.11/edge"
     # renovate: charm="wazuh-indexer" track="4.11" risk="edge" base="22.04" arch="amd64"
-    revision    = 13
+    revision    = 15
     config      = var.wazuh_indexer_config
     constraints = var.wazuh_indexer_constraints
     units       = var.wazuh_indexer_units
@@ -48,7 +48,7 @@ module "wazuh" {
     app_name = "wazuh-dashboard-v5"
     channel  = "4.11/edge"
     # renovate: charm="wazuh-dashboard" track="4.11" risk="edge" base="22.04" arch="amd64"
-    revision    = 21
+    revision    = 23
     constraints = var.wazuh_dashboard_constraints
   }
 
@@ -56,7 +56,7 @@ module "wazuh" {
     app_name = "wazuh-server"
     channel  = "4.11/edge"
     # renovate: charm="wazuh-server" track="4.11" risk="edge" base="22.04" arch="amd64"
-    revision = 273
+    revision = 283
     config = {
       logs-ca-cert             = var.logs_ca_certificate
       custom-config-ssh-key    = "secret:${juju_secret.git_ssh_key.secret_id}"
@@ -79,7 +79,7 @@ module "wazuh" {
     app_name = "self-signed-certificates"
     channel  = "1/edge"
     # renovate: charm="self-signed-certificates" track="1" risk="edge" base="22.04" arch="amd64"
-    revision = 672
+    revision = 684
     base     = "ubuntu@22.04"
 
     config = {
@@ -89,16 +89,18 @@ module "wazuh" {
   }
 
   wazuh_indexer_backup = {
-    channel = "latest/stable"
-    # renovate: charm="s3-integrator" track="latest" risk="stable" base="22.04" arch="amd64"
-    revision = 145
+    channel = "2/stable"
+    # renovate: charm="s3-integrator" track="2" risk="stable" base="24.04" arch="amd64"
+    revision = 544
+    base     = "ubuntu@24.04"
     config = {
       bucket         = openstack_objectstorage_container_v1.wazuh_indexer_backup.name
       endpoint       = data.vault_generic_secret.s3.data["endpoint_url"]
       path           = "/opensearch"
-      region         = openstack_objectstorage_container_v1.wazuh_indexer_backup.region
+      region         = ""
       s3-api-version = ""
       s3-uri-style   = "path"
+      credentials    = "secret:${juju_secret.wazuh_indexer_backup_credentials.secret_id}"
     }
   }
 
@@ -119,6 +121,33 @@ module "wazuh" {
     juju.wazuh_indexer   = juju.wazuh_indexer
     juju.wazuh_dashboard = juju.wazuh_dashboard
   }
+}
+
+resource "juju_secret" "wazuh_indexer_backup_credentials" {
+  provider   = juju.wazuh_indexer
+  model_uuid = var.indexer_model_uuid
+  name       = "wazuh-indexer-backup-credentials"
+  value = {
+    access-key = data.vault_generic_secret.s3.data["access_key"]
+    secret-key = data.vault_generic_secret.s3.data["secret_key"]
+  }
+}
+
+resource "juju_access_secret" "wazuh_indexer_backup_credentials_access" {
+  provider   = juju.wazuh_indexer
+  model_uuid = var.indexer_model_uuid
+  applications = [
+    # Matches the app_name the wazuh-server-operator product module derives for the
+    # backup s3-integrator: "${wazuh_indexer.app_name}-backup" (see locals.machine_indexer_charms above).
+    # TODO: switch to a `module.wazuh.wazuh_indexer_backup_name` output once the upstream
+    # wazuh-server-operator product module exposes one (it currently doesn't).
+    "wazuh-indexer-v5-backup"
+  ]
+  secret_id = juju_secret.wazuh_indexer_backup_credentials.secret_id
+
+  depends_on = [
+    module.wazuh
+  ]
 }
 
 resource "juju_secret" "lego_credentials" {
@@ -534,4 +563,91 @@ resource "juju_integration" "ubuntu_pro_dashboard" {
   }
 
   provider = juju.wazuh_dashboard
+}
+
+module "haproxy" {
+  source     = "git::https://github.com/canonical/haproxy-operator//terraform/product?ref=tf-manual&depth=1"
+  model_uuid = var.dashboard_model_uuid
+
+  haproxy = {
+    channel = "2.8/edge"
+    # renovate: charm="haproxy" track="2.8" risk="edge" base="24.04" arch="amd64"
+    revision = 569
+    base     = "ubuntu@24.04"
+    units    = 1
+  }
+
+  grafana_agent = {
+    app_name = "haproxy-grafana-agent"
+    channel  = "2/stable"
+    # renovate: charm="grafana-agent" track="2" risk="stable" base="24.04" arch="amd64"
+    revision = 848
+  }
+
+  providers = {
+    juju = juju.wazuh_dashboard
+  }
+}
+
+resource "juju_integration" "haproxy_lego" {
+  provider   = juju.wazuh_dashboard
+  model_uuid = var.dashboard_model_uuid
+
+  application {
+    offer_url = juju_offer.lego.url
+  }
+
+  application {
+    name     = module.haproxy.haproxy_app_name
+    endpoint = module.haproxy.requires.certificates
+  }
+}
+
+resource "juju_application" "ingress_configurator" {
+  provider   = juju.wazuh_dashboard
+  model_uuid = var.dashboard_model_uuid
+
+  charm {
+    name    = "ingress-configurator"
+    channel = "latest/edge"
+    # renovate: charm="ingress-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 122
+  }
+  units = 1
+  config = {
+    backend-addresses = var.dashboard_ingress_backend_addresses
+    backend-ports     = var.dashboard_ingress_backend_ports
+    backend-protocol  = var.dashboard_ingress_backend_protocol
+    hostname          = var.dashboard_ingress_hostname
+  }
+}
+
+resource "juju_integration" "haproxy_ingress" {
+  provider   = juju.wazuh_dashboard
+  model_uuid = var.dashboard_model_uuid
+
+  application {
+    name     = module.haproxy.haproxy_app_name
+    endpoint = module.haproxy.provides.haproxy_route
+  }
+
+  application {
+    name     = juju_application.ingress_configurator.name
+    endpoint = "haproxy-route"
+  }
+}
+
+resource "juju_integration" "haproxy_ca_certs" {
+  provider   = juju.wazuh_dashboard
+  model_uuid = var.dashboard_model_uuid
+
+  application {
+    name     = module.haproxy.haproxy_app_name
+    endpoint = module.haproxy.requires.receive_ca_certs
+  }
+
+  application {
+    offer_url = module.wazuh.self_signed_certificates_offer_url
+    endpoint  = "send-ca-cert"
+  }
 }

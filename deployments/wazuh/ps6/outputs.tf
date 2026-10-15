@@ -26,3 +26,13 @@ output "self_signed_certificates_app_name" {
 output "self_signed_certificates_offer_url" {
   value = module.wazuh.self_signed_certificates_offer_url
 }
+
+output "haproxy_app_name" {
+  description = "Name of the deployed haproxy application."
+  value       = module.haproxy.haproxy_app_name
+}
+
+output "ingress_configurator_app_name" {
+  description = "Name of the deployed ingress-configurator application."
+  value       = juju_application.ingress_configurator.name
+}

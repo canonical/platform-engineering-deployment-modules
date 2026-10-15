@@ -6,6 +6,8 @@ mock_provider "vault" {
     defaults = {
       data = {
         endpoint_url = "https://mock-s3.example.com"
+        access_key   = "mock-access-key"
+        secret_key   = "mock-secret-key"
         username     = "mock-username"
         password     = "mock-password"
         private_key  = "mock-private-key"
@@ -52,6 +54,8 @@ run "basic_plan" {
     wazuh_external_hostname               = "wazuh.test.local"
     wazuh_indexer_constraints             = "arch=amd64"
     wazuh_server_storage                  = {}
+    dashboard_ingress_hostname            = "wazuh-dashboard.test.local"
+    dashboard_ingress_backend_addresses   = "10.0.0.1,10.0.0.2"
   }
 
   assert {
