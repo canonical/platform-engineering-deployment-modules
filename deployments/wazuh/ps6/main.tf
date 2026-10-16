@@ -8,6 +8,12 @@ locals {
     "wazuh-indexer-v5-backup",
     "self-signed-certificates"
   ])
+  machine_indexer_charms_2204 = toset([
+    for charm in local.machine_indexer_charms : charm if charm != "wazuh-indexer-v5-backup"
+  ])
+  machine_indexer_charms_2404 = toset([
+    "wazuh-indexer-v5-backup"
+  ])
 }
 resource "openstack_identity_ec2_credential_v3" "wazuh_indexer_s3_creds" {}
 
@@ -30,9 +36,9 @@ module "wazuh" {
 
   wazuh_indexer = {
     app_name = "wazuh-indexer-v5"
-    channel  = "4.11/edge"
-    # renovate: charm="wazuh-indexer" track="4.11" risk="edge" base="22.04" arch="amd64"
-    revision    = 15
+    channel  = "4.14/edge"
+    # renovate: charm="wazuh-indexer" track="4.14" risk="edge" base="22.04" arch="amd64"
+    revision    = 17
     config      = var.wazuh_indexer_config
     constraints = var.wazuh_indexer_constraints
     units       = var.wazuh_indexer_units
@@ -533,8 +539,28 @@ resource "juju_application" "ubuntu_pro_dashboard" {
   provider = juju.wazuh_dashboard
 }
 
+resource "juju_application" "ubuntu_pro_2404" {
+  name       = "ubuntu-pro-2404"
+  model_uuid = var.indexer_model_uuid
+
+  charm {
+    name = "ubuntu-pro"
+    # renovate: charm="ubuntu-pro" track="latest" risk="stable" base="24.04" arch="amd64"
+    revision = 28
+    channel  = "latest/stable"
+    base     = "ubuntu@24.04"
+  }
+
+  config = {
+    ppa   = "ppa:ua-client/stable"
+    token = data.vault_generic_secret.ubuntu_pro_token.data["token"]
+  }
+
+  provider = juju.wazuh_indexer
+}
+
 resource "juju_integration" "ubuntu_pro" {
-  for_each   = local.machine_indexer_charms
+  for_each   = local.machine_indexer_charms_2204
   model_uuid = var.indexer_model_uuid
 
   application {
@@ -543,6 +569,22 @@ resource "juju_integration" "ubuntu_pro" {
   }
   application {
     name     = juju_application.ubuntu_pro.name
+    endpoint = "juju-info"
+  }
+
+  provider = juju.wazuh_indexer
+}
+
+resource "juju_integration" "ubuntu_pro_2404" {
+  for_each   = local.machine_indexer_charms_2404
+  model_uuid = var.indexer_model_uuid
+
+  application {
+    name     = each.key
+    endpoint = "juju-info"
+  }
+  application {
+    name     = juju_application.ubuntu_pro_2404.name
     endpoint = "juju-info"
   }
 
