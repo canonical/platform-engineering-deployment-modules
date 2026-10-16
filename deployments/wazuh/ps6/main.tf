@@ -8,6 +8,16 @@ locals {
     "wazuh-indexer-v5-backup",
     "self-signed-certificates"
   ])
+  # wazuh-indexer-v5-backup (s3-integrator, track 2) runs on base ubuntu@24.04.
+  # The published ubuntu-pro charm has no single revision supporting both
+  # 22.04 and 24.04 (unlike landscape-client), so it needs a separate
+  # ubuntu-pro application pinned to a 24.04-compatible revision.
+  machine_indexer_charms_2204 = toset([
+    for charm in local.machine_indexer_charms : charm if charm != "wazuh-indexer-v5-backup"
+  ])
+  machine_indexer_charms_2404 = toset([
+    "wazuh-indexer-v5-backup"
+  ])
 }
 resource "openstack_identity_ec2_credential_v3" "wazuh_indexer_s3_creds" {}
 
@@ -533,8 +543,32 @@ resource "juju_application" "ubuntu_pro_dashboard" {
   provider = juju.wazuh_dashboard
 }
 
+# Separate ubuntu-pro instance for base ubuntu@24.04 principals (currently only
+# wazuh-indexer-v5-backup). The ubuntu-pro charm does not yet publish a single
+# revision covering both 22.04 and 24.04 (unlike landscape-client), so the
+# 22.04-base juju_application.ubuntu_pro above cannot be related to a 24.04 app.
+resource "juju_application" "ubuntu_pro_2404" {
+  name       = "ubuntu-pro-2404"
+  model_uuid = var.indexer_model_uuid
+
+  charm {
+    name = "ubuntu-pro"
+    # renovate: charm="ubuntu-pro" track="latest" risk="stable" base="24.04" arch="amd64"
+    revision = 28
+    channel  = "latest/stable"
+    base     = "ubuntu@24.04"
+  }
+
+  config = {
+    ppa   = "ppa:ua-client/stable"
+    token = data.vault_generic_secret.ubuntu_pro_token.data["token"]
+  }
+
+  provider = juju.wazuh_indexer
+}
+
 resource "juju_integration" "ubuntu_pro" {
-  for_each   = local.machine_indexer_charms
+  for_each   = local.machine_indexer_charms_2204
   model_uuid = var.indexer_model_uuid
 
   application {
@@ -543,6 +577,22 @@ resource "juju_integration" "ubuntu_pro" {
   }
   application {
     name     = juju_application.ubuntu_pro.name
+    endpoint = "juju-info"
+  }
+
+  provider = juju.wazuh_indexer
+}
+
+resource "juju_integration" "ubuntu_pro_2404" {
+  for_each   = local.machine_indexer_charms_2404
+  model_uuid = var.indexer_model_uuid
+
+  application {
+    name     = each.key
+    endpoint = "juju-info"
+  }
+  application {
+    name     = juju_application.ubuntu_pro_2404.name
     endpoint = "juju-info"
   }
 
