@@ -635,8 +635,8 @@ resource "juju_application" "opencti-woap-connector" {
   charm {
     name    = "opencti-woap-connector"
     channel = "latest/edge"
-    # renovate: charm="opencti-woap-connector" track="latest" risk="edge" base="44.04" arch="amd64"
-    revision = 4
+    # renovate: charm="opencti-woap-connector" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 5
     base     = "ubuntu@24.04"
   }
 
