@@ -52,17 +52,17 @@ module "wazuh" {
 
   wazuh_dashboard = {
     app_name = "wazuh-dashboard-v5"
-    channel  = "4.14/edge"
-    # renovate: charm="wazuh-dashboard" track="4.14" risk="edge" base="22.04" arch="amd64"
-    revision    = 24
+    channel  = "4.11/edge"
+    # renovate: charm="wazuh-dashboard" track="4.11" risk="edge" base="22.04" arch="amd64"
+    revision    = 23
     constraints = var.wazuh_dashboard_constraints
   }
 
   wazuh_server = {
     app_name = "wazuh-server"
-    channel  = "4.14/edge"
-    # renovate: charm="wazuh-server" track="4.14" risk="edge" base="22.04" arch="amd64"
-    revision = 290
+    channel  = "4.11/edge"
+    # renovate: charm="wazuh-server" track="4.11" risk="edge" base="22.04" arch="amd64"
+    revision = 283
     config = {
       logs-ca-cert             = var.logs_ca_certificate
       custom-config-ssh-key    = "secret:${juju_secret.git_ssh_key.secret_id}"
