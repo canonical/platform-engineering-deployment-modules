@@ -540,7 +540,7 @@ resource "juju_application" "ubuntu_pro_dashboard" {
 }
 
 resource "juju_application" "ubuntu_pro_2404" {
-  name       = "ubuntu-pro-2404"
+  name       = "ubuntu-pro-noble"
   model_uuid = var.indexer_model_uuid
 
   charm {
