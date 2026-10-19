@@ -641,11 +641,9 @@ resource "juju_application" "opencti-woap-connector" {
   }
 
   config = {
-    opensearch-index          = "wazuh-alerts-*"
-    opensearch-ssl-verify     = true
-    connector-log-level       = "info"
     connector-duration-period = "PT1M"
-    wazuh-min-severity        = 12
+    connector-log-level       = "info"
+    opensearch-ssl-verify     = true
   }
 }
 
