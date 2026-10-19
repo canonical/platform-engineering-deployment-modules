@@ -56,7 +56,7 @@ module "wazuh" {
     app_name = "wazuh-server"
     channel  = "4.11/edge"
     # renovate: charm="wazuh-server" track="4.11" risk="edge" base="22.04" arch="amd64"
-    revision = 283
+    revision = 286
     config = {
       logs-ca-cert             = var.logs_ca_certificate
       custom-config-ssh-key    = "secret:${juju_secret.git_ssh_key.secret_id}"
@@ -68,7 +68,7 @@ module "wazuh" {
   traefik_k8s = {
     channel = "latest/stable"
     # renovate: charm="traefik-k8s" track="latest" risk="stable" base="20.04" arch="amd64"
-    revision = 377
+    revision = 417
     config = {
       external_hostname = var.wazuh_external_hostname
     }
@@ -79,7 +79,7 @@ module "wazuh" {
     app_name = "self-signed-certificates"
     channel  = "1/edge"
     # renovate: charm="self-signed-certificates" track="1" risk="edge" base="22.04" arch="amd64"
-    revision = 684
+    revision = 704
     base     = "ubuntu@22.04"
 
     config = {
@@ -97,7 +97,7 @@ module "wazuh" {
       bucket         = openstack_objectstorage_container_v1.wazuh_indexer_backup.name
       endpoint       = data.vault_generic_secret.s3.data["endpoint_url"]
       path           = "/opensearch"
-      region         = ""
+      region         = "us-east-1"
       s3-api-version = ""
       s3-uri-style   = "path"
       credentials    = "secret:${juju_secret.wazuh_indexer_backup_credentials.secret_id}"
