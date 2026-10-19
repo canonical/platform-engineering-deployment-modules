@@ -539,7 +539,7 @@ resource "juju_application" "ubuntu_pro_dashboard" {
   provider = juju.wazuh_dashboard
 }
 
-resource "juju_application" "ubuntu_pro_2404" {
+resource "juju_application" "ubuntu_pro_noble" {
   name       = "ubuntu-pro-noble"
   model_uuid = var.indexer_model_uuid
 
@@ -575,7 +575,7 @@ resource "juju_integration" "ubuntu_pro" {
   provider = juju.wazuh_indexer
 }
 
-resource "juju_integration" "ubuntu_pro_2404" {
+resource "juju_integration" "ubuntu_pro_noble" {
   for_each   = local.machine_indexer_charms_2404
   model_uuid = var.indexer_model_uuid
 
@@ -584,7 +584,7 @@ resource "juju_integration" "ubuntu_pro_2404" {
     endpoint = "juju-info"
   }
   application {
-    name     = juju_application.ubuntu_pro_2404.name
+    name     = juju_application.ubuntu_pro_noble.name
     endpoint = "juju-info"
   }
 
