@@ -74,7 +74,7 @@ module "wazuh" {
   traefik_k8s = {
     channel = "latest/stable"
     # renovate: charm="traefik-k8s" track="latest" risk="stable" base="20.04" arch="amd64"
-    revision = 377
+    revision = 417
     config = {
       external_hostname = var.wazuh_external_hostname
     }
@@ -85,7 +85,7 @@ module "wazuh" {
     app_name = "self-signed-certificates"
     channel  = "1/edge"
     # renovate: charm="self-signed-certificates" track="1" risk="edge" base="22.04" arch="amd64"
-    revision = 684
+    revision = 704
     base     = "ubuntu@22.04"
 
     config = {
