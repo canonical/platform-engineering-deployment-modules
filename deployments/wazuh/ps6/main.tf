@@ -36,8 +36,8 @@ module "wazuh" {
 
   wazuh_indexer = {
     app_name = "wazuh-indexer-v5"
-    channel  = "4.14/edge"
-    # renovate: charm="wazuh-indexer" track="4.14" risk="edge" base="22.04" arch="amd64"
+    channel  = "4.14/stable"
+    # renovate: charm="wazuh-indexer" track="4.14" risk="stable" base="22.04" arch="amd64"
     revision    = 17
     config      = var.wazuh_indexer_config
     constraints = var.wazuh_indexer_constraints
@@ -52,17 +52,17 @@ module "wazuh" {
 
   wazuh_dashboard = {
     app_name = "wazuh-dashboard-v5"
-    channel  = "4.11/edge"
-    # renovate: charm="wazuh-dashboard" track="4.11" risk="edge" base="22.04" arch="amd64"
-    revision    = 23
+    channel  = "4.14/stable"
+    # renovate: charm="wazuh-dashboard" track="4.14" risk="stable" base="22.04" arch="amd64"
+    revision    = 25
     constraints = var.wazuh_dashboard_constraints
   }
 
   wazuh_server = {
     app_name = "wazuh-server"
-    channel  = "4.11/edge"
-    # renovate: charm="wazuh-server" track="4.11" risk="edge" base="22.04" arch="amd64"
-    revision = 283
+    channel  = "4.14/stable"
+    # renovate: charm="wazuh-server" track="4.14" risk="stable" base="22.04" arch="amd64"
+    revision = 292
     config = {
       logs-ca-cert             = var.logs_ca_certificate
       custom-config-ssh-key    = "secret:${juju_secret.git_ssh_key.secret_id}"
