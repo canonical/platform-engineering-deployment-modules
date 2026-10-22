@@ -550,7 +550,7 @@ resource "juju_application" "opencti-mitre-connector" {
     name    = "opencti-mitre-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-mitre-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 119
+    revision = 125
     base     = "ubuntu@24.04"
   }
 
@@ -570,7 +570,7 @@ resource "juju_application" "opencti-sekoia-connector" {
     name    = "opencti-sekoia-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-sekoia-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 118
+    revision = 124
     base     = "ubuntu@24.04"
   }
 
@@ -591,7 +591,7 @@ resource "juju_application" "opencti-urlhaus-connector" {
     name    = "opencti-urlhaus-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-urlhaus-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 115
+    revision = 121
     base     = "ubuntu@24.04"
   }
 
@@ -635,8 +635,8 @@ resource "juju_application" "opencti-woap-connector" {
   charm {
     name    = "opencti-woap-connector"
     channel = "latest/edge"
-    # renovate: charm="opencti-woap-connector" track="latest" risk="edge" base="44.04" arch="amd64"
-    revision = 4
+    # renovate: charm="opencti-woap-connector" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 5
     base     = "ubuntu@24.04"
   }
 

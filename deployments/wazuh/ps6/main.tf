@@ -8,6 +8,12 @@ locals {
     "wazuh-indexer-v5-backup",
     "self-signed-certificates"
   ])
+  machine_indexer_charms_2204 = toset([
+    for charm in local.machine_indexer_charms : charm if charm != "wazuh-indexer-v5-backup"
+  ])
+  machine_indexer_charms_2404 = toset([
+    "wazuh-indexer-v5-backup"
+  ])
 }
 resource "openstack_identity_ec2_credential_v3" "wazuh_indexer_s3_creds" {}
 
@@ -30,9 +36,9 @@ module "wazuh" {
 
   wazuh_indexer = {
     app_name = "wazuh-indexer-v5"
-    channel  = "4.11/edge"
-    # renovate: charm="wazuh-indexer" track="4.11" risk="edge" base="22.04" arch="amd64"
-    revision    = 15
+    channel  = "4.14/stable"
+    # renovate: charm="wazuh-indexer" track="4.14" risk="stable" base="22.04" arch="amd64"
+    revision    = 17
     config      = var.wazuh_indexer_config
     constraints = var.wazuh_indexer_constraints
     units       = var.wazuh_indexer_units
@@ -46,17 +52,17 @@ module "wazuh" {
 
   wazuh_dashboard = {
     app_name = "wazuh-dashboard-v5"
-    channel  = "4.11/edge"
-    # renovate: charm="wazuh-dashboard" track="4.11" risk="edge" base="22.04" arch="amd64"
-    revision    = 23
+    channel  = "4.14/stable"
+    # renovate: charm="wazuh-dashboard" track="4.14" risk="stable" base="22.04" arch="amd64"
+    revision    = 25
     constraints = var.wazuh_dashboard_constraints
   }
 
   wazuh_server = {
     app_name = "wazuh-server"
-    channel  = "4.11/edge"
-    # renovate: charm="wazuh-server" track="4.11" risk="edge" base="22.04" arch="amd64"
-    revision = 283
+    channel  = "4.14/stable"
+    # renovate: charm="wazuh-server" track="4.14" risk="stable" base="22.04" arch="amd64"
+    revision = 292
     config = {
       logs-ca-cert             = var.logs_ca_certificate
       custom-config-ssh-key    = "secret:${juju_secret.git_ssh_key.secret_id}"
@@ -68,7 +74,7 @@ module "wazuh" {
   traefik_k8s = {
     channel = "latest/stable"
     # renovate: charm="traefik-k8s" track="latest" risk="stable" base="20.04" arch="amd64"
-    revision = 377
+    revision = 417
     config = {
       external_hostname = var.wazuh_external_hostname
     }
@@ -79,7 +85,7 @@ module "wazuh" {
     app_name = "self-signed-certificates"
     channel  = "1/edge"
     # renovate: charm="self-signed-certificates" track="1" risk="edge" base="22.04" arch="amd64"
-    revision = 684
+    revision = 704
     base     = "ubuntu@22.04"
 
     config = {
@@ -97,7 +103,7 @@ module "wazuh" {
       bucket         = openstack_objectstorage_container_v1.wazuh_indexer_backup.name
       endpoint       = data.vault_generic_secret.s3.data["endpoint_url"]
       path           = "/opensearch"
-      region         = ""
+      region         = "us-east-1"
       s3-api-version = ""
       s3-uri-style   = "path"
       credentials    = "secret:${juju_secret.wazuh_indexer_backup_credentials.secret_id}"
@@ -533,8 +539,28 @@ resource "juju_application" "ubuntu_pro_dashboard" {
   provider = juju.wazuh_dashboard
 }
 
+resource "juju_application" "ubuntu_pro_noble" {
+  name       = "ubuntu-pro-noble"
+  model_uuid = var.indexer_model_uuid
+
+  charm {
+    name = "ubuntu-pro"
+    # renovate: charm="ubuntu-pro" track="latest" risk="stable" base="24.04" arch="amd64"
+    revision = 28
+    channel  = "latest/stable"
+    base     = "ubuntu@24.04"
+  }
+
+  config = {
+    ppa   = "ppa:ua-client/stable"
+    token = data.vault_generic_secret.ubuntu_pro_token.data["token"]
+  }
+
+  provider = juju.wazuh_indexer
+}
+
 resource "juju_integration" "ubuntu_pro" {
-  for_each   = local.machine_indexer_charms
+  for_each   = local.machine_indexer_charms_2204
   model_uuid = var.indexer_model_uuid
 
   application {
@@ -543,6 +569,22 @@ resource "juju_integration" "ubuntu_pro" {
   }
   application {
     name     = juju_application.ubuntu_pro.name
+    endpoint = "juju-info"
+  }
+
+  provider = juju.wazuh_indexer
+}
+
+resource "juju_integration" "ubuntu_pro_noble" {
+  for_each   = local.machine_indexer_charms_2404
+  model_uuid = var.indexer_model_uuid
+
+  application {
+    name     = each.key
+    endpoint = "juju-info"
+  }
+  application {
+    name     = juju_application.ubuntu_pro_noble.name
     endpoint = "juju-info"
   }
 
