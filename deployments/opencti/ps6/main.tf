@@ -643,7 +643,7 @@ resource "juju_application" "opencti-woap-connector" {
   config = {
     connector-duration-period = "PT1M"
     connector-log-level       = "info"
-    opensearch-ssl-verify     = true
+    opensearch-ssl-verify     = false
   }
 }
 
