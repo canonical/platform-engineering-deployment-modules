@@ -281,7 +281,7 @@ resource "juju_application" "opencti-alienvault-connector" {
     name    = "opencti-alienvault-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-alienvault-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 124
+    revision = 125
     base     = "ubuntu@24.04"
   }
 
