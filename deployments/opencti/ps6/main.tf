@@ -47,7 +47,7 @@ resource "openstack_objectstorage_container_v1" "opensearch_backup" {
 }
 
 module "opencti" {
-  source        = "git::https://github.com/canonical/opencti-operator//terraform/product?ref=opencti-rev118&depth=1"
+  source        = "git::https://github.com/canonical/opencti-operator//terraform/product?ref=opencti-rev131&depth=1"
   model_uuid    = var.model_uuid
   db_model_uuid = var.db_model_uuid
   model_user    = var.model_name
@@ -643,7 +643,7 @@ resource "juju_application" "opencti-woap-connector" {
   config = {
     connector-duration-period = "PT1M"
     connector-log-level       = "info"
-    opensearch-ssl-verify     = true
+    opensearch-ssl-verify     = false
   }
 }
 
