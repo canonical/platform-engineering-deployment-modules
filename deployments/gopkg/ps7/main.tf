@@ -33,9 +33,115 @@ module "gopkg" {
     units    = var.gopkg_units
   }
 
-  logging_offer_url           = var.loki_offer_url
-  metrics_offer_url           = var.prometheus_offer_url
-  grafana_dashboard_offer_url = var.grafana_dashboard_offer_url
+  # The product module's COS offer inputs stay unset: on PS7, gopkg's COS
+  # endpoints relate to the in-model OpenTelemetry Collector below instead.
+}
+
+# PS7 workloads reach the IS Central COS through an OpenTelemetry Collector in
+# their own model, related to the shared COS aggregator over JAAS cross-model
+# relations (IS docs: "How to relate a deployment to COS"). The collector scrapes
+# gopkg in-model, so no COS component has to reach across clusters.
+resource "juju_application" "opentelemetry_collector" {
+  model_uuid = var.model_uuid
+  name       = "opentelemetry-collector"
+
+  charm {
+    name    = "opentelemetry-collector-k8s"
+    channel = "0.130/stable"
+    # renovate: charm="opentelemetry-collector-k8s" track="0.130" risk="stable" base="26.04" arch="amd64"
+    revision = 272
+    base     = "ubuntu@26.04"
+  }
+
+  config = var.opentelemetry_collector_config
+  # The charm patches its own StatefulSet and stays blocked without trust.
+  trust = true
+  units = 1
+}
+
+# --- gopkg to the collector, in-model ---
+
+resource "juju_integration" "gopkg_metrics" {
+  model_uuid = var.model_uuid
+
+  application {
+    name     = module.gopkg.gopkg.app_name
+    endpoint = module.gopkg.gopkg.provides.metrics_endpoint
+  }
+
+  application {
+    name     = juju_application.opentelemetry_collector.name
+    endpoint = "metrics-endpoint"
+  }
+}
+
+resource "juju_integration" "gopkg_logging" {
+  model_uuid = var.model_uuid
+
+  application {
+    name     = module.gopkg.gopkg.app_name
+    endpoint = module.gopkg.gopkg.requires.logging
+  }
+
+  application {
+    name     = juju_application.opentelemetry_collector.name
+    endpoint = "receive-loki-logs"
+  }
+}
+
+resource "juju_integration" "gopkg_dashboards" {
+  model_uuid = var.model_uuid
+
+  application {
+    name     = module.gopkg.gopkg.app_name
+    endpoint = module.gopkg.gopkg.provides.grafana_dashboard
+  }
+
+  application {
+    name     = juju_application.opentelemetry_collector.name
+    endpoint = "grafana-dashboards-consumer"
+  }
+}
+
+# --- the collector to the COS aggregator, cross-model ---
+
+resource "juju_integration" "otelcol_otlp" {
+  model_uuid = var.model_uuid
+
+  application {
+    name     = juju_application.opentelemetry_collector.name
+    endpoint = "send-otlp"
+  }
+
+  application {
+    offer_url = var.cos_aggregator_otlp_offer_url
+  }
+}
+
+resource "juju_integration" "otelcol_dashboards" {
+  model_uuid = var.model_uuid
+
+  application {
+    name     = juju_application.opentelemetry_collector.name
+    endpoint = "grafana-dashboards-provider"
+  }
+
+  application {
+    offer_url = var.cos_aggregator_dashboards_offer_url
+  }
+}
+
+resource "juju_integration" "otelcol_ca_cert" {
+  model_uuid = var.model_uuid
+
+  application {
+    name     = juju_application.opentelemetry_collector.name
+    endpoint = "receive-ca-cert"
+  }
+
+  application {
+    offer_url = var.cos_aggregator_ca_cert_offer_url
+  }
 }
 
 resource "juju_integration" "gopkg_ingress" {

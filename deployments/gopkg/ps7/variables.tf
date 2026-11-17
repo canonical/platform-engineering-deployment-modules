@@ -28,17 +28,23 @@ variable "gopkg_units" {
   default     = 1
 }
 
-variable "loki_offer_url" {
-  description = "Loki offer URL for gopkg to push logs to"
+variable "cos_aggregator_otlp_offer_url" {
+  description = "COS aggregator offer for the collector's send-otlp endpoint (otlp:receive-otlp), e.g. <owner>/k8s-ps7-o11y-cos-aggregator.otelcol-aggregator. Metrics, logs and alert rules travel over it."
   type        = string
 }
 
-variable "prometheus_offer_url" {
-  description = "Prometheus offer URL for gopkg's metrics-endpoint. Required: on PS7 the COS model offers prometheus-metrics-endpoint (requirer, prometheus_scrape)."
+variable "cos_aggregator_dashboards_offer_url" {
+  description = "COS aggregator offer for the collector's grafana-dashboards-provider endpoint (grafana_dashboard:grafana-dashboards-consumer). On PS7 it is the same otelcol-aggregator offer as the OTLP one. gopkg's dashboards reach Central COS Grafana only over this relation."
   type        = string
 }
 
-variable "grafana_dashboard_offer_url" {
-  description = "Grafana offer URL for gopkg's grafana-dashboard endpoint. Required: on PS7 the COS model offers grafana-dashboards (requirer, grafana_dashboard). The charm ships its own dashboard and alert rules, which reach Grafana only over this relation."
+variable "cos_aggregator_ca_cert_offer_url" {
+  description = "COS aggregator offer for the collector's receive-ca-cert endpoint (certificate_transfer:send-ca-cert), e.g. <owner>/k8s-ps7-o11y-cos-aggregator.self-signed-certificates-aggregator."
   type        = string
+}
+
+variable "opentelemetry_collector_config" {
+  description = "opentelemetry-collector-k8s charm configuration. Central COS alerts need IS approval; once approved, set forward_alert_rules = \"true\" and extra_alert_labels = \"canonical_team=<team>\"."
+  type        = map(string)
+  default     = {}
 }
