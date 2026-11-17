@@ -47,7 +47,7 @@ resource "openstack_objectstorage_container_v1" "opensearch_backup" {
 }
 
 module "opencti" {
-  source        = "git::https://github.com/canonical/opencti-operator//terraform/product?ref=opencti-rev118&depth=1"
+  source        = "git::https://github.com/canonical/opencti-operator//terraform/product?ref=opencti-rev131&depth=1"
   model_uuid    = var.model_uuid
   db_model_uuid = var.db_model_uuid
   model_user    = var.model_name
@@ -56,7 +56,7 @@ module "opencti" {
   opencti = {
     channel = "latest/edge"
     # renovate: charm="opencti" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision    = 118
+    revision    = 124
     base        = "ubuntu@24.04"
     constraints = "arch=amd64"
     units       = 1
@@ -212,7 +212,7 @@ resource "juju_application" "gateway-route-configurator" {
   charm {
     name = "gateway-route-configurator"
     # renovate: charm="gateway-route-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 29
+    revision = 33
     channel  = "latest/edge"
   }
 
@@ -258,7 +258,7 @@ resource "juju_application" "opencti-abuseipdb-ipblacklist-connector" {
     name    = "opencti-abuseipdb-ipblacklist-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-abuseipdb-ipblacklist-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 115
+    revision = 121
     base     = "ubuntu@24.04"
   }
 
@@ -281,7 +281,7 @@ resource "juju_application" "opencti-alienvault-connector" {
     name    = "opencti-alienvault-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-alienvault-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 118
+    revision = 124
     base     = "ubuntu@24.04"
   }
 
@@ -309,7 +309,7 @@ resource "juju_application" "opencti-cisa-kev-connector" {
     name    = "opencti-cisa-kev-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-cisa-kev-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 116
+    revision = 122
     base     = "ubuntu@24.04"
   }
 
@@ -331,7 +331,7 @@ resource "juju_application" "opencti-crowdstrike-connector" {
     name    = "opencti-crowdstrike-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-crowdstrike-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 118
+    revision = 124
     base     = "ubuntu@24.04"
   }
 
@@ -411,7 +411,7 @@ resource "juju_application" "opencti-export-file-stix-connector" {
     name    = "opencti-export-file-stix-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-export-file-stix-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 118
+    revision = 124
     base     = "ubuntu@24.04"
   }
 
@@ -428,7 +428,7 @@ resource "juju_application" "opencti-export-file-txt-connector" {
     name    = "opencti-export-file-txt-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-export-file-txt-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 117
+    revision = 123
     base     = "ubuntu@24.04"
   }
 
@@ -445,7 +445,7 @@ resource "juju_application" "opencti-import-document-connector" {
     name    = "opencti-import-document-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-import-document-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 120
+    revision = 126
     base     = "ubuntu@24.04"
   }
 
@@ -467,7 +467,7 @@ resource "juju_application" "opencti-import-file-stix-connector" {
     name    = "opencti-import-file-stix-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-import-file-stix-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 123
+    revision = 128
     base     = "ubuntu@24.04"
   }
 
@@ -487,7 +487,7 @@ resource "juju_application" "opencti-ipinfo-connector" {
     name    = "opencti-ipinfo-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-ipinfo-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 115
+    revision = 121
     base     = "ubuntu@24.04"
   }
 
@@ -510,7 +510,7 @@ resource "juju_application" "opencti-malwarebazaar-connector" {
     name    = "opencti-malwarebazaar-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-malwarebazaar-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 115
+    revision = 121
     base     = "ubuntu@24.04"
   }
 
@@ -530,7 +530,7 @@ resource "juju_application" "opencti-misp-feed-connector" {
     name    = "opencti-misp-feed-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-misp-feed-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 118
+    revision = 124
     base     = "ubuntu@24.04"
   }
 
@@ -550,7 +550,7 @@ resource "juju_application" "opencti-mitre-connector" {
     name    = "opencti-mitre-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-mitre-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 119
+    revision = 125
     base     = "ubuntu@24.04"
   }
 
@@ -570,7 +570,7 @@ resource "juju_application" "opencti-sekoia-connector" {
     name    = "opencti-sekoia-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-sekoia-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 118
+    revision = 124
     base     = "ubuntu@24.04"
   }
 
@@ -591,7 +591,7 @@ resource "juju_application" "opencti-urlhaus-connector" {
     name    = "opencti-urlhaus-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-urlhaus-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 115
+    revision = 121
     base     = "ubuntu@24.04"
   }
 
@@ -635,17 +635,15 @@ resource "juju_application" "opencti-woap-connector" {
   charm {
     name    = "opencti-woap-connector"
     channel = "latest/edge"
-    # renovate: charm="opencti-woap-connector" track="latest" risk="edge" base="44.04" arch="amd64"
-    revision = 4
+    # renovate: charm="opencti-woap-connector" track="latest" risk="edge" base="24.04" arch="amd64"
+    revision = 5
     base     = "ubuntu@24.04"
   }
 
   config = {
-    opensearch-index          = "wazuh-alerts-*"
-    opensearch-ssl-verify     = true
-    connector-log-level       = "info"
     connector-duration-period = "PT1M"
-    wazuh-min-severity        = 12
+    connector-log-level       = "info"
+    opensearch-ssl-verify     = false
   }
 }
 
@@ -795,7 +793,7 @@ resource "juju_application" "landscape-client" {
   charm {
     name = "landscape-client"
     # renovate: charm="landscape-client" track="latest" risk="stable" base="22.04" arch="amd64"
-    revision = 72
+    revision = 94
     channel  = "latest/stable"
     base     = "ubuntu@22.04"
   }

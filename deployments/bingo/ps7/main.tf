@@ -19,7 +19,7 @@ module "bingo" {
   bingo = {
     channel = "1/stable"
     # renovate: charm="bingo" track="1" risk="stable" base="24.04" arch="amd64"
-    revision = 11
+    revision = 16
     config   = var.bingo_config
     units    = var.bingo_units
   }
@@ -51,7 +51,7 @@ resource "juju_application" "ingress_configurator" {
     name    = "ingress-configurator"
     channel = "latest/edge"
     # renovate: charm="ingress-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 111
+    revision = 122
     base     = "ubuntu@24.04"
   }
 

@@ -2,7 +2,8 @@
 
 Deploys [gopkg-k8s](https://github.com/canonical/gopkg-charmed) (the
 gopkg.in versioned import-path service) on a PS7 Kubernetes model, fronted by
-ingress-configurator and shipping logs to a Loki offer.
+ingress-configurator and observed by the IS Central COS through an
+OpenTelemetry Collector in the same model.
 
 ## Models
 
@@ -44,6 +45,18 @@ input from the consuming deployment.
 - gopkg serves versioned import paths such as `/yaml.v2` and needs the original
   request path. ingress-configurator does not rewrite paths, so no extra
   configuration is required here.
+- Observability follows the IS guide "How to relate a deployment to COS": an
+  `opentelemetry-collector-k8s` (`0.130/stable`, trusted) in this model takes
+  gopkg's metrics (scraped in-model on `metrics-port`), logs and dashboards, and
+  forwards them to the PS7 COS aggregator through three cross-model relations.
+  The consuming deployment supplies the aggregator offer URLs, and its Juju
+  identity must be allowed to consume them (`juju find-offers`).
+- Central COS Grafana is at https://cos.ps7.admin.canonical.com/ (Canonical SSO,
+  Viewer access). It shows only charm-exported dashboards: gopkg Overview and
+  Go Operator.
+- Central COS does not page anyone by default. Alerts need IS approval; then
+  set `forward_alert_rules` and `extra_alert_labels` through
+  `opentelemetry_collector_config`.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -63,7 +76,7 @@ input from the consuming deployment.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_gopkg"></a> [gopkg](#module\_gopkg) | git::https://github.com/canonical/gopkg-charmed//terraform/product | rev2&depth=1 |
+| <a name="module_gopkg"></a> [gopkg](#module\_gopkg) | git::https://github.com/canonical/gopkg-charmed//terraform/product | gopkg-k8s-rev12&depth=1 |
 | <a name="module_ingress_configurator"></a> [ingress\_configurator](#module\_ingress\_configurator) | git::https://github.com/canonical/ingress-configurator-operator//terraform | ingress-configurator-rev103&depth=1 |
 
 ## Resources
