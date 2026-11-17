@@ -13,11 +13,11 @@ run "basic_plan" {
   command = plan
 
   variables {
-    model_uuid                  = run.setup_tests.model_uuid
-    external_hostname           = "gopkg.test.local"
-    loki_offer_url              = "admin/test-cos.loki-logging"
-    prometheus_offer_url        = "admin/test-cos.prometheus-metrics-endpoint"
-    grafana_dashboard_offer_url = "admin/test-cos.grafana-dashboards"
+    model_uuid                          = run.setup_tests.model_uuid
+    external_hostname                   = "gopkg.test.local"
+    cos_aggregator_otlp_offer_url       = "admin/test-cos.otelcol-aggregator"
+    cos_aggregator_dashboards_offer_url = "admin/test-cos.otelcol-aggregator"
+    cos_aggregator_ca_cert_offer_url    = "admin/test-cos.self-signed-certificates-aggregator"
   }
 
   assert {
@@ -45,5 +45,16 @@ run "basic_plan" {
   assert {
     condition     = output.components.gopkg.gopkg.requires.logging == "logging"
     error_message = "gopkg logging requirer endpoint did not match expected"
+  }
+
+  assert {
+    condition     = output.components.opentelemetry_collector.name == "opentelemetry-collector"
+    error_message = "opentelemetry-collector app name did not match expected"
+  }
+
+  # Without trust the collector stays blocked, and no telemetry reaches COS.
+  assert {
+    condition     = output.components.opentelemetry_collector.trust == true
+    error_message = "opentelemetry-collector must be deployed with trust"
   }
 }

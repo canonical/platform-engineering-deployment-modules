@@ -47,7 +47,7 @@ resource "openstack_objectstorage_container_v1" "opensearch_backup" {
 }
 
 module "opencti" {
-  source        = "git::https://github.com/canonical/opencti-operator//terraform/product?ref=opencti-rev118&depth=1"
+  source        = "git::https://github.com/canonical/opencti-operator//terraform/product?ref=opencti-rev131&depth=1"
   model_uuid    = var.model_uuid
   db_model_uuid = var.db_model_uuid
   model_user    = var.model_name
@@ -212,7 +212,7 @@ resource "juju_application" "gateway-route-configurator" {
   charm {
     name = "gateway-route-configurator"
     # renovate: charm="gateway-route-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 31
+    revision = 33
     channel  = "latest/edge"
   }
 
@@ -641,11 +641,9 @@ resource "juju_application" "opencti-woap-connector" {
   }
 
   config = {
-    opensearch-index          = "wazuh-alerts-*"
-    opensearch-ssl-verify     = true
-    connector-log-level       = "info"
     connector-duration-period = "PT1M"
-    wazuh-min-severity        = 12
+    connector-log-level       = "info"
+    opensearch-ssl-verify     = false
   }
 }
 
