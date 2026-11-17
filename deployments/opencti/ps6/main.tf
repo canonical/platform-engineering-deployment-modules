@@ -793,7 +793,7 @@ resource "juju_application" "landscape-client" {
   charm {
     name = "landscape-client"
     # renovate: charm="landscape-client" track="latest" risk="stable" base="22.04" arch="amd64"
-    revision = 72
+    revision = 94
     channel  = "latest/stable"
     base     = "ubuntu@22.04"
   }
