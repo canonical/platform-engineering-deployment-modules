@@ -25,7 +25,7 @@ resource "openstack_objectstorage_container_v1" "wazuh_indexer_backup" {
 }
 
 module "wazuh" {
-  source               = "git::https://github.com/canonical/wazuh-server-operator//terraform/product?ref=wazuh-server-rev279&depth=1"
+  source               = "git::https://github.com/canonical/wazuh-server-operator//terraform/product?ref=wazuh-server-rev303&depth=1"
   server_model_name    = var.server_model_name
   server_model_uuid    = var.server_model_uuid
   indexer_model_name   = var.indexer_model_name
@@ -54,7 +54,7 @@ module "wazuh" {
     app_name = "wazuh-dashboard-v5"
     channel  = "4.14/stable"
     # renovate: charm="wazuh-dashboard" track="4.14" risk="stable" base="22.04" arch="amd64"
-    revision    = 25
+    revision    = 26
     constraints = var.wazuh_dashboard_constraints
   }
 
@@ -62,7 +62,7 @@ module "wazuh" {
     app_name = "wazuh-server"
     channel  = "4.14/stable"
     # renovate: charm="wazuh-server" track="4.14" risk="stable" base="22.04" arch="amd64"
-    revision = 292
+    revision = 303
     config = {
       logs-ca-cert             = var.logs_ca_certificate
       custom-config-ssh-key    = "secret:${juju_secret.git_ssh_key.secret_id}"
