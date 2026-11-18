@@ -76,7 +76,7 @@ input from the consuming deployment.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_gopkg"></a> [gopkg](#module\_gopkg) | git::https://github.com/canonical/gopkg-charmed//terraform/product | rev2&depth=1 |
+| <a name="module_gopkg"></a> [gopkg](#module\_gopkg) | git::https://github.com/canonical/gopkg-charmed//terraform/product | gopkg-k8s-rev12&depth=1 |
 | <a name="module_ingress_configurator"></a> [ingress\_configurator](#module\_ingress\_configurator) | git::https://github.com/canonical/ingress-configurator-operator//terraform | ingress-configurator-rev103&depth=1 |
 
 ## Resources

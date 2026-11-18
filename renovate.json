@@ -38,10 +38,24 @@
       "ignoreTests": true
     },
     {
+      "description": "gopkg module refs: charm-ci tags gopkg-k8s-rev<N>, a multi-segment prefix the default regex above cannot parse (#208). The compatibility group pins updates to one tag family, so a ref never jumps to another charm's tags in the same repo.",
+      "matchManagers": ["terraform"],
+      "matchDepTypes": ["module"],
+      "matchFileNames": ["deployments/gopkg/ps7/main.tf"],
+      "matchDepNames": ["github.com/canonical/gopkg-charmed"],
+      "versioning": "regex:^(?<compatibility>(?:[a-z0-9]+-)*)rev(?<major>\\d+)$"
+    },
+    {
       "matchDatasources": ["custom.charmhub"],
       "groupName": null,
       "automerge": true,
       "ignoreTests": true
+    },
+    {
+      "description": "gopkg: charm-ci tags gopkg-k8s-rev<N> on the commit charm revision N was built from, so the module ref and charm revision move together in one PR. Placed after the charmhub rule so this groupName overrides its null.",
+      "matchFileNames": ["deployments/gopkg/ps7/main.tf"],
+      "matchDepNames": ["gopkg-k8s", "github.com/canonical/gopkg-charmed"],
+      "groupName": "gopkg-k8s"
     }
   ]
 }
