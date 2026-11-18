@@ -54,10 +54,8 @@ module "wazuh" {
     app_name = "wazuh-dashboard-v5"
     channel  = "4.14/stable"
     # renovate: charm="wazuh-dashboard" track="4.14" risk="stable" base="22.04" arch="amd64"
-    # NOTE: rev26 is the anticipated next revision, carrying the wazuh.yml 4.14 snap
-    # data path fix from canonical/wazuh-dashboard-operator#67. It is not yet published
-    # (release-to-edge CI is in progress). Confirm it publishes to 4.14/edge as rev26
-    # and promote it to 4.14/stable (promote_charm.yaml) before merging this PR.
+    # rev26 carries the wazuh.yml 4.14 snap data path fix from
+    # canonical/wazuh-dashboard-operator#67, promoted to 4.14/stable.
     revision    = 26
     constraints = var.wazuh_dashboard_constraints
   }
