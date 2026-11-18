@@ -42,6 +42,7 @@
       "matchManagers": ["terraform"],
       "matchDepTypes": ["module"],
       "matchFileNames": ["deployments/gopkg/ps7/main.tf"],
+      "matchDepNames": ["github.com/canonical/gopkg-charmed"],
       "versioning": "regex:^(?<compatibility>(?:[a-z0-9]+-)*)rev(?<major>\\d+)$"
     },
     {
@@ -49,6 +50,12 @@
       "groupName": null,
       "automerge": true,
       "ignoreTests": true
+    },
+    {
+      "description": "gopkg: charm-ci tags gopkg-k8s-rev<N> on the commit charm revision N was built from, so the module ref and charm revision move together in one PR. Placed after the charmhub rule so this groupName overrides its null.",
+      "matchFileNames": ["deployments/gopkg/ps7/main.tf"],
+      "matchDepNames": ["gopkg-k8s", "github.com/canonical/gopkg-charmed"],
+      "groupName": "gopkg-k8s"
     }
   ]
 }
