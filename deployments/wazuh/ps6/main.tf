@@ -25,7 +25,7 @@ resource "openstack_objectstorage_container_v1" "wazuh_indexer_backup" {
 }
 
 module "wazuh" {
-  source               = "git::https://github.com/canonical/wazuh-server-operator//terraform/product?ref=wazuh-server-rev279&depth=1"
+  source               = "git::https://github.com/canonical/wazuh-server-operator//terraform/product?ref=wazuh-server-rev303&depth=1"
   server_model_name    = var.server_model_name
   server_model_uuid    = var.server_model_uuid
   indexer_model_name   = var.indexer_model_name
@@ -36,8 +36,8 @@ module "wazuh" {
 
   wazuh_indexer = {
     app_name = "wazuh-indexer-v5"
-    channel  = "4.14/stable"
-    # renovate: charm="wazuh-indexer" track="4.14" risk="stable" base="22.04" arch="amd64"
+    channel  = "4.14/edge"
+    # renovate: charm="wazuh-indexer" track="4.14" risk="edge" base="22.04" arch="amd64"
     revision    = 17
     config      = var.wazuh_indexer_config
     constraints = var.wazuh_indexer_constraints
@@ -52,17 +52,20 @@ module "wazuh" {
 
   wazuh_dashboard = {
     app_name = "wazuh-dashboard-v5"
-    channel  = "4.14/stable"
-    # renovate: charm="wazuh-dashboard" track="4.14" risk="stable" base="22.04" arch="amd64"
-    revision    = 25
+    channel  = "4.14/edge"
+    # renovate: charm="wazuh-dashboard" track="4.14" risk="edge" base="22.04" arch="amd64"
+    # NOTE: rev26 is anticipated (not yet confirmed published) - carries the wazuh.yml
+    # 4.14 snap data path fix from canonical/wazuh-dashboard-operator#67. Verify the
+    # actual published revision on Charmhub before merging; update if it differs.
+    revision    = 26
     constraints = var.wazuh_dashboard_constraints
   }
 
   wazuh_server = {
     app_name = "wazuh-server"
-    channel  = "4.14/stable"
-    # renovate: charm="wazuh-server" track="4.14" risk="stable" base="22.04" arch="amd64"
-    revision = 292
+    channel  = "4.14/edge"
+    # renovate: charm="wazuh-server" track="4.14" risk="edge" base="22.04" arch="amd64"
+    revision = 303
     config = {
       logs-ca-cert             = var.logs_ca_certificate
       custom-config-ssh-key    = "secret:${juju_secret.git_ssh_key.secret_id}"
