@@ -41,7 +41,6 @@ resource "juju_offer" "lego_certificates" {
 }
 
 resource "juju_access_offer" "lego_certificates" {
-  admin     = [var.model_name]
   offer_url = juju_offer.lego_certificates.url
   consume   = var.lego_certificates_consumers
 }
