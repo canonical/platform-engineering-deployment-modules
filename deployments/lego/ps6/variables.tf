@@ -1,9 +1,3 @@
-# tflint-ignore: terraform_unused_declarations
-variable "model_name" {
-  description = "Juju model name (deprecated, unused; kept for backward compatibility)"
-  type        = string
-}
-
 variable "model_uuid" {
   description = "Juju model for LEGO"
   type        = string

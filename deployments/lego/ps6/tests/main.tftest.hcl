@@ -13,7 +13,6 @@ run "basic_plan" {
   command = plan
 
   variables {
-    model_name                  = run.setup_tests.model_name
     model_uuid                  = run.setup_tests.model_uuid
     username                    = "test-user"
     password                    = "test-password"
