@@ -79,6 +79,7 @@ module "opencti" {
     # renovate: charm="self-signed-certificates" track="latest" risk="stable" base="22.04" arch="amd64"
     revision = 264
     base     = "ubuntu@22.04"
+    units    = var.self_signed_certificates_units
     config = {
       ca-common-name   = "CA"
       root-ca-validity = 3650

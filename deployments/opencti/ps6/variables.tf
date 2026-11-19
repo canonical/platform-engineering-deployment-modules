@@ -54,6 +54,12 @@ variable "opensearch_constraints" {
   type        = string
 }
 
+variable "self_signed_certificates_units" {
+  description = "Number of self-signed-certificates units"
+  type        = number
+  default     = 3
+}
+
 variable "prometheus_metrics_endpoint_offer_url" {
   description = "Prometheus metrics offer URL"
   type        = string
