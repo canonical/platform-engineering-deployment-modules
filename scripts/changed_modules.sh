@@ -7,7 +7,7 @@
 # $GITHUB_OUTPUT (or stdout when unset) as `k8s` and `lxd_mixed`.
 #
 # All modules are selected when no base is given, or when the diff touches the
-# workflows or the scripts. Otherwise only the modules that changed are selected.
+# test workflow or this script. Otherwise only the modules that changed are selected.
 #
 # Usage: changed_modules.sh [<base-sha> <head-sha>]
 
@@ -37,8 +37,8 @@ if [[ -z "${base}" || "${base}" =~ ^0+$ ]]; then
     select_all=1
     changed=()
 else
-    mapfile -t files < <(git diff --name-only "${base}" "${head}")
-    if printf '%s\n' "${files[@]}" | grep -qE '^(\.github/workflows|scripts)/'; then
+    mapfile -t files < <(git diff --name-only "${base}...${head}")
+    if printf '%s\n' "${files[@]}" | grep -qE '^(\.github/workflows/|scripts/changed_modules\.sh$)'; then
         select_all=1
     fi
     mapfile -t changed < <(

@@ -6,10 +6,10 @@ name: Terraform modules tests
 on:
   workflow_dispatch:
   pull_request:
-    paths:
-      - 'deployments/**'
-      - 'scripts/**'
-      - '.github/workflows/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   changes:
