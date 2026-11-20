@@ -8,18 +8,52 @@ on:
   pull_request:
     paths:
       - 'deployments/**'
+      - 'scripts/**'
       - '.github/workflows/**'
 
 jobs:
+  changes:
+    name: Select modules to test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      k8s: ${{ steps.select.outputs.k8s }}
+      lxd_mixed: ${{ steps.select.outputs.lxd_mixed }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          fetch-depth: 0
+      - id: select
+        run: |
+          scripts/changed_modules.sh \
+            "${{ github.event.pull_request.base.sha }}" \
+            "${{ github.event.pull_request.head.sha }}"
   terraform-k8s-tests:
+    needs: changes
+    if: ${{ needs.changes.outputs.k8s != '[]' }}
     uses: canonical/operator-workflows/.github/workflows/terraform_modules_test.yaml@main
     secrets: inherit
     with:
       k8s-controller: true
-      terraform-directories: '["deployments/falcosidekick/ps7", "deployments/bingo/ps7", "deployments/gopkg/ps7"]'
+      terraform-directories: ${{ needs.changes.outputs.k8s }}
   terraform-lxd-mixed-tests:
+    needs: changes
+    if: ${{ needs.changes.outputs.lxd_mixed != '[]' }}
     uses: canonical/operator-workflows/.github/workflows/terraform_modules_test.yaml@main
     secrets: inherit
     with:
       lxd-controller-with-k8s-cloud: true
-      terraform-directories: '["deployments/falco/ps7", "deployments/lego/ps6", "deployments/opencti/ps6", "deployments/wazuh/ps6", "deployments/mattermost/ps7"]'
+      terraform-directories: ${{ needs.changes.outputs.lxd_mixed }}
+  all-tests-passed:
+    name: all-tests-passed
+    if: ${{ always() }}
+    needs: [changes, terraform-k8s-tests, terraform-lxd-mixed-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check results
+        run: |
+          if [[ "${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}" == "true" ]]; then
+            echo "Some jobs failed or were cancelled."
+            exit 1
+          fi
