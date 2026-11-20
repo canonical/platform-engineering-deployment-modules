@@ -56,7 +56,7 @@ module "opencti" {
   opencti = {
     channel = "latest/edge"
     # renovate: charm="opencti" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision    = 132
+    revision    = 134
     base        = "ubuntu@24.04"
     constraints = "arch=amd64"
     units       = 1
@@ -259,7 +259,7 @@ resource "juju_application" "opencti-abuseipdb-ipblacklist-connector" {
     name    = "opencti-abuseipdb-ipblacklist-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-abuseipdb-ipblacklist-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 121
+    revision = 134
     base     = "ubuntu@24.04"
   }
 
@@ -282,7 +282,7 @@ resource "juju_application" "opencti-alienvault-connector" {
     name    = "opencti-alienvault-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-alienvault-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 124
+    revision = 134
     base     = "ubuntu@24.04"
   }
 
@@ -310,7 +310,7 @@ resource "juju_application" "opencti-cisa-kev-connector" {
     name    = "opencti-cisa-kev-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-cisa-kev-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 122
+    revision = 131
     base     = "ubuntu@24.04"
   }
 
@@ -332,7 +332,7 @@ resource "juju_application" "opencti-crowdstrike-connector" {
     name    = "opencti-crowdstrike-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-crowdstrike-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 124
+    revision = 133
     base     = "ubuntu@24.04"
   }
 
@@ -374,7 +374,7 @@ resource "juju_application" "opencti-cyber-campaign-connector" {
     name    = "opencti-cyber-campaign-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-cyber-campaign-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 119
+    revision = 133
     base     = "ubuntu@24.04"
   }
 
@@ -395,7 +395,7 @@ resource "juju_application" "opencti-export-file-csv-connector" {
     name    = "opencti-export-file-csv-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-export-file-csv-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 119
+    revision = 133
     base     = "ubuntu@24.04"
   }
 
@@ -412,7 +412,7 @@ resource "juju_application" "opencti-export-file-stix-connector" {
     name    = "opencti-export-file-stix-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-export-file-stix-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 124
+    revision = 133
     base     = "ubuntu@24.04"
   }
 
