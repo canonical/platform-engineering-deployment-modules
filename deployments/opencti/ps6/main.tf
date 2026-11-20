@@ -56,7 +56,7 @@ module "opencti" {
   opencti = {
     channel = "latest/edge"
     # renovate: charm="opencti" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision    = 132
+    revision    = 133
     base        = "ubuntu@24.04"
     constraints = "arch=amd64"
     units       = 1
