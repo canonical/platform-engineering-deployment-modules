@@ -8,12 +8,18 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: tag-on-merge
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v7.0.1
+        with:
+          fetch-depth: 0
 
       - name: Fetch tags
         run: git fetch --tags
@@ -57,3 +63,11 @@ jobs:
           name: Release ${{ steps.generate_tag.outputs.next_tag }}
           tag_name: ${{ steps.generate_tag.outputs.next_tag }}
           generate_release_notes: true
+
+      - name: Tag changed modules
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          scripts/tag_modules.sh "${{ github.event.before }}" "${{ github.sha }}"
