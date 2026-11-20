@@ -16,7 +16,7 @@ module "lego" {
   app_name = "lego"
   channel  = "4/candidate"
   # renovate: charm="lego" track="4" risk="candidate" base="22.04" arch="amd64"
-  revision = 128
+  revision = 562
   config = {
     "email" : "is-admin@canonical.com",
     "plugin" : "httpreq",
@@ -41,7 +41,6 @@ resource "juju_offer" "lego_certificates" {
 }
 
 resource "juju_access_offer" "lego_certificates" {
-  admin     = [var.model_name]
   offer_url = juju_offer.lego_certificates.url
   consume   = var.lego_certificates_consumers
 }

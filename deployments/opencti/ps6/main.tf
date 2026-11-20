@@ -56,7 +56,7 @@ module "opencti" {
   opencti = {
     channel = "latest/edge"
     # renovate: charm="opencti" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision    = 132
+    revision    = 133
     base        = "ubuntu@24.04"
     constraints = "arch=amd64"
     units       = 1
@@ -169,7 +169,7 @@ resource "juju_application" "lego" {
     name    = "lego"
     channel = "4/candidate"
     # renovate: charm="lego" track="4" risk="candidate" base="22.04" arch="amd64"
-    revision = 128
+    revision = 562
   }
 
   config = {
@@ -259,7 +259,7 @@ resource "juju_application" "opencti-abuseipdb-ipblacklist-connector" {
     name    = "opencti-abuseipdb-ipblacklist-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-abuseipdb-ipblacklist-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 121
+    revision = 133
     base     = "ubuntu@24.04"
   }
 
