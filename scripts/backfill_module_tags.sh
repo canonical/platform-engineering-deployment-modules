@@ -19,6 +19,7 @@ set -euo pipefail
 
 deployments_repo="${1:-}"
 dry_run="${DRY_RUN:-0}"
+created=()
 
 create_tag() {
     local tag="$1" commit="$2"
@@ -28,7 +29,7 @@ create_tag() {
     echo "${tag} -> ${commit}"
     if [[ "${dry_run}" != "1" ]]; then
         git tag "${tag}" "${commit}"
-        git push origin "${tag}"
+        created+=("${tag}")
     fi
 }
 
@@ -39,7 +40,12 @@ if [[ -n "${deployments_repo}" ]]; then
         version="${version%%&*}"
         module="${module_path#deployments/}"
         module="${module//\//-}"
-        create_tag "${module}/${version}" "$(git rev-list -n 1 "main.${version}")"
+        commit="$(git rev-list -n 1 "main.${version}" 2>/dev/null || true)"
+        if [[ -z "${commit}" ]]; then
+            echo "error: legacy tag main.${version} not found (git fetch --tags?)" >&2
+            exit 1
+        fi
+        create_tag "${module}/${version}" "${commit}"
     done < <(
         grep -rhoE 'deployments/[^/?]+/[^/?]+\?ref=main\.[0-9.]+' \
             --include='*.tf' "${deployments_repo}/deployments" | sort -u
@@ -58,3 +64,7 @@ for dir in deployments/*/*/; do
     fi
     create_tag "${module}/${legacy_tag#main.}" "$(git rev-list -n 1 "${legacy_tag}")"
 done
+
+if [[ ${#created[@]} -gt 0 ]]; then
+    git push origin "${created[@]/#/refs/tags/}"
+fi

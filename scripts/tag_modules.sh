@@ -10,7 +10,7 @@
 # Environment:
 #   DRY_RUN=1   print the tags that would be created without creating them
 #   GH_TOKEN    when set (and `gh` is available), a GitHub release is created
-#               for every new tag
+#               for every new tag, with the commits that touched the module
 
 set -euo pipefail
 
@@ -24,23 +24,28 @@ fi
 
 date_part="$(date +'%Y.%m.%d')"
 
-mapfile -t modules < <(
+mapfile -t dirs < <(
     git diff --name-only "${before}" "${after}" \
-        | sed -nE 's#^deployments/([^/]+)/([^/]+)/.*#\1-\2#p' \
+        | sed -nE 's#^(deployments/[^/]+/[^/]+)/.*#\1#p' \
         | sort -u
 )
 
-if [[ ${#modules[@]} -eq 0 ]]; then
+if [[ ${#dirs[@]} -eq 0 ]]; then
     echo "No module changed, nothing to tag."
     exit 0
 fi
 
-for module in "${modules[@]}"; do
-    # The app name can contain dashes, the site never does.
-    site="${module##*-}"
-    app="${module%-"${site}"}"
-    if [[ ! -d "deployments/${app}/${site}" ]]; then
+for dir in "${dirs[@]}"; do
+    module="${dir#deployments/}"
+    module="${module//\//-}"
+    if [[ ! -d "${dir}" ]]; then
         echo "Skipping ${module}: module directory was removed."
+        continue
+    fi
+
+    # Already tagged (rerun of a failed job): do not create a second tag.
+    if [[ -n "$(git tag --points-at "${after}" --list "${module}/*")" ]]; then
+        echo "Skipping ${module}: ${after} is already tagged."
         continue
     fi
 
@@ -60,10 +65,12 @@ for module in "${modules[@]}"; do
     git push origin "${tag}"
 
     if [[ -n "${GH_TOKEN:-}" ]] && command -v gh >/dev/null 2>&1; then
-        args=(--title "${tag}" --generate-notes --verify-tag)
+        range="${after}"
         if [[ -n "${last_tag}" ]]; then
-            args+=(--notes-start-tag "${last_tag}")
+            range="${last_tag}..${after}"
         fi
-        gh release create "${tag}" "${args[@]}"
+        notes="$(git log --no-merges --format='- %s (%h)' "${range}" -- "${dir}")"
+        gh release create "${tag}" --title "${tag}" --notes "${notes:-No notes.}" \
+            --verify-tag --latest=false
     fi
 done
