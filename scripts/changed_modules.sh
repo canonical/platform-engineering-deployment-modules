@@ -10,6 +10,7 @@
 # test workflow or this script. Otherwise only the modules that changed are selected.
 #
 # Usage: changed_modules.sh [<base-sha> <head-sha>]
+# Example (local): scripts/changed_modules.sh origin/main HEAD
 
 set -euo pipefail
 
@@ -37,7 +38,9 @@ if [[ -z "${base}" || "${base}" =~ ^0+$ ]]; then
     select_all=1
     changed=()
 else
-    mapfile -t files < <(git diff --name-only "${base}...${head}")
+    # Captured first so a failing diff aborts the script instead of selecting nothing.
+    diff_output="$(git diff --name-only "${base}...${head}")"
+    mapfile -t files <<< "${diff_output}"
     if printf '%s\n' "${files[@]}" | grep -qE '^(\.github/workflows/|scripts/changed_modules\.sh$)'; then
         select_all=1
     fi
@@ -48,11 +51,28 @@ else
     )
 fi
 
+contains() {
+    local needle="$1" item
+    shift
+    for item in "$@"; do
+        [[ "${item}" == "${needle}" ]] && return 0
+    done
+    return 1
+}
+
 # Fail on modules that exist but are not assigned to a test group.
 for dir in deployments/*/*/; do
     dir="${dir%/}"
-    if [[ ! " ${all_modules[*]} " =~ " ${dir} " ]]; then
+    if ! contains "${dir}" "${all_modules[@]}"; then
         echo "::error::${dir} is not assigned to a test group in scripts/changed_modules.sh" >&2
+        exit 1
+    fi
+done
+
+# Fail on modules listed in a test group that no longer exist.
+for module in "${all_modules[@]}"; do
+    if [[ ! -d "${module}" ]]; then
+        echo "::error::${module} is listed in scripts/changed_modules.sh but does not exist" >&2
         exit 1
     fi
 done
@@ -60,8 +80,7 @@ done
 selected() {
     local module
     for module in "$@"; do
-        [[ -d "${module}" ]] || continue
-        if [[ "${select_all}" == "1" || " ${changed[*]:-} " =~ " ${module} " ]]; then
+        if [[ "${select_all}" == "1" ]] || contains "${module}" "${changed[@]}"; then
             echo "${module}"
         fi
     done
