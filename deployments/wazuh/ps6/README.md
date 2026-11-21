@@ -37,3 +37,6 @@ Terraform configuration.
 
 The default Juju provider is used for resources inside the Kubernetes model. 
 The `wazuh_indexer` Juju provider is used for all resources inside the Wazuh indexer model, the `wazuh_dashboard`provider, for all resources inside the Wazuh dashboard model`.
+
+<!-- BEGIN_TF_DOCS -->
+<!-- END_TF_DOCS -->
