@@ -21,35 +21,34 @@ N/A
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.6 |
-| <a name="requirement_juju"></a> [juju](#requirement\_juju) | ~> 0.12.0 |
-| <a name="requirement_vault"></a> [vault](#requirement\_vault) | ~> 4.3.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.12.0 |
+| <a name="requirement_juju"></a> [juju](#requirement\_juju) | >= 1.0, < 3.0 |
+| <a name="requirement_vault"></a> [vault](#requirement\_vault) | >= 5.6.0, < 6.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_juju"></a> [juju](#provider\_juju) | ~> 0.12.0 |
-| <a name="provider_vault"></a> [vault](#provider\_vault) | ~> 4.3.0 |
+| <a name="provider_juju"></a> [juju](#provider\_juju) | >= 1.0, < 3.0 |
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_falco"></a> [falco](#module\_falco) | git::https://github.com/canonical/falco-operators//falco-operator/terraform | falco-rev125&depth=1 |
 
 ## Resources
 
 | Name | Type |
 |------|------|
-| [juju_model.service_model](https://registry.terraform.io/providers/juju/juju/latest/docs/data-sources/model) | data source |
-| [vault_generic_secret.juju_controller_certificate](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/generic_secret) | data source |
-| [vault_generic_secret.juju_credentials](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/generic_secret) | data source |
+| [juju_integration.falco_falcosidekick_http_endpoint](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_approle_role_id"></a> [approle\_role\_id](#input\_approle\_role\_id) | Approle Role ID | `string` | n/a | yes |
-| <a name="input_approle_secret_id"></a> [approle\_secret\_id](#input\_approle\_secret\_id) | Approle Secret ID | `string` | n/a | yes |
+| <a name="input_falcosidekick_http_endpoint_offer_url"></a> [falcosidekick\_http\_endpoint\_offer\_url](#input\_falcosidekick\_http\_endpoint\_offer\_url) | Falco HTTP endpoint offer | `string` | n/a | yes |
+| <a name="input_model_uuid"></a> [model\_uuid](#input\_model\_uuid) | Juju model UUID | `string` | n/a | yes |
 
 ## Outputs
 

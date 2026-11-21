@@ -127,34 +127,107 @@ credentials requires `additional_vault_token_policies`.
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.6 |
-| <a name="requirement_juju"></a> [juju](#requirement\_juju) | ~> 0.12.0 |
-| <a name="requirement_vault"></a> [vault](#requirement\_vault) | ~> 4.3.0 |
+| <a name="requirement_juju"></a> [juju](#requirement\_juju) | >= 1.0, < 3.0 |
+| <a name="requirement_openstack"></a> [openstack](#requirement\_openstack) | 3.4.0 |
+| <a name="requirement_vault"></a> [vault](#requirement\_vault) | >= 5.6.0, < 6.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_juju"></a> [juju](#provider\_juju) | ~> 0.12.0 |
-| <a name="provider_vault"></a> [vault](#provider\_vault) | ~> 4.3.0 |
+| <a name="provider_juju"></a> [juju](#provider\_juju) | >= 1.0, < 3.0 |
+| <a name="provider_juju.opencti_db"></a> [juju.opencti\_db](#provider\_juju.opencti\_db) | >= 1.0, < 3.0 |
+| <a name="provider_openstack"></a> [openstack](#provider\_openstack) | 3.4.0 |
+| <a name="provider_vault"></a> [vault](#provider\_vault) | >= 5.6.0, < 6.0 |
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_opencti"></a> [opencti](#module\_opencti) | git::https://github.com/canonical/opencti-operator//terraform/product | opencti-rev131&depth=1 |
 
 ## Resources
 
 | Name | Type |
 |------|------|
-| [juju_model.service_model](https://registry.terraform.io/providers/juju/juju/latest/docs/data-sources/model) | data source |
-| [vault_generic_secret.juju_controller_certificate](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/generic_secret) | data source |
-| [vault_generic_secret.juju_credentials](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/generic_secret) | data source |
+| [juju_access_offer.opencti_connector](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/access_offer) | resource |
+| [juju_access_secret.lego_credentials_access](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/access_secret) | resource |
+| [juju_access_secret.opencti-admin-access](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/access_secret) | resource |
+| [juju_application.gateway-api-integrator](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_application.gateway-route-configurator](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_application.grafana-agent](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_application.landscape-client](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_application.lego](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_application.opencti-abuseipdb-ipblacklist-connector](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_application.opencti-alienvault-connector](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_application.opencti-cisa-kev-connector](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_application.opencti-crowdstrike-connector](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_application.opencti-cyber-campaign-connector](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_application.opencti-export-file-csv-connector](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_application.opencti-export-file-stix-connector](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_application.opencti-export-file-txt-connector](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_application.opencti-import-document-connector](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_application.opencti-import-file-stix-connector](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_application.opencti-ipinfo-connector](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_application.opencti-malwarebazaar-connector](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_application.opencti-misp-feed-connector](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_application.opencti-mitre-connector](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_application.opencti-sekoia-connector](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_application.opencti-urlhaus-connector](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_application.opencti-vxvault-connector](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_application.opencti-woap-connector](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_application.ubuntu_pro](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_integration.gateway-api-route](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_integration.grafana-agent-cos](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_integration.ingress](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_integration.landscape_client](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_integration.opencti-connector](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_integration.opencti-connector-loki](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_integration.opencti-grafana](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_integration.opencti-loki](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_integration.opencti-prometheus-scrape](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_integration.tls-certificates](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_integration.ubuntu_pro](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_integration.woap_connector_indexer](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_offer.opencti_connector](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/offer) | resource |
+| [juju_secret.lego_credentials](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/secret) | resource |
+| [juju_secret.opencti-admin](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/secret) | resource |
+| [openstack_identity_ec2_credential_v3.opencti_s3_creds](https://registry.terraform.io/providers/terraform-provider-openstack/openstack/3.4.0/docs/resources/identity_ec2_credential_v3) | resource |
+| [openstack_identity_ec2_credential_v3.opensearch_backup_s3_creds](https://registry.terraform.io/providers/terraform-provider-openstack/openstack/3.4.0/docs/resources/identity_ec2_credential_v3) | resource |
+| [openstack_objectstorage_container_v1.opencti](https://registry.terraform.io/providers/terraform-provider-openstack/openstack/3.4.0/docs/resources/objectstorage_container_v1) | resource |
+| [openstack_objectstorage_container_v1.opensearch_backup](https://registry.terraform.io/providers/terraform-provider-openstack/openstack/3.4.0/docs/resources/objectstorage_container_v1) | resource |
+| [vault_generic_secret.abuseipdb-ipblacklist](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/generic_secret) | data source |
+| [vault_generic_secret.alienvault](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/generic_secret) | data source |
+| [vault_generic_secret.crowdstrike](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/generic_secret) | data source |
+| [vault_generic_secret.ipinfo](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/generic_secret) | data source |
+| [vault_generic_secret.landscape_registration_key](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/generic_secret) | data source |
+| [vault_generic_secret.lego_credentials](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/generic_secret) | data source |
+| [vault_generic_secret.opencti-admin](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/generic_secret) | data source |
+| [vault_generic_secret.s3](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/generic_secret) | data source |
+| [vault_generic_secret.s3_opensearch](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/generic_secret) | data source |
+| [vault_generic_secret.sekoia](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/generic_secret) | data source |
+| [vault_generic_secret.ubuntu_pro_token](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/generic_secret) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_approle_role_id"></a> [approle\_role\_id](#input\_approle\_role\_id) | Approle Role ID | `string` | n/a | yes |
-| <a name="input_approle_secret_id"></a> [approle\_secret\_id](#input\_approle\_secret\_id) | Approle Secret ID | `string` | n/a | yes |
+| <a name="input_db_model_name"></a> [db\_model\_name](#input\_db\_model\_name) | Juju model for OpenCTI DB | `string` | n/a | yes |
+| <a name="input_db_model_uuid"></a> [db\_model\_uuid](#input\_db\_model\_uuid) | Juju model UUID for OpenCTI DB | `string` | n/a | yes |
+| <a name="input_grafana_offer_url"></a> [grafana\_offer\_url](#input\_grafana\_offer\_url) | Grafana offer URL | `string` | n/a | yes |
+| <a name="input_indexer_offer_url"></a> [indexer\_offer\_url](#input\_indexer\_offer\_url) | Indexer offer URL | `string` | n/a | yes |
+| <a name="input_loki_offer_url"></a> [loki\_offer\_url](#input\_loki\_offer\_url) | Loki offer URL | `string` | n/a | yes |
+| <a name="input_model_name"></a> [model\_name](#input\_model\_name) | Juju model for OpenCTI | `string` | n/a | yes |
+| <a name="input_model_uuid"></a> [model\_uuid](#input\_model\_uuid) | Juju model UUID for OpenCTI | `string` | n/a | yes |
+| <a name="input_opencti_consumers"></a> [opencti\_consumers](#input\_opencti\_consumers) | List of models that consume the OpenCTI offer | `list(string)` | n/a | yes |
+| <a name="input_opencti_external_hostname"></a> [opencti\_external\_hostname](#input\_opencti\_external\_hostname) | The external hostname for OpenCTI | `string` | n/a | yes |
+| <a name="input_opensearch_config"></a> [opensearch\_config](#input\_opensearch\_config) | OpenSearch configuration | `map(string)` | `{}` | no |
+| <a name="input_opensearch_constraints"></a> [opensearch\_constraints](#input\_opensearch\_constraints) | OpenSearch constraints | `string` | n/a | yes |
+| <a name="input_prometheus_metrics_endpoint_offer_url"></a> [prometheus\_metrics\_endpoint\_offer\_url](#input\_prometheus\_metrics\_endpoint\_offer\_url) | Prometheus metrics offer URL | `string` | n/a | yes |
+| <a name="input_prometheus_remote_write_offer_url"></a> [prometheus\_remote\_write\_offer\_url](#input\_prometheus\_remote\_write\_offer\_url) | Prometheus removete write offer URL | `string` | n/a | yes |
+| <a name="input_rabbitmq_constraints"></a> [rabbitmq\_constraints](#input\_rabbitmq\_constraints) | RabbitMQ constraints | `string` | n/a | yes |
+| <a name="input_redis_storage"></a> [redis\_storage](#input\_redis\_storage) | Redis storage | `string` | n/a | yes |
+| <a name="input_self_signed_certificates_units"></a> [self\_signed\_certificates\_units](#input\_self\_signed\_certificates\_units) | Number of self-signed-certificates units | `number` | `3` | no |
 
 ## Outputs
 
