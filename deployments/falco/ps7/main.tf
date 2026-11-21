@@ -12,8 +12,8 @@ resource "juju_integration" "falco_falcosidekick_http_endpoint" {
   model_uuid = var.model_uuid
 
   application {
-    name     = module.falco.app_name
-    endpoint = module.falco.requires.http_endpoint
+    name     = module.falco.application.name
+    endpoint = module.falco.requires.http_endpoint.endpoint
   }
 
   application {
