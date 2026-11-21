@@ -25,6 +25,8 @@ jobs:
         deployments/bingo/ps7,
         deployments/falco/ps7,
         deployments/falcosidekick/ps7,
+        deployments/gopkg/ps7,
         deployments/lego/ps6,
+        deployments/mattermost/ps7,
         deployments/opencti/ps6,
         deployments/wazuh/ps6
