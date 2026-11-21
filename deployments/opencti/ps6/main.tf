@@ -68,7 +68,7 @@ module "opencti" {
   opensearch = {
     channel = "2/edge"
     # renovate: charm="opensearch" track="2" risk="edge" base="22.04" arch="amd64"
-    revision    = 373
+    revision    = 416
     base        = "ubuntu@22.04"
     constraints = var.opensearch_constraints
     config      = var.opensearch_config
@@ -213,7 +213,7 @@ resource "juju_application" "gateway-route-configurator" {
   charm {
     name = "gateway-route-configurator"
     # renovate: charm="gateway-route-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 33
+    revision = 34
     channel  = "latest/edge"
   }
 
@@ -429,7 +429,7 @@ resource "juju_application" "opencti-export-file-txt-connector" {
     name    = "opencti-export-file-txt-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-export-file-txt-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 123
+    revision = 132
     base     = "ubuntu@24.04"
   }
 
@@ -446,7 +446,7 @@ resource "juju_application" "opencti-import-document-connector" {
     name    = "opencti-import-document-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-import-document-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 126
+    revision = 135
     base     = "ubuntu@24.04"
   }
 
@@ -468,7 +468,7 @@ resource "juju_application" "opencti-import-file-stix-connector" {
     name    = "opencti-import-file-stix-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-import-file-stix-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 128
+    revision = 137
     base     = "ubuntu@24.04"
   }
 
@@ -488,7 +488,7 @@ resource "juju_application" "opencti-ipinfo-connector" {
     name    = "opencti-ipinfo-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-ipinfo-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 121
+    revision = 130
     base     = "ubuntu@24.04"
   }
 
@@ -511,7 +511,7 @@ resource "juju_application" "opencti-malwarebazaar-connector" {
     name    = "opencti-malwarebazaar-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-malwarebazaar-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 121
+    revision = 129
     base     = "ubuntu@24.04"
   }
 
@@ -531,7 +531,7 @@ resource "juju_application" "opencti-misp-feed-connector" {
     name    = "opencti-misp-feed-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-misp-feed-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 124
+    revision = 132
     base     = "ubuntu@24.04"
   }
 
@@ -551,7 +551,7 @@ resource "juju_application" "opencti-mitre-connector" {
     name    = "opencti-mitre-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-mitre-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 125
+    revision = 132
     base     = "ubuntu@24.04"
   }
 
@@ -571,7 +571,7 @@ resource "juju_application" "opencti-sekoia-connector" {
     name    = "opencti-sekoia-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-sekoia-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 124
+    revision = 132
     base     = "ubuntu@24.04"
   }
 
@@ -592,7 +592,7 @@ resource "juju_application" "opencti-urlhaus-connector" {
     name    = "opencti-urlhaus-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-urlhaus-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 121
+    revision = 127
     base     = "ubuntu@24.04"
   }
 
@@ -615,7 +615,7 @@ resource "juju_application" "opencti-vxvault-connector" {
     name    = "opencti-vxvault-connector"
     channel = "latest/edge"
     # renovate: charm="opencti-vxvault-connector" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 121
+    revision = 133
     base     = "ubuntu@24.04"
   }
 
@@ -832,7 +832,7 @@ resource "juju_application" "ubuntu_pro" {
   charm {
     name = "ubuntu-pro"
     # renovate: charm="ubuntu-pro" track="latest" risk="stable" base="22.04" arch="amd64"
-    revision = 29
+    revision = 48
     channel  = "latest/stable"
     base     = "ubuntu@22.04"
   }
