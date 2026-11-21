@@ -52,10 +52,45 @@
       "ignoreTests": true
     },
     {
-      "description": "gopkg: charm-ci tags gopkg-k8s-rev<N> on the commit charm revision N was built from, so the module ref and charm revision move together in one PR. Placed after the charmhub rule so this groupName overrides its null.",
-      "matchFileNames": ["deployments/gopkg/ps7/main.tf"],
-      "matchDepNames": ["gopkg-k8s", "github.com/canonical/gopkg-charmed"],
-      "groupName": "gopkg-k8s"
+      "description": "One PR per module (deployments/<app>/<site>), so each merge produces a single module tag. Must stay after the charmhub rule so groupName overrides its null. separateMajorMinor is off because charm revision bumps count as major updates and would otherwise split the group. Every module needs its own rule here (see AGENTS.md). gopkg/ps7 relies on this to bump its module ref and charm revision together.",
+      "matchFileNames": ["deployments/bingo/ps7/**"],
+      "groupName": "bingo-ps7",
+      "separateMajorMinor": false
+    },
+    {
+      "matchFileNames": ["deployments/falco/ps7/**"],
+      "groupName": "falco-ps7",
+      "separateMajorMinor": false
+    },
+    {
+      "matchFileNames": ["deployments/falcosidekick/ps7/**"],
+      "groupName": "falcosidekick-ps7",
+      "separateMajorMinor": false
+    },
+    {
+      "matchFileNames": ["deployments/gopkg/ps7/**"],
+      "groupName": "gopkg-ps7",
+      "separateMajorMinor": false
+    },
+    {
+      "matchFileNames": ["deployments/lego/ps6/**"],
+      "groupName": "lego-ps6",
+      "separateMajorMinor": false
+    },
+    {
+      "matchFileNames": ["deployments/mattermost/ps7/**"],
+      "groupName": "mattermost-ps7",
+      "separateMajorMinor": false
+    },
+    {
+      "matchFileNames": ["deployments/opencti/ps6/**"],
+      "groupName": "opencti-ps6",
+      "separateMajorMinor": false
+    },
+    {
+      "matchFileNames": ["deployments/wazuh/ps6/**"],
+      "groupName": "wazuh-ps6",
+      "separateMajorMinor": false
     }
   ]
 }
