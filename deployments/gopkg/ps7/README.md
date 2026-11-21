@@ -83,19 +83,27 @@ input from the consuming deployment.
 
 | Name | Type |
 |------|------|
+| [juju_application.opentelemetry_collector](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_integration.gopkg_dashboards](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.gopkg_ingress](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_integration.gopkg_logging](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_integration.gopkg_metrics](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_integration.otelcol_ca_cert](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_integration.otelcol_dashboards](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_integration.otelcol_otlp](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_cos_aggregator_ca_cert_offer_url"></a> [cos\_aggregator\_ca\_cert\_offer\_url](#input\_cos\_aggregator\_ca\_cert\_offer\_url) | COS aggregator offer for the collector's receive-ca-cert endpoint (certificate\_transfer:send-ca-cert), e.g. <owner>/k8s-ps7-o11y-cos-aggregator.self-signed-certificates-aggregator. | `string` | n/a | yes |
+| <a name="input_cos_aggregator_dashboards_offer_url"></a> [cos\_aggregator\_dashboards\_offer\_url](#input\_cos\_aggregator\_dashboards\_offer\_url) | COS aggregator offer for the collector's grafana-dashboards-provider endpoint (grafana\_dashboard:grafana-dashboards-consumer). On PS7 it is the same otelcol-aggregator offer as the OTLP one. gopkg's dashboards reach Central COS Grafana only over this relation. | `string` | n/a | yes |
+| <a name="input_cos_aggregator_otlp_offer_url"></a> [cos\_aggregator\_otlp\_offer\_url](#input\_cos\_aggregator\_otlp\_offer\_url) | COS aggregator offer for the collector's send-otlp endpoint (otlp:receive-otlp), e.g. <owner>/k8s-ps7-o11y-cos-aggregator.otelcol-aggregator. Metrics, logs and alert rules travel over it. | `string` | n/a | yes |
 | <a name="input_external_hostname"></a> [external\_hostname](#input\_external\_hostname) | Public hostname for gopkg. Configured on ingress-configurator and threaded into gopkg's hostname config. | `string` | n/a | yes |
 | <a name="input_gopkg_config"></a> [gopkg\_config](#input\_gopkg\_config) | gopkg charm configuration. `hostname` is set from external\_hostname; other keys are passed through. | `map(string)` | `{}` | no |
 | <a name="input_gopkg_units"></a> [gopkg\_units](#input\_gopkg\_units) | Number of gopkg units to deploy | `number` | `1` | no |
-| <a name="input_grafana_dashboard_offer_url"></a> [grafana\_dashboard\_offer\_url](#input\_grafana\_dashboard\_offer\_url) | Grafana dashboard offer URL for gopkg's grafana-dashboard endpoint. Leave null to skip. | `string` | `null` | no |
-| <a name="input_loki_offer_url"></a> [loki\_offer\_url](#input\_loki\_offer\_url) | Loki offer URL for gopkg to push logs to | `string` | n/a | yes |
 | <a name="input_model_uuid"></a> [model\_uuid](#input\_model\_uuid) | Juju model UUID | `string` | n/a | yes |
-| <a name="input_prometheus_offer_url"></a> [prometheus\_offer\_url](#input\_prometheus\_offer\_url) | Prometheus scrape offer URL for gopkg's metrics-endpoint. Leave null to skip. | `string` | `null` | no |
+| <a name="input_opentelemetry_collector_config"></a> [opentelemetry\_collector\_config](#input\_opentelemetry\_collector\_config) | opentelemetry-collector-k8s charm configuration. Central COS alerts need IS approval; once approved, set forward\_alert\_rules = "true" and extra\_alert\_labels = "canonical\_team=<team>". | `map(string)` | `{}` | no |
 
 ## Outputs
 
