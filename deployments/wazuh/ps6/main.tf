@@ -467,8 +467,30 @@ resource "juju_application" "landscape_client_dashboard" {
   provider = juju.wazuh_dashboard
 }
 
+resource "juju_application" "landscape_client_noble" {
+  name       = "landscape-client-noble"
+  model_uuid = var.indexer_model_uuid
+
+  charm {
+    name = "landscape-client"
+    # renovate: charm="landscape-client" track="latest" risk="stable" base="24.04" arch="amd64"
+    revision = 98
+    channel  = "latest/stable"
+    base     = "ubuntu@24.04"
+  }
+
+  config = {
+    registration-key = data.vault_generic_secret.landscape_registration_key.data["key"]
+    url              = "https://landscape.is.canonical.com/message-system"
+    ping-url         = "http://landscape.is.canonical.com/ping"
+    account-name     = "standalone"
+  }
+
+  provider = juju.wazuh_indexer
+}
+
 resource "juju_integration" "landscape_client" {
-  for_each   = local.machine_indexer_charms
+  for_each   = local.machine_indexer_charms_2204
   model_uuid = var.indexer_model_uuid
 
   application {
@@ -477,6 +499,22 @@ resource "juju_integration" "landscape_client" {
   }
   application {
     name     = juju_application.landscape_client.name
+    endpoint = "container"
+  }
+
+  provider = juju.wazuh_indexer
+}
+
+resource "juju_integration" "landscape_client_noble" {
+  for_each   = local.machine_indexer_charms_2404
+  model_uuid = var.indexer_model_uuid
+
+  application {
+    name     = each.key
+    endpoint = "juju-info"
+  }
+  application {
+    name     = juju_application.landscape_client_noble.name
     endpoint = "container"
   }
 
