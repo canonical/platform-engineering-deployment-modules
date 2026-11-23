@@ -429,10 +429,10 @@ resource "juju_application" "landscape_client" {
 
   charm {
     name = "landscape-client"
-    # renovate: charm="landscape-client" track="latest" risk="stable" base="24.04" arch="amd64"
-    revision = 98
+    # renovate: charm="landscape-client" track="latest" risk="stable" base="22.04" arch="amd64"
+    revision = 97
     channel  = "latest/stable"
-    base     = "ubuntu@24.04"
+    base     = "ubuntu@22.04"
   }
 
   config = {
@@ -451,10 +451,10 @@ resource "juju_application" "landscape_client_dashboard" {
 
   charm {
     name = "landscape-client"
-    # renovate: charm="landscape-client" track="latest" risk="stable" base="24.04" arch="amd64"
-    revision = 98
+    # renovate: charm="landscape-client" track="latest" risk="stable" base="22.04" arch="amd64"
+    revision = 97
     channel  = "latest/stable"
-    base     = "ubuntu@24.04"
+    base     = "ubuntu@22.04"
   }
 
   config = {
