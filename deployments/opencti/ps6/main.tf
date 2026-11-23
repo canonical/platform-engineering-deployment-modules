@@ -261,6 +261,12 @@ resource "juju_integration" "grafana-agent-opensearch" {
   depends_on = [module.opencti]
 }
 
+# Keep the live cos-agent relation that the previous OpenSearch module created.
+moved {
+  from = module.opencti.module.opensearch.juju_integration.grafana_agent-opensearch-integration
+  to   = juju_integration.grafana-agent-opensearch
+}
+
 resource "juju_application" "opencti-abuseipdb-ipblacklist-connector" {
   name       = "opencti-abuseipdb-ipblacklist-connector"
   model_uuid = var.model_uuid
