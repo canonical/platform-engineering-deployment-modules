@@ -45,11 +45,10 @@ resource "openstack_objectstorage_container_v1" "opensearch_backup" {
 }
 
 module "opencti" {
-  source        = "git::https://github.com/canonical/opencti-operator//terraform/product?ref=tf-product-2.1.0&depth=1"
+  source        = "git::https://github.com/canonical/opencti-operator//terraform/product?ref=tf-product-2.8.0&depth=1"
   model_uuid    = var.model_uuid
   db_model_uuid = var.db_model_uuid
   model_user    = var.model_name
-  db_model_user = var.db_model_name
 
   opencti = {
     channel = "latest/edge"
@@ -798,7 +797,6 @@ resource "juju_offer" "opencti_connector" {
 }
 
 resource "juju_access_offer" "opencti_connector" {
-  admin     = [var.model_name]
   offer_url = juju_offer.opencti_connector.url
   consume   = var.opencti_consumers
 }
