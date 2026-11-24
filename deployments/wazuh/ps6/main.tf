@@ -74,7 +74,7 @@ module "wazuh" {
   traefik_k8s = {
     channel = "latest/stable"
     # renovate: charm="traefik-k8s" track="latest" risk="stable" base="20.04" arch="amd64"
-    revision = 417
+    revision = 506
     config = {
       external_hostname = var.wazuh_external_hostname
     }
@@ -85,7 +85,7 @@ module "wazuh" {
     app_name = "self-signed-certificates"
     channel  = "1/edge"
     # renovate: charm="self-signed-certificates" track="1" risk="edge" base="22.04" arch="amd64"
-    revision = 704
+    revision = 734
     base     = "ubuntu@22.04"
 
     config = {
@@ -544,7 +544,7 @@ resource "juju_application" "ubuntu_pro" {
   charm {
     name = "ubuntu-pro"
     # renovate: charm="ubuntu-pro" track="latest" risk="stable" base="22.04" arch="amd64"
-    revision = 29
+    revision = 48
     channel  = "latest/stable"
     base     = "ubuntu@22.04"
   }
@@ -564,7 +564,7 @@ resource "juju_application" "ubuntu_pro_dashboard" {
   charm {
     name = "ubuntu-pro"
     # renovate: charm="ubuntu-pro" track="latest" risk="stable" base="22.04" arch="amd64"
-    revision = 29
+    revision = 48
     channel  = "latest/stable"
     base     = "ubuntu@22.04"
   }
@@ -584,7 +584,7 @@ resource "juju_application" "ubuntu_pro_noble" {
   charm {
     name = "ubuntu-pro"
     # renovate: charm="ubuntu-pro" track="latest" risk="stable" base="24.04" arch="amd64"
-    revision = 28
+    revision = 45
     channel  = "latest/stable"
     base     = "ubuntu@24.04"
   }
@@ -691,7 +691,7 @@ resource "juju_application" "ingress_configurator" {
     name    = "ingress-configurator"
     channel = "latest/edge"
     # renovate: charm="ingress-configurator" track="latest" risk="edge" base="24.04" arch="amd64"
-    revision = 152
+    revision = 162
   }
   units = 1
   config = {
