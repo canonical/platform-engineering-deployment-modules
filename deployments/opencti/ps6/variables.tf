@@ -74,3 +74,9 @@ variable "rabbitmq_constraints" {
   description = "RabbitMQ constraints"
   type        = string
 }
+
+variable "valkey_storage_directives" {
+  description = "Valkey storage sizes by storage name (data, logs, archive), for example { data = \"20G\" }"
+  type        = map(string)
+  default     = {}
+}
