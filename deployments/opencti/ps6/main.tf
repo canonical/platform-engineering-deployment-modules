@@ -260,22 +260,6 @@ resource "juju_integration" "grafana-agent-opensearch" {
   depends_on = [module.opencti]
 }
 
-# Keep the live cos-agent relation that the previous OpenSearch module created.
-moved {
-  from = module.opencti.module.opensearch.juju_integration.grafana_agent-opensearch-integration
-  to   = juju_integration.grafana-agent-opensearch
-}
-
-# The previous OpenSearch module also tracked the grafana-agent application. The wrapper owns it,
-# so stop tracking the old address without destroying the live application.
-removed {
-  from = module.opencti.module.opensearch.juju_application.grafana-agent
-
-  lifecycle {
-    destroy = false
-  }
-}
-
 resource "juju_application" "opencti-abuseipdb-ipblacklist-connector" {
   name       = "opencti-abuseipdb-ipblacklist-connector"
   model_uuid = var.model_uuid
