@@ -48,6 +48,15 @@ run "basic_plan" {
     prometheus_metrics_endpoint_offer_url = "admin/test-cos.prometheus-metrics-endpoint"
     prometheus_remote_write_offer_url     = "admin/test-cos.prometheus-receive-remote-write"
     rabbitmq_constraints                  = "arch=amd64"
-    redis_storage                         = "1G"
+  }
+
+  assert {
+    condition     = contains(keys(module.opencti.models.opencti.components), "valkey")
+    error_message = "valkey must be deployed"
+  }
+
+  assert {
+    condition     = !contains(keys(module.opencti.models.opencti.components), "redis_k8s")
+    error_message = "redis_k8s must not be deployed"
   }
 }

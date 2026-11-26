@@ -20,9 +20,7 @@ locals {
     "opencti-woap-connector"
   ])
   machine_charms = toset([
-    "data-integrator",
     "opensearch",
-    "opensearch-dashboards",
     "rabbitmq-server",
     "s3-integrator",
     "self-signed-certificates"
@@ -47,11 +45,10 @@ resource "openstack_objectstorage_container_v1" "opensearch_backup" {
 }
 
 module "opencti" {
-  source        = "git::https://github.com/canonical/opencti-operator//terraform/product?ref=opencti-rev131&depth=1"
+  source        = "git::https://github.com/canonical/opencti-operator//terraform/product?ref=tf-product-2.8.0&depth=1"
   model_uuid    = var.model_uuid
   db_model_uuid = var.db_model_uuid
   model_user    = var.model_name
-  db_model_user = var.db_model_name
 
   opencti = {
     channel = "latest/edge"
@@ -94,15 +91,10 @@ module "opencti" {
     constraints = var.rabbitmq_constraints
   }
 
-  redis_k8s = {
-    channel = "latest/edge"
-    # renovate: charm="redis-k8s" track="latest" risk="edge" base="22.04" arch="amd64"
-    revision    = 42
-    base        = "ubuntu@22.04"
-    constraints = "arch=amd64"
-    storage = {
-      database = var.redis_storage
-    }
+  valkey = {
+    channel = "9/stable"
+    # renovate: charm="valkey" track="9" risk="stable" base="26.04" arch="amd64"
+    revision = 166
   }
 
   s3_integrator = {
@@ -125,7 +117,7 @@ module "opencti" {
     constraints = "arch=amd64 cores=1"
     config = {
       bucket       = openstack_objectstorage_container_v1.opensearch_backup.name
-      endpoint     = data.vault_generic_secret.s3_opensearch.data["endpoint_url"]
+      endpoint     = nonsensitive(data.vault_generic_secret.s3_opensearch.data["endpoint_url"])
       region       = openstack_objectstorage_container_v1.opensearch_backup.region
       s3-uri-style = "path"
     }
@@ -249,6 +241,23 @@ resource "juju_application" "grafana-agent" {
   }
 
   provider = juju.opencti_db
+}
+
+resource "juju_integration" "grafana-agent-opensearch" {
+  model_uuid = var.db_model_uuid
+
+  application {
+    name     = juju_application.grafana-agent.name
+    endpoint = "cos-agent"
+  }
+
+  application {
+    name     = "opensearch"
+    endpoint = "cos-agent"
+  }
+
+  provider   = juju.opencti_db
+  depends_on = [module.opencti]
 }
 
 resource "juju_application" "opencti-abuseipdb-ipblacklist-connector" {
@@ -653,7 +662,7 @@ resource "juju_integration" "ingress" {
 
   application {
     name     = module.opencti.app_name
-    endpoint = module.opencti.requires.ingress
+    endpoint = "ingress"
   }
 
   application {
@@ -681,7 +690,7 @@ resource "juju_integration" "opencti-grafana" {
 
   application {
     name     = module.opencti.app_name
-    endpoint = module.opencti.provides.grafana_dashboard
+    endpoint = "grafana-dashboard"
   }
 
   application {
@@ -694,7 +703,7 @@ resource "juju_integration" "opencti-prometheus-scrape" {
 
   application {
     name     = module.opencti.app_name
-    endpoint = module.opencti.provides.metrics_endpoint
+    endpoint = "metrics-endpoint"
   }
 
   application {
@@ -707,7 +716,7 @@ resource "juju_integration" "opencti-loki" {
 
   application {
     name     = module.opencti.app_name
-    endpoint = module.opencti.requires.logging
+    endpoint = "logging"
   }
 
   application {
@@ -722,7 +731,7 @@ resource "juju_integration" "opencti-connector" {
 
   application {
     name     = module.opencti.app_name
-    endpoint = module.opencti.requires.opencti_connector
+    endpoint = "opencti-connector"
   }
 
   application {
@@ -778,11 +787,10 @@ resource "juju_secret" "opencti-admin" {
 resource "juju_offer" "opencti_connector" {
   model_uuid       = var.model_uuid
   application_name = module.opencti.app_name
-  endpoints        = [module.opencti.requires.opencti_connector]
+  endpoints        = ["opencti-connector"]
 }
 
 resource "juju_access_offer" "opencti_connector" {
-  admin     = [var.model_name]
   offer_url = juju_offer.opencti_connector.url
   consume   = var.opencti_consumers
 }

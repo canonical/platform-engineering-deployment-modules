@@ -97,8 +97,8 @@ it has three units.
 The OpenSearch charm can also be scaled horizontally by adding more units. 
 Currently, it has three units.  
 
-The OpenCTI charm does not yet support Redis-K8s in high availability mode but 
-will in the future.  
+The OpenCTI charm does not support the Valkey charm in high availability mode.
+Valkey runs as a single unit.
 
 The OpenCTI charm does not support the RabbitMQ-Server charm in high 
 availability mode due to the limitations of the RabbitMQ-Server charm.

@@ -74,8 +74,3 @@ variable "rabbitmq_constraints" {
   description = "RabbitMQ constraints"
   type        = string
 }
-
-variable "redis_storage" {
-  description = "Redis storage"
-  type        = string
-}
