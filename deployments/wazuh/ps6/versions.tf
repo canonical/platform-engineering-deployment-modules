@@ -7,7 +7,7 @@ terraform {
     }
     juju = {
       source                = "juju/juju"
-      version               = ">= 1.0, < 2.0"
+      version               = "< 2.5"
       configuration_aliases = [juju.wazuh_indexer, juju.wazuh_dashboard]
     }
     openstack = {
