@@ -45,7 +45,7 @@ resource "openstack_objectstorage_container_v1" "opensearch_backup" {
 }
 
 module "opencti" {
-  source        = "git::https://github.com/canonical/opencti-operator//terraform/product?ref=tf-product-2.8.0&depth=1"
+  source        = "git::https://github.com/canonical/opencti-operator//terraform/product?ref=tf-product-2.9.0&depth=1"
   model_uuid    = var.model_uuid
   db_model_uuid = var.db_model_uuid
   model_user    = var.model_name
@@ -95,6 +95,8 @@ module "opencti" {
     channel = "9/stable"
     # renovate: charm="valkey" track="9" risk="stable" base="26.04" arch="amd64"
     revision = 166
+
+    storage_directives = var.valkey_storage_directives
   }
 
   s3_integrator = {
